@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["storage.js", "sidebar.js", "panel.js", "content.js"],
+      "js": ["storage.js", "sidebar.js", "panel.js", "subscriptions-filter.js", "content.js"],
       "css": ["sidebar.css"],
       "run_at": "document_idle"
     }

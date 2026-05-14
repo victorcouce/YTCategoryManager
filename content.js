@@ -102,11 +102,20 @@
   document.addEventListener('yt-navigate-finish', () => {
     isInjected = false;
     scheduleInject(600);
+    // Navbar de suscripciones
+    if (location.pathname === '/feed/subscriptions') {
+      setTimeout(() => YCSM.subscriptionsFilter?.injectSubscriptionsNav(), 800);
+    } else {
+      YCSM.subscriptionsFilter?.cleanup();
+    }
   });
 
   // Algunos cambios de ruta también emiten este evento
   document.addEventListener('yt-page-data-updated', () => {
     if (!isInjected) scheduleInject(500);
+    if (location.pathname === '/feed/subscriptions') {
+      setTimeout(() => YCSM.subscriptionsFilter?.injectSubscriptionsNav(), 600);
+    }
   });
 
   /* ═══════════════════════════════════════════════════════════════
@@ -118,6 +127,9 @@
 
     // Primer intento inmediato; si falla, los reintentos vienen del observer
     await tryInject();
+
+    // Navbar de suscripciones en carga directa (YouTube tarda en renderizar el grid)
+    setTimeout(() => YCSM.subscriptionsFilter?.injectSubscriptionsNav(), 1500);
 
     // Si tras 3 s todavía no inyectamos, reintentar (para cargas lentas)
     if (!isInjected) {

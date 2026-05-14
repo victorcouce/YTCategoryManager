@@ -610,7 +610,7 @@ html[dark] .ycsm-legend-pill.ycsm-legend-pill-active {
   color: #fff;
 }
 .ycsm-legend-all {
-  /* sin variables extra, usa los neutros de .ycsm-legend-pill */
+  padding: 4px 12px;
 }
 
 /* Pill ahora es un span contenedor; el label y el × son buttons */
@@ -822,6 +822,8 @@ html[dark] .ycsm-card-name {
   min-height: 14px;
   margin-top: -5px;
   line-height: 1.2;
+  letter-spacing: 0.03em;
+  word-spacing: 3px;
 }
 
 html[dark] .ycsm-card-date {
@@ -1017,16 +1019,75 @@ html[dark] .ycsm-card-add-cat:hover {
 }
 html[dark] .ycsm-card-add-menu { background: #222; border-color: #444; }
 
+/* ─── Filtrado de vídeos en suscripciones ─────────────────────── */
+ytd-rich-item-renderer.ycsm-hidden,
+ytd-rich-section-renderer.ycsm-hidden {
+  display: none !important;
+}
+
+/* ─── Navbar de categorías en /feed/subscriptions ────────────── */
+#ycsm-subs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 24px 4px;
+  position: sticky;
+  top: 56px;
+  z-index: 2000;
+  background: #fff;
+}
+html[dark] #ycsm-subs-nav {
+  background: #0f0f0f;
+}
+
+.ycsm-subs-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid #d3d3d3;
+  background: #f2f2f2;
+  color: #0f0f0f;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.ycsm-subs-pill:hover {
+  background: #e5e5e5;
+  border-color: #bbb;
+}
+.ycsm-subs-pill-active {
+  background: #0f0f0f;
+  border-color: #0f0f0f;
+  color: #fff;
+}
+html[dark] .ycsm-subs-pill {
+  background: #272727;
+  border-color: #3f3f3f;
+  color: #f1f1f1;
+}
+html[dark] .ycsm-subs-pill:hover {
+  background: #3f3f3f;
+}
+html[dark] .ycsm-subs-pill-active {
+  background: #f1f1f1;
+  border-color: #f1f1f1;
+  color: #0f0f0f;
+}
+
 /* ─── Punto azul de vídeos nuevos ────────────────────────────── */
 .ycsm-card-new-dot {
   position: absolute;
   top: 1px;
   right: 1px;
-  width: 11px;
-  height: 11px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #1a73e8;
-  border: 2px solid #fff;
+  border: 1.5px solid #fff;
   pointer-events: none;
 }
 html[dark] .ycsm-card-new-dot {
