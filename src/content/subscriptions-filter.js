@@ -251,11 +251,18 @@
       return;
     }
 
+    // Recuperar filtro pendiente (viene de clic en sidebar)
+    const pending = sessionStorage.getItem('ycsm_pending_filter');
+    if (pending) {
+      activeFilter = pending;
+      sessionStorage.removeItem('ycsm_pending_filter');
+    }
+
     const nav = await buildNav();
     grid.parentElement.insertBefore(nav, grid);
 
     setupFilterObserver();
-    applyFilter();
+    applyFilter({ animate: false });
   }
 
   /* ─── Limpieza al salir de la página ──────────────────────── */
@@ -269,5 +276,11 @@
     _hrefToId = {};
   }
 
-  window.YCSM.subscriptionsFilter = { injectSubscriptionsNav, cleanup };
+  function activateFilter(categoryId) {
+    activeFilter = categoryId;
+    if (navEl) refreshPills();
+    applyFilter({ animate: true });
+  }
+
+  window.YCSM.subscriptionsFilter = { injectSubscriptionsNav, cleanup, activateFilter };
 })();

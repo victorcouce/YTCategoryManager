@@ -622,7 +622,7 @@
           ${isNew ? '<span class="ycsm-card-new-dot" aria-label="Nuevos vídeos sin ver"></span>' : ''}
         </div>
         <span class="ycsm-card-name" title="${escapeHtml(channel.name)}">${escapeHtml(channel.name)}</span>
-        <span class="ycsm-card-date" data-cid="${escapeHtml(channel.id)}">${escapeHtml(formatRelativeDate(_dateCache.get(channel.id) || ''))}</span>
+        <span class="ycsm-card-date" data-cid="${escapeHtml(channel.id)}" title="Último vídeo publicado">${_dateCache.get(channel.id) ? '🎥 ' + escapeHtml(formatRelativeDate(_dateCache.get(channel.id))) : ''}</span>
         <div class="ycsm-card-cats" role="group" aria-label="Categorías de ${escapeHtml(channel.name)}"></div>
       `;
 
@@ -723,7 +723,7 @@
           _dateObserver.unobserve(span);
           if (span.textContent) return; // ya tiene fecha del caché
           fetchLastVideoDate(span.dataset.cid).then((iso) => {
-            span.textContent = formatRelativeDate(iso);
+            span.textContent = iso ? '\uD83C\uDFA5 ' + formatRelativeDate(iso) : '';
             // Actualizar punto azul ahora que tenemos la fecha
             if (hasNewVideo(span.dataset.cid)) {
               const card = span.closest('.ycsm-panel-card');

@@ -13,14 +13,20 @@
   ],
 
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background/background.js"
   },
 
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["storage.js", "sidebar.js", "panel.js", "subscriptions-filter.js", "content.js"],
-      "css": ["sidebar.css"],
+      "js": [
+        "src/shared/storage.js",
+        "src/content/sidebar.js",
+        "src/panel/panel.js",
+        "src/content/subscriptions-filter.js",
+        "src/content/content.js"
+      ],
+      "css": ["src/content/sidebar.css"],
       "run_at": "document_idle"
     }
   ],
@@ -31,7 +37,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["panel.html"],
+      "resources": ["src/panel/panel.html"],
       "matches": ["https://www.youtube.com/*"]
     }
   ]

@@ -6,7 +6,6 @@
   if (!window.YCSM) window.YCSM = {};
 
   let sidebarRoot = null;
-  let dragState = null;
 
   /* ═══════════════════════════════════════════════════════════════
      UTILIDADES
@@ -63,7 +62,15 @@
       const imgEl = entry.querySelector('img#img, yt-img-shadow img, img');
       const avatar = imgEl?.src || '';
 
-      channels.push({ id: channelId, name, avatar, href });
+      // Detectar el punto azul de "nuevo vídeo" que YouTube pone en el sidebar
+      const badgeEl = entry.querySelector(
+        '#badge ytd-badge-supported-renderer:not([hidden]), ' +
+        'ytd-badge-supported-renderer.ytd-guide-entry-renderer:not([hidden]), ' +
+        '.badge-style-type-unread:not([hidden])'
+      );
+      const _unseen = !!badgeEl;
+
+      channels.push({ id: channelId, name, avatar, href, _unseen, _domIndex: channels.length });
     });
 
     return channels;
@@ -73,93 +80,57 @@
      ELEMENTOS DEL SIDEBAR
   ═══════════════════════════════════════════════════════════════ */
 
-  function createCategoryElement(category, channels, assignments, allCategories) {
-    const catEl = document.createElement('div');
-    catEl.className = 'ycsm-category';
-    catEl.dataset.categoryId = category.id;
-
-    const color = sanitizeColor(category.color || '#4285F4');
-
-    // Canales asignados a esta categoría
+  function createCategoryElement(category, channels, assignments) {
     const assigned = channels.filter((ch) =>
       (assignments[ch.id] || []).includes(category.id)
     );
+    // Ordenar por posición en el sidebar de YouTube (índice más bajo = vídeo más reciente).
+    // Los canales sin índice DOM (solo en caché) van al final.
+    const sortedByRecent = assigned
+      .slice()
+      .sort((a, b) => (a._domIndex ?? Infinity) - (b._domIndex ?? Infinity));
+    const avatarChannels = sortedByRecent.slice(0, 3);
 
-    /* ── Header ── */
-    const header = document.createElement('div');
-    header.className = 'ycsm-category-header';
-    header.setAttribute('role', 'button');
-    header.setAttribute('aria-expanded', category.collapsed ? 'false' : 'true');
-    header.innerHTML = `
-      <span class="ycsm-drag-handle" title="Reordenar" aria-hidden="true">⠿</span>
-      <span class="ycsm-cat-dot" style="background-color:${color}" aria-hidden="true"></span>
-      <span class="ycsm-cat-name">${escapeHtml((category.emoji || '') + ' ' + category.name)}</span>
-      <span class="ycsm-cat-count" aria-label="${assigned.length} canales">${assigned.length}</span>
-      <div class="ycsm-cat-actions" role="group" aria-label="Acciones de categoría">
-        <button class="ycsm-btn-icon ycsm-btn-rename" title="Renombrar" aria-label="Renombrar categoría">✏️</button>
-        <button class="ycsm-btn-icon ycsm-btn-delete" title="Eliminar" aria-label="Eliminar categoría">🗑️</button>
-      </div>
-      <span class="ycsm-cat-chevron" aria-hidden="true">${category.collapsed ? '▶' : '▼'}</span>
+    const label = (category.emoji ? category.emoji + '\u00a0' : '') + category.name;
+
+    const el = document.createElement('a');
+    el.className = 'ycsm-cat-entry';
+    el.href = '/feed/subscriptions';
+    el.dataset.categoryId = category.id;
+    el.setAttribute('role', 'option');
+    el.setAttribute('aria-label', label);
+
+    const avatarsHtml = avatarChannels.length > 0
+      ? `<span class="ycsm-cat-avatars" aria-hidden="true">${
+          avatarChannels.map(ch =>
+            ch.avatar
+              ? `<img class="ycsm-cat-avatar" src="${escapeHtml(ch.avatar)}" alt="" loading="lazy">`
+              : `<span class="ycsm-cat-avatar ycsm-cat-avatar-fallback">${escapeHtml((ch.name || '?').charAt(0).toUpperCase())}</span>`
+          ).join('')
+        }</span>`
+      : '';
+
+    el.innerHTML = `
+      ${avatarsHtml}
+      <span class="ycsm-cat-entry-label">
+        <span class="ycsm-cat-entry-name">${escapeHtml(label)}</span>
+      </span>
     `;
 
-    /* ── Content ── */
-    const content = document.createElement('div');
-    content.className =
-      'ycsm-cat-content' + (category.collapsed ? ' ycsm-collapsed' : '');
-
-    if (assigned.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'ycsm-empty-cat';
-      empty.innerHTML = `Sin canales. <button class="ycsm-link-btn ycsm-open-panel">Organizar</button>`;
-      empty
-        .querySelector('.ycsm-open-panel')
-        .addEventListener('click', () => YCSM.panel.open());
-      content.appendChild(empty);
-    } else {
-      assigned.forEach((ch) => {
-        const chEl = createChannelItem(ch, assignments[ch.id] || [], allCategories);
-        content.appendChild(chEl);
-      });
-    }
-
-    catEl.appendChild(header);
-    catEl.appendChild(content);
-
-    /* ── Eventos de header ── */
-    header.addEventListener('click', (e) => {
-      if (
-        e.target.closest('.ycsm-cat-actions') ||
-        e.target.closest('.ycsm-drag-handle')
-      )
-        return;
-      toggleCollapse(category.id, catEl, content, header);
+    // Navegar a suscripciones con este filtro activo
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.ycsm-cat-entry-actions')) return;
+      e.preventDefault();
+      // Guardar el filtro deseado para que subscriptions-filter lo lea al inyectarse
+      sessionStorage.setItem('ycsm_pending_filter', category.id);
+      if (location.pathname === '/feed/subscriptions') {
+        YCSM.subscriptionsFilter?.activateFilter(category.id);
+      } else {
+        location.href = '/feed/subscriptions';
+      }
     });
 
-    header
-      .querySelector('.ycsm-cat-name')
-      .addEventListener('dblclick', (e) => {
-        e.stopPropagation();
-        startInlineRename(category.id, header.querySelector('.ycsm-cat-name'), category.name);
-      });
-
-    header
-      .querySelector('.ycsm-btn-rename')
-      .addEventListener('click', (e) => {
-        e.stopPropagation();
-        startInlineRename(category.id, header.querySelector('.ycsm-cat-name'), category.name);
-      });
-
-    header
-      .querySelector('.ycsm-btn-delete')
-      .addEventListener('click', (e) => {
-        e.stopPropagation();
-        promptDelete(category.id, category.name);
-      });
-
-    /* ── Drag & Drop ── */
-    setupDragHandlers(catEl, category.id, header.querySelector('.ycsm-drag-handle'));
-
-    return catEl;
+    return el;
   }
 
   function createChannelItem(channel, categoryIds, allCategories) {
@@ -340,69 +311,6 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     DRAG & DROP (reordenar categorías)
-  ═══════════════════════════════════════════════════════════════ */
-
-  function setupDragHandlers(catEl, categoryId, handle) {
-    // Solo empieza el drag desde el handle
-    handle.addEventListener('mousedown', () => {
-      catEl.setAttribute('draggable', 'true');
-    });
-
-    catEl.addEventListener('dragstart', (e) => {
-      dragState = { categoryId };
-      catEl.classList.add('ycsm-dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', categoryId);
-    });
-
-    catEl.addEventListener('dragend', () => {
-      catEl.setAttribute('draggable', 'false');
-      catEl.classList.remove('ycsm-dragging');
-      document
-        .querySelectorAll('.ycsm-drag-over')
-        .forEach((el) => el.classList.remove('ycsm-drag-over'));
-      dragState = null;
-    });
-
-    catEl.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      if (dragState && dragState.categoryId !== categoryId) {
-        catEl.classList.add('ycsm-drag-over');
-        e.dataTransfer.dropEffect = 'move';
-      }
-    });
-
-    catEl.addEventListener('dragleave', (e) => {
-      if (!catEl.contains(e.relatedTarget)) {
-        catEl.classList.remove('ycsm-drag-over');
-      }
-    });
-
-    catEl.addEventListener('drop', async (e) => {
-      e.preventDefault();
-      catEl.classList.remove('ycsm-drag-over');
-      if (!dragState || dragState.categoryId === categoryId) return;
-
-      const list = sidebarRoot?.querySelector('.ycsm-categories-list');
-      if (!list) return;
-
-      const categoryEls = [...list.querySelectorAll(':scope > .ycsm-category')];
-      const ids = categoryEls.map((el) => el.dataset.categoryId);
-
-      const fromIdx = ids.indexOf(dragState.categoryId);
-      const toIdx = ids.indexOf(categoryId);
-      if (fromIdx === -1 || toIdx === -1) return;
-
-      ids.splice(fromIdx, 1);
-      ids.splice(toIdx, 0, dragState.categoryId);
-
-      await YCSM.storage.reorderCategories(ids);
-      await renderSidebar();
-    });
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
      RENDER PRINCIPAL
   ═══════════════════════════════════════════════════════════════ */
 
@@ -460,7 +368,6 @@
       list.appendChild(el);
     });
   }
-
   /* ═══════════════════════════════════════════════════════════════
      CONSTRUCCIÓN DEL SIDEBAR
   ═══════════════════════════════════════════════════════════════ */
@@ -472,65 +379,19 @@
     root.setAttribute('aria-label', 'Mis categorías de YouTube');
     root.innerHTML = `
       <div class="ycsm-sidebar-header">
-        <span class="ycsm-sidebar-title">Mis Categorías</span>
+        <h3 class="ycsm-sidebar-title">Mis categorías</h3>
         <div class="ycsm-sidebar-header-actions">
-          <button class="ycsm-btn-icon" id="ycsm-btn-organize" title="Organizar suscripciones" aria-label="Organizar suscripciones">⚙️</button>
-          <button class="ycsm-btn-icon" id="ycsm-btn-add" title="Nueva categoría" aria-label="Nueva categoría">＋</button>
+          <button class="ycsm-hdr-btn" id="ycsm-btn-organize" title="Organizar suscripciones" aria-label="Organizar suscripciones">
+            <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" style="pointer-events:none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.0136 4.8356C19.094 4.35341 19.5112 4 20 4H28C28.4888 4 28.906 4.35341 28.9864 4.8356L29.8799 10.1966C31.0005 10.6745 32.0508 11.2847 33.0111 12.0074L38.1037 10.0995C38.5615 9.92801 39.0761 10.1126 39.3205 10.5359L43.3205 17.4642C43.565 17.8875 43.4675 18.4255 43.0901 18.7362L38.8921 22.1921C38.9634 22.7852 39 23.3885 39 24C39 24.6115 38.9633 25.2149 38.892 25.808L43.09 29.2639C43.4675 29.5746 43.5649 30.1126 43.3205 30.5359L39.3205 37.4641C39.0761 37.8875 38.5614 38.0721 38.1037 37.9006L33.011 35.9927C32.0507 36.7153 31.0005 37.3255 29.8799 37.8034L28.9864 43.1644C28.906 43.6466 28.4888 44 28 44H20C19.5112 44 19.094 43.6466 19.0136 43.1644L18.1201 37.8034C16.9994 37.3255 15.9492 36.7153 14.9888 35.9926L9.89629 37.9005C9.43852 38.072 8.92386 37.8874 8.67944 37.4641L4.67944 30.5359C4.43502 30.1125 4.53249 29.5745 4.90989 29.2638L9.10793 25.8079C9.03664 25.2148 8.99999 24.6115 8.99999 24C8.99999 23.3885 9.03664 22.7851 9.10794 22.192L4.90994 18.7361C4.53254 18.4254 4.43507 17.8874 4.67949 17.4641L8.67949 10.5358C8.92391 10.1125 9.43857 9.92791 9.89633 10.0994L14.989 12.0073C15.9493 11.2847 16.9995 10.6745 18.1201 10.1966L19.0136 4.8356ZM20.8471 6L20.0008 11.0782C19.9424 11.4285 19.7025 11.7217 19.3706 11.8482C18.0654 12.3457 16.8605 13.0478 15.7951 13.9158C15.5195 14.1403 15.1455 14.2017 14.8126 14.077L9.98797 12.2695L6.8351 17.7304L10.8113 21.0037C11.0852 21.2292 11.2191 21.583 11.1632 21.9334C11.0559 22.6058 11 23.296 11 24C11 24.7039 11.0558 25.3941 11.1632 26.0665C11.2191 26.4169 11.0852 26.7706 10.8113 26.9961L6.83505 30.2695L9.98793 35.7304L14.8125 33.923C15.1454 33.7983 15.5194 33.8596 15.795 34.0841C16.8604 34.9521 18.0654 35.6543 19.3706 36.1518C19.7025 36.2784 19.9424 36.5715 20.0008 36.9218L20.8471 42H27.1529L27.9992 36.9218C28.0576 36.5715 28.2975 36.2783 28.6294 36.1518C29.9346 35.6543 31.1395 34.9522 32.2049 34.0842C32.4805 33.8597 32.8545 33.7983 33.1873 33.923L38.012 35.7305L41.1649 30.2696L37.1887 26.9963C36.9148 26.7708 36.7809 26.417 36.8368 26.0666C36.9441 25.3941 37 24.7039 37 24C37 23.2961 36.9441 22.6059 36.8368 21.9335C36.7809 21.5831 36.9148 21.2294 37.1887 21.0039L41.1649 17.7305L38.0121 12.2696L33.1874 14.077C32.8546 14.2017 32.4806 14.1404 32.205 13.9159C31.1396 13.0479 29.9346 12.3457 28.6294 11.8482C28.2975 11.7217 28.0576 11.4285 27.9992 11.0782L27.1529 6H20.8471Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24 19C21.2386 19 19 21.2386 19 24C19 26.7614 21.2386 29 24 29C26.7614 29 29 26.7614 29 24C29 21.2386 26.7614 19 24 19ZM17 24C17 20.134 20.134 17 24 17C27.866 17 31 20.134 31 24C31 27.866 27.866 31 24 31C20.134 31 17 27.866 17 24Z" fill="currentColor"/></svg>
+          </button>
         </div>
       </div>
-      <div class="ycsm-categories-list" role="list"></div>
-      <div class="ycsm-add-form" id="ycsm-add-form" hidden>
-        <input
-          class="ycsm-input"
-          id="ycsm-new-name"
-          type="text"
-          placeholder="Nombre de la categoría…"
-          maxlength="50"
-          aria-label="Nombre de la nueva categoría"
-        >
-        <div class="ycsm-add-form-row">
-          <input type="color" id="ycsm-new-color" value="#4285F4" title="Color" aria-label="Color de la categoría">
-          <button class="ycsm-btn-primary" id="ycsm-btn-save">Crear</button>
-          <button class="ycsm-btn-icon" id="ycsm-btn-cancel">✕</button>
-        </div>
-      </div>
+      <div class="ycsm-categories-list" role="listbox" aria-label="Categorías"></div>
     `;
     return root;
   }
 
   function attachSidebarEvents(root) {
-    const addForm = root.querySelector('#ycsm-add-form');
-    const nameInput = root.querySelector('#ycsm-new-name');
-    const colorInput = root.querySelector('#ycsm-new-color');
-
-    root.querySelector('#ycsm-btn-add').addEventListener('click', () => {
-      addForm.hidden = !addForm.hidden;
-      if (!addForm.hidden) nameInput.focus();
-    });
-
-    root.querySelector('#ycsm-btn-cancel').addEventListener('click', () => {
-      addForm.hidden = true;
-      nameInput.value = '';
-    });
-
-    const createCategory = async () => {
-      const name = nameInput.value.trim();
-      if (!name) return;
-      await YCSM.storage.addCategory(name, colorInput.value);
-      nameInput.value = '';
-      addForm.hidden = true;
-      await renderSidebar();
-    };
-
-    root.querySelector('#ycsm-btn-save').addEventListener('click', createCategory);
-    nameInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') createCategory();
-      if (e.key === 'Escape') {
-        addForm.hidden = true;
-        nameInput.value = '';
-      }
-    });
-
     root.querySelector('#ycsm-btn-organize').addEventListener('click', () => {
       YCSM.panel.open();
     });
@@ -552,26 +413,19 @@
     const root = buildSidebarRoot();
     sidebarRoot = root;
 
-    // Insertar antes de la sección de suscripciones si existe; si no, al inicio
-    const sections = guideContent.querySelectorAll('ytd-guide-section-renderer');
-    let insertBefore = null;
+    // Insertar justo después de la primera sección (Inicio / Shorts)
+    // para quedar pegado a Suscripciones. Si las secciones aún no están en el DOM,
+    // reintentar hasta que aparezcan.
+    const sections = [...guideContent.querySelectorAll('ytd-guide-section-renderer')];
 
-    for (const section of sections) {
-      const title =
-        section.querySelector('#guide-section-title')?.textContent?.toLowerCase() ||
-        section.querySelector('[title]')?.getAttribute('title')?.toLowerCase() ||
-        '';
-      if (title.includes('subscri') || title.includes('suscri')) {
-        insertBefore = section;
-        break;
-      }
+    if (sections.length === 0) {
+      // Secciones aún no renderizadas, reintentar
+      sidebarRoot = null;
+      setTimeout(() => injectIntoYouTube(), 500);
+      return false;
     }
 
-    if (insertBefore) {
-      guideContent.insertBefore(root, insertBefore);
-    } else {
-      guideContent.prepend(root);
-    }
+    sections[0].insertAdjacentElement('afterend', root);
 
     attachSidebarEvents(root);
     await renderSidebar();

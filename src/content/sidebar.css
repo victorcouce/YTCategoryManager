@@ -36,28 +36,7 @@ html[dark] #ycsm-sidebar {
   --ycsm-border: #3d3d3d;
 }
 
-/* ─── Header del sidebar ────────────────────────────────────── */
-.ycsm-sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px 12px 8px;
-}
-
-.ycsm-sidebar-title {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--ycsm-text-sub);
-}
-
-.ycsm-sidebar-header-actions {
-  display: flex;
-  gap: 2px;
-}
-
-/* ─── Botones genéricos ─────────────────────────────────────── */
+/* Botones genéricos (formulario nueva categoría) */
 .ycsm-btn-icon {
   background: none;
   border: none;
@@ -72,17 +51,10 @@ html[dark] #ycsm-sidebar {
   color: var(--ycsm-text-sub);
   transition: background var(--ycsm-anim), color var(--ycsm-anim);
   padding: 0;
-  line-height: 1;
 }
-
 .ycsm-btn-icon:hover {
   background: var(--ycsm-bg-hover);
   color: var(--ycsm-text);
-}
-
-.ycsm-btn-icon:focus-visible {
-  outline: 2px solid var(--ycsm-accent);
-  outline-offset: 1px;
 }
 
 .ycsm-btn-primary {
@@ -96,128 +68,146 @@ html[dark] #ycsm-sidebar {
   padding: 6px 12px;
   transition: opacity var(--ycsm-anim);
 }
+.ycsm-btn-primary:hover { opacity: 0.85; }
 
-.ycsm-btn-primary:hover {
-  opacity: 0.85;
-}
-
-.ycsm-btn-primary:focus-visible {
-  outline: 2px solid var(--ycsm-accent);
-  outline-offset: 2px;
-}
-
-/* ─── Categoría ─────────────────────────────────────────────── */
-.ycsm-category {
-  margin: 1px 0;
-}
-
-.ycsm-category.ycsm-dragging {
-  opacity: 0.45;
-}
-
-.ycsm-category.ycsm-drag-over > .ycsm-category-header {
-  box-shadow: inset 0 2px 0 var(--ycsm-accent);
-}
-
-.ycsm-category-header {
+/* ─── Header del sidebar ─────────────────────────────────────── */
+.ycsm-sidebar-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: background var(--ycsm-anim);
-  border-radius: 0;
-  position: relative;
+  justify-content: space-between;
+  padding: 10px 20px 4px;
 }
 
-.ycsm-category-header:hover {
+/* Mismo estilo que ytd-guide-entry-renderer[is-header] .title */
+.ycsm-sidebar-title {
+  padding-right: 8px;
+  flex: none;
+  font-family: Roboto, "Arial", sans-serif;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+  font-weight: 500;
+  overflow: hidden;
+  max-height: 2.2rem;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: normal;
+  color: var(--yt-spec-text-primary, var(--ycsm-text));
+  margin: 0;
+}
+
+.ycsm-sidebar-header-actions {
+  display: flex;
+  gap: 0;
+}
+
+/* Botones SVG del header (estilo nativo YouTube) */
+.ycsm-hdr-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ycsm-text);
+  padding: 0;
+  transition: background 0.1s;
+}
+.ycsm-hdr-btn svg {
+  pointer-events: none;
+}
+.ycsm-hdr-btn:hover {
+  background: var(--ycsm-bg-hover);
+}
+.ycsm-hdr-btn:focus-visible {
+  outline: 2px solid var(--ycsm-accent);
+  outline-offset: 1px;
+}
+
+/* ─── Entrada de categoría (estilo nativo ytd-guide-entry) ──── */
+.ycsm-cat-entry {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 12px;
+  height: 40px;
+  text-decoration: none;
+  color: var(--ycsm-text);
+  font-family: var(--ycsm-font);
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 10px;
+  margin: 0 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+  box-sizing: border-box;
+}
+.ycsm-cat-entry:hover {
   background: var(--ycsm-bg-hover);
 }
 
-.ycsm-category-header:hover .ycsm-cat-actions {
-  opacity: 1;
-}
 
-.ycsm-drag-handle {
-  cursor: grab;
-  font-size: 13px;
-  color: var(--ycsm-text-sub);
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-.ycsm-drag-handle:active {
-  cursor: grabbing;
-}
-
-.ycsm-cat-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.ycsm-cat-name {
+.ycsm-cat-entry-label {
   flex: 1;
   min-width: 0;
-  font-size: 14px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.ycsm-cat-entry-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 40px;
 }
 
-.ycsm-cat-count {
-  font-size: 11px;
-  color: var(--ycsm-text-sub);
-  background: var(--ycsm-bg-hover);
-  border-radius: 10px;
-  padding: 1px 6px;
-  flex-shrink: 0;
-  min-width: 18px;
-  text-align: center;
-}
-
-.ycsm-cat-actions {
+/* Avatares de canales con vídeos nuevos */
+.ycsm-cat-avatars {
   display: flex;
-  gap: 1px;
-  opacity: 0;
-  transition: opacity var(--ycsm-anim);
-}
-
-.ycsm-cat-actions .ycsm-btn-icon {
-  width: 22px;
-  height: 22px;
-  font-size: 12px;
-}
-
-.ycsm-cat-chevron {
-  font-size: 9px;
-  color: var(--ycsm-text-sub);
+  flex-direction: row-reverse;
+  align-items: center;
   flex-shrink: 0;
-  margin-left: 2px;
+  margin-right: 18px;
 }
 
-/* ─── Contenido colapsable de la categoría ──────────────────── */
-.ycsm-cat-content {
-  overflow: hidden;
-  max-height: 2000px;
-  transition: max-height 0.3s ease;
+.ycsm-cat-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ycsm-bg, #fff);
+  object-fit: cover;
+  margin-left: -6px;
+  flex-shrink: 0;
 }
 
-.ycsm-cat-content.ycsm-collapsed {
-  max-height: 0;
+.ycsm-cat-avatars .ycsm-cat-avatar:last-child {
+  margin-left: 0;
 }
 
-/* ─── Canal ─────────────────────────────────────────────────── */
-.ycsm-channel-item {
+.ycsm-cat-avatar-fallback {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 12px 6px 30px;
-  text-decoration: none;
-  color: var(--ycsm-text);
-  transition: background var(--ycsm-anim);
+  justify-content: center;
+  background: var(--ycsm-bg-hover, #e5e5e5);
+  color: var(--ycsm-text, #0f0f0f);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+html[dark] .ycsm-cat-avatar {
+  border-color: var(--ycsm-bg, #0f0f0f);
+}
+
+
+
   position: relative;
   min-width: 0;
 }
