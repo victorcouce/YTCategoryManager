@@ -1,6 +1,6 @@
 /**
- * video-label.js — Botón "Etiquetar" en la página de vídeo de YouTube.
- * Inyecta un botón junto a las acciones del vídeo (me gusta, compartir…)
+ * video-label.js — Botón "Categorizar" en páginas de vídeo y canal de YouTube.
+ * Inyecta un botón junto a las acciones nativas
  * que abre un desplegable para asignar el canal a categorías existentes.
  */
 (function () {
@@ -10,6 +10,7 @@
   let dropdownOpen = false;
   let currentChannelId = null;
   let currentChannelName = null;
+  let currentChannelData = null;
   let injectTimeout = null;
 
   /* ═══════════════════════════════════════════════════════════════
@@ -20,6 +21,18 @@
     const div = document.createElement('div');
     div.appendChild(document.createTextNode(String(value ?? '')));
     return div.innerHTML;
+  }
+
+  function normalizeHref(href) {
+    return (href || '').split('?')[0];
+  }
+
+  function isWatchPage() {
+    return location.pathname.startsWith('/watch');
+  }
+
+  function isChannelPage() {
+    return /^\/(@|channel\/|c\/|user\/)/.test(location.pathname);
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -52,13 +65,15 @@
   async function openDropdown(anchorEl) {
     closeDropdown();
 
-    const channelData = getChannelIds();
+    const channelData = await resolveCanonicalChannelData(getChannelIds());
     if (!channelData) return;
 
+    currentChannelData = channelData;
     currentChannelId = channelData.primaryId;
     currentChannelName = channelData.name;
 
-    const { categories, channelAssignments } = await YCSM.storage.getAll();
+    const { categories } = await YCSM.storage.getAll();
+    const channelAssignments = await migrateChannelAssignments(channelData);
     const catList = Object.values(categories).sort(
       (a, b) => (a.order ?? 0) - (b.order ?? 0)
     );
@@ -74,11 +89,11 @@
     dropdownEl.id = 'ycsm-video-dropdown';
     dropdownEl.className = 'ycsm-video-dropdown';
     dropdownEl.setAttribute('role', 'dialog');
-    dropdownEl.setAttribute('aria-label', 'Asignar etiqueta al canal');
+    dropdownEl.setAttribute('aria-label', 'Asignar categoría al canal');
 
     dropdownEl.innerHTML = `
       <div class="ycsm-vd-header">
-        <span class="ycsm-vd-title">Etiquetar canal</span>
+        <span class="ycsm-vd-title">Categorizar canal</span>
         <span class="ycsm-vd-subtitle">${escapeHtml(currentChannelName)}</span>
       </div>
       <div class="ycsm-vd-search-wrap">
@@ -89,20 +104,19 @@
           id="ycsm-vd-search"
           class="ycsm-vd-search"
           type="search"
-          placeholder="Buscar etiqueta…"
+          placeholder="Buscar categoría…"
           autocomplete="off"
           spellcheck="false"
-          aria-label="Buscar etiqueta"
+          aria-label="Buscar categoría"
         />
       </div>
-      <ul class="ycsm-vd-list" role="listbox" aria-label="Etiquetas disponibles">
+      <ul class="ycsm-vd-list" role="listbox" aria-label="Categorías disponibles">
         ${
           catList.length === 0
-            ? '<li class="ycsm-vd-empty">No hay etiquetas. Crea una en el panel lateral.</li>'
+            ? '<li class="ycsm-vd-empty">No hay categorías. Crea una en el panel lateral.</li>'
             : catList
                 .map((cat) => {
                   const isChecked = assigned.includes(cat.id);
-                  const emoji = cat.emoji ? escapeHtml(cat.emoji) + '\u00a0' : '';
                   return `
                   <li class="ycsm-vd-item${isChecked ? ' ycsm-vd-item--checked' : ''}"
                       role="option"
@@ -111,7 +125,7 @@
                     <span class="ycsm-vd-check" aria-hidden="true">
                       ${isChecked ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : ''}
                     </span>
-                    <span class="ycsm-vd-cat-label">${emoji}${escapeHtml(cat.name)}</span>
+                    <span class="ycsm-vd-cat-label">${escapeHtml(cat.name)}</span>
                   </li>`;
                 })
                 .join('')
@@ -187,10 +201,10 @@
 
   function filterList(query) {
     if (!dropdownEl) return;
-    const q = query.toLowerCase().trim();
+    const q = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     dropdownEl.querySelectorAll('.ycsm-vd-item').forEach((item) => {
       const text =
-        item.querySelector('.ycsm-vd-cat-label')?.textContent?.toLowerCase() || '';
+        (item.querySelector('.ycsm-vd-cat-label')?.textContent || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       item.style.display = !q || text.includes(q) ? '' : 'none';
     });
   }
@@ -198,7 +212,26 @@
   async function toggleCategory(catId, itemEl) {
     if (!currentChannelId || !catId) return;
 
-    const nowAssigned = await YCSM.storage.toggleChannelCategory(currentChannelId, catId);
+    const channelData = await resolveCanonicalChannelData(currentChannelData || getChannelIds());
+    if (!channelData) return;
+
+    const channelAssignments = await migrateChannelAssignments(channelData);
+    const assigned = channelAssignments[channelData.primaryId] || [];
+    const isAssigned = assigned.includes(catId);
+    const nowAssigned = !isAssigned;
+
+    if (nowAssigned) {
+      channelAssignments[channelData.primaryId] = [...new Set([...assigned, catId])];
+    } else {
+      const next = assigned.filter((id) => id !== catId);
+      if (next.length > 0) {
+        channelAssignments[channelData.primaryId] = next;
+      } else {
+        delete channelAssignments[channelData.primaryId];
+      }
+    }
+
+    await YCSM.storage.saveChannelAssignments(channelAssignments);
 
     itemEl.classList.toggle('ycsm-vd-item--checked', nowAssigned);
     itemEl.setAttribute('aria-selected', nowAssigned ? 'true' : 'false');
@@ -210,7 +243,7 @@
         : '';
     }
 
-    // Actualizar el botón para reflejar si el canal tiene etiquetas
+    // Actualizar el botón para reflejar si el canal tiene categorías
     updateButtonState();
   }
 
@@ -228,18 +261,99 @@
     try {
       for (const script of document.querySelectorAll('script:not([src])')) {
         const text = script.textContent || '';
-        if (!text.includes('videoOwnerRenderer')) continue;
-        // Busca el browseId dentro del contexto de videoOwnerRenderer
-        const match = text.match(
+        if (!text.includes('videoOwnerRenderer') && !text.includes('channelMetadataRenderer')) continue;
+        const metadataMatch = text.match(
+          /"channelMetadataRenderer"\s*:\s*\{[^}]*?"externalId"\s*:\s*"(UC[^"]{10,})"/
+        );
+        if (metadataMatch) return metadataMatch[1];
+
+        const ownerMatch = text.match(
           /"videoOwnerRenderer"\s*:\s*\{[^}]*?"browseId"\s*:\s*"(UC[^"]{10,})"/
         );
-        if (match) return match[1];
+        if (ownerMatch) return ownerMatch[1];
       }
     } catch (_) { /* ignorar */ }
     return null;
   }
 
-  function getChannelIds() {
+  async function migrateChannelAssignments(channelData) {
+    const channelAssignments = await YCSM.storage.getChannelAssignments();
+    const primaryId = channelData.primaryId;
+    const ids = [...new Set(channelData.ids || [])].filter(Boolean);
+    const merged = new Set(channelAssignments[primaryId] || []);
+    let dirty = false;
+
+    ids.forEach((id) => {
+      const cats = channelAssignments[id] || [];
+      cats.forEach((catId) => {
+        if (!merged.has(catId)) dirty = true;
+        merged.add(catId);
+      });
+      if (id !== primaryId && channelAssignments[id]) dirty = true;
+    });
+
+    const next = [...merged];
+    if (next.length > 0) {
+      const current = channelAssignments[primaryId] || [];
+      const same =
+        current.length === next.length &&
+        current.every((catId) => merged.has(catId));
+      if (!same) dirty = true;
+      channelAssignments[primaryId] = next;
+    } else if (channelAssignments[primaryId]) {
+      delete channelAssignments[primaryId];
+      dirty = true;
+    }
+
+    ids.forEach((id) => {
+      if (id !== primaryId && channelAssignments[id]) {
+        delete channelAssignments[id];
+        dirty = true;
+      }
+    });
+
+    if (dirty) await YCSM.storage.saveChannelAssignments(channelAssignments);
+    return channelAssignments;
+  }
+
+  async function resolveCanonicalChannelData(channelData) {
+    if (!channelData) return null;
+
+    const ids = new Set(channelData.ids || []);
+    let primaryId = channelData.primaryId;
+
+    try {
+      const { channels } = await YCSM.storage.getCachedChannels();
+      const match = (channels || []).find((channel) => {
+        const channelHref = normalizeHref(channel.href);
+        return ids.has(channel.id) || (channelHref && ids.has(channelHref));
+      });
+
+      if (match?.id) {
+        ids.add(match.id);
+        if (match.href) ids.add(normalizeHref(match.href));
+        primaryId = match.id;
+      }
+    } catch (_) { /* caché no disponible; usar IDs detectados en la página */ }
+
+    return {
+      ...channelData,
+      ids: [...ids].filter(Boolean),
+      primaryId,
+    };
+  }
+
+  function makeChannelData(ids, name, preferredId) {
+    if (ids.size === 0) return null;
+    const idList = [...ids].filter(Boolean);
+    const primaryId =
+      preferredId ||
+      idList.find((id) => id.startsWith('UC')) ||
+      idList[0];
+    return { ids: idList, name: name || primaryId, primaryId };
+  }
+
+  function getVideoChannelIds() {
     const ids = new Set();
 
     // El avatar-link es el más fiable: siempre está en ytd-video-owner-renderer
@@ -260,7 +374,7 @@
       return null;
     }
 
-    const href = channelLink.getAttribute('href') || '';
+    const href = normalizeHref(channelLink.getAttribute('href') || '');
     // Intentar el nameLink para el texto visible
     const name = nameLink?.textContent?.trim() || href;
 
@@ -275,10 +389,10 @@
 
     // Si el avatar y el nameLink tienen hrefs distintos, añadir ambos
     if (nameLink && nameLink !== avatarLink) {
-      const nHref = nameLink.getAttribute('href') || '';
+      const nHref = normalizeHref(nameLink.getAttribute('href') || '');
       const nId = nHref.startsWith('/channel/')
         ? nHref.replace('/channel/', '').split('?')[0]
-        : nHref.split('?')[0];
+        : nHref;
       if (nId) ids.add(nId);
     }
 
@@ -287,20 +401,60 @@
     if (ucId) ids.add(ucId);
 
     if (ids.size === 0) return null;
-    return { ids: [...ids], name, primaryId: hrefId || [...ids][0] };
+    return makeChannelData(ids, name, ucId || hrefId);
+  }
+
+  function getChannelPageIds() {
+    const ids = new Set();
+    const canonicalHref =
+      document.querySelector('link[rel="canonical"]')?.href ||
+      document.querySelector('meta[property="og:url"]')?.content ||
+      location.href;
+
+    let href = '';
+    try {
+      href = normalizeHref(new URL(canonicalHref, location.origin).pathname);
+    } catch (_) {
+      href = normalizeHref(location.pathname);
+    }
+
+    const hrefId = href.startsWith('/channel/')
+      ? href.replace('/channel/', '').split('/')[0]
+      : href.split('/').slice(0, 2).join('/');
+    if (hrefId) ids.add(hrefId);
+
+    const ucId = getUCChannelIdFromScripts();
+    if (ucId) ids.add(ucId);
+
+    const name =
+      document.querySelector('meta[property="og:title"]')?.content ||
+      document.querySelector('yt-dynamic-text-view-model h1 span')?.textContent?.trim() ||
+      document.querySelector('ytd-channel-name #text')?.textContent?.trim() ||
+      document.title.replace(/\s*-\s*YouTube\s*$/, '').trim() ||
+      hrefId;
+
+    return makeChannelData(ids, name, ucId || hrefId);
+  }
+
+  function getChannelIds() {
+    if (isWatchPage()) return getVideoChannelIds();
+    if (isChannelPage()) return getChannelPageIds();
+    return null;
   }
 
   async function updateButtonState() {
     const btn = document.getElementById('ycsm-label-btn');
     if (!btn) return false;
 
-    const channelData = getChannelIds();
+    const channelData = await resolveCanonicalChannelData(getChannelIds());
     if (!channelData) return false;
 
+    currentChannelData = channelData;
     currentChannelId = channelData.primaryId;
     currentChannelName = channelData.name;
 
-    const { categories, channelAssignments } = await YCSM.storage.getAll();
+    const { categories } = await YCSM.storage.getAll();
+    const channelAssignments = await migrateChannelAssignments(channelData);
 
     // Recoger todos los catIds asignados a cualquiera de los IDs del canal
     const assignedCatIds = new Set();
@@ -320,16 +474,16 @@
     if (!textEl) return true;
 
     if (!hasLabels) {
-      textEl.textContent = 'Etiquetar';
+      textEl.textContent = 'Categorizar';
     } else if (assignedCats.length === 1) {
       const cat = assignedCats[0];
-      textEl.textContent = (cat.emoji ? cat.emoji + '\u00a0' : '') + cat.name;
+      textEl.textContent = cat.name;
     } else {
-      // Mostrar la primera etiqueta + contador de las demás
+      // Mostrar la primera categoría + contador de las demás
       const first = assignedCats[0];
       const rest = assignedCats.length - 1;
       textEl.textContent =
-        (first.emoji ? first.emoji + '\u00a0' : '') + first.name + ` +${rest}`;
+        first.name + ` +${rest}`;
     }
 
     return true;
@@ -358,14 +512,14 @@
     const btn = document.createElement('button');
     btn.id = 'ycsm-label-btn';
     btn.className = 'ycsm-video-label-btn';
-    btn.setAttribute('aria-label', 'Etiquetar canal');
-    btn.setAttribute('title', 'Asignar este canal a una etiqueta');
+    btn.setAttribute('aria-label', 'Categorizar canal');
+    btn.setAttribute('title', 'Asignar este canal a una categoría');
 
     btn.innerHTML = `
       <svg class="ycsm-label-btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
         <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
       </svg>
-      <span class="ycsm-label-btn-text">Etiquetar</span>
+      <span class="ycsm-label-btn-text">Categorizar</span>
     `;
 
     btn.addEventListener('click', (e) => {
@@ -380,36 +534,97 @@
     return btn;
   }
 
+  function getVideoMenuButtonHost() {
+    const menuRenderer =
+      document.querySelector('ytd-watch-metadata #menu > ytd-menu-renderer') ||
+      document.querySelector('#menu > ytd-menu-renderer');
+
+    if (!menuRenderer) return null;
+
+    return (
+      menuRenderer.querySelector('#top-level-buttons-computed') ||
+      menuRenderer
+    );
+  }
+
+  function getChannelButtonPlacement() {
+    const root =
+      document.querySelector('ytd-browse[page-subtype="channels"]') ||
+      document.querySelector('ytd-browse') ||
+      document;
+    const header =
+      root.querySelector('yt-page-header-renderer, page-header-renderer, yt-page-header-view-model, ytd-page-header-renderer') ||
+      root.querySelector('ytd-channel-header-renderer, ytd-c4-tabbed-header-renderer') ||
+      root;
+    const actionHost =
+      header.querySelector('yt-flexible-actions-view-model') ||
+      header.querySelector('#buttons, #actions, #meta #buttons') ||
+      header.querySelector('[class*="actions"]');
+    const shape = (actionHost || header).querySelector(
+      'yt-touch-feedback-shape, ' +
+      'yt-button-shape yt-touch-feedback-shape, ' +
+      'button-view-model yt-touch-feedback-shape, ' +
+      'yt-button-view-model yt-touch-feedback-shape'
+    );
+
+    if (actionHost) {
+      return {
+        host: actionHost,
+        before: null,
+        mode: 'channel',
+      };
+    }
+    if (!shape) return null;
+
+    const nativeButton =
+      shape.closest('yt-button-view-model, button-view-model, ytd-button-renderer, a.yt-spec-button-shape-next, a') ||
+      shape.closest('button') ||
+      shape.parentElement;
+    const host = nativeButton?.parentElement;
+    if (!host) return null;
+
+    return {
+      host,
+      before: nativeButton.nextSibling,
+      mode: 'channel',
+    };
+  }
+
+  function getLabelButtonPlacement() {
+    if (isWatchPage()) {
+      const host = getVideoMenuButtonHost();
+      return host ? { host, before: host.firstElementChild, mode: 'watch' } : null;
+    }
+    if (isChannelPage()) return getChannelButtonPlacement();
+    return null;
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      INYECCIÓN
   ═══════════════════════════════════════════════════════════════ */
 
   async function injectLabelButton() {
-    if (document.getElementById('ycsm-label-btn')) {
+    if (!isWatchPage() && !isChannelPage()) return false;
+
+    const placement = getLabelButtonPlacement();
+    if (!placement) return false;
+
+    const existingBtn = document.getElementById('ycsm-label-btn');
+    if (existingBtn) {
+      const alreadyPlaced =
+        existingBtn.parentElement === placement.host &&
+        (placement.before === existingBtn || existingBtn.nextSibling === placement.before);
+      if (!alreadyPlaced) {
+        placement.host.insertBefore(existingBtn, placement.before);
+      }
+      existingBtn.classList.toggle('ycsm-video-label-btn--channel', placement.mode === 'channel');
       scheduleButtonStateUpdate();
       return true;
     }
 
-    if (!location.pathname.startsWith('/watch')) return false;
-
-    // Selectores para el contenedor de acciones — probamos varios por compatibilidad
-    const actionsInner =
-      document.querySelector('#actions-inner') ||
-      document.querySelector('#actions.ytd-video-primary-info-renderer') ||
-      document.querySelector('ytd-watch-metadata #actions');
-
-    if (!actionsInner) return false;
-
     const btn = createLabelButton();
-
-    // Insertar antes del menú de puntos suspensivos (ytd-menu-renderer)
-    // o al final del contenedor de acciones si no hay menú
-    const menuRenderer = actionsInner.querySelector('ytd-menu-renderer');
-    if (menuRenderer) {
-      menuRenderer.parentNode.insertBefore(btn, menuRenderer);
-    } else {
-      actionsInner.appendChild(btn);
-    }
+    btn.classList.toggle('ycsm-video-label-btn--channel', placement.mode === 'channel');
+    placement.host.insertBefore(btn, placement.before);
 
     // Actualizar estado con reintentos (el DOM del canal puede no estar aún)
     scheduleButtonStateUpdate();
@@ -431,6 +646,7 @@
     document.getElementById('ycsm-label-btn')?.remove();
     currentChannelId = null;
     currentChannelName = null;
+    currentChannelData = null;
   }
 
   /* ═══════════════════════════════════════════════════════════════

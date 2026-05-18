@@ -18,10 +18,6 @@
     return div.innerHTML;
   }
 
-  function sanitizeColor(color) {
-    // Solo permitir colores hexadecimales válidos
-    return /^#[0-9A-Fa-f]{3,8}$/.test(color) ? color : '#4285F4';
-  }
 
   /* ═══════════════════════════════════════════════════════════════
      SCRAPING DEL DOM DE YOUTUBE
@@ -86,7 +82,7 @@
       (assignments[ch.id] || []).includes(category.id)
     );
 
-    const label = (category.emoji ? category.emoji + '\u00a0' : '') + category.name;
+    const label = category.name;
 
     const el = document.createElement('a');
     el.className = 'ycsm-cat-entry';
@@ -97,13 +93,22 @@
     el.setAttribute('draggable', 'false');
 
     el.innerHTML = `
+      <span class="ycsm-drag-handle" title="Reordenar categoría" aria-hidden="true">⋮⋮</span>
       <span class="ycsm-cat-entry-label">
         <span class="ycsm-cat-entry-name">${escapeHtml(label)}</span>
       </span>
     `;
 
+    const handle = el.querySelector('.ycsm-drag-handle');
+    handle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    setupDragHandlers(el, category.id, handle);
+
     // Navegar a suscripciones con este filtro activo
     el.addEventListener('click', (e) => {
+      if (e.target.closest('.ycsm-drag-handle')) return;
       if (e.target.closest('.ycsm-cat-entry-actions')) return;
       e.preventDefault();
       // Guardar el filtro deseado para que subscriptions-filter lo lea al inyectarse
@@ -150,7 +155,7 @@
       btn.className = 'ycsm-btn-icon ycsm-ctx-btn';
       btn.title = 'Gestionar categorías';
       btn.setAttribute('aria-label', 'Gestionar categorías del canal');
-      btn.textContent = '🏷️';
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>';
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -251,7 +256,6 @@
     menu.setAttribute('role', 'menu');
 
     sorted.forEach((cat) => {
-      const color = sanitizeColor(cat.color);
       const isAssigned = currentCategoryIds.includes(cat.id);
       const item = document.createElement('label');
       item.className = 'ycsm-ctx-menu-item';
@@ -259,7 +263,6 @@
       item.setAttribute('aria-checked', isAssigned ? 'true' : 'false');
       item.innerHTML = `
         <input type="checkbox" ${isAssigned ? 'checked' : ''} aria-hidden="true">
-        <span class="ycsm-cat-dot" style="background:${color}"></span>
         <span>${escapeHtml(cat.name)}</span>
       `;
 
@@ -428,7 +431,7 @@
         <h3 class="ycsm-sidebar-title">Mis categorías</h3>
         <div class="ycsm-sidebar-header-actions">
           <button class="ycsm-hdr-btn" id="ycsm-btn-organize" title="Organizar suscripciones" aria-label="Organizar suscripciones">
-            <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" style="pointer-events:none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.0136 4.8356C19.094 4.35341 19.5112 4 20 4H28C28.4888 4 28.906 4.35341 28.9864 4.8356L29.8799 10.1966C31.0005 10.6745 32.0508 11.2847 33.0111 12.0074L38.1037 10.0995C38.5615 9.92801 39.0761 10.1126 39.3205 10.5359L43.3205 17.4642C43.565 17.8875 43.4675 18.4255 43.0901 18.7362L38.8921 22.1921C38.9634 22.7852 39 23.3885 39 24C39 24.6115 38.9633 25.2149 38.892 25.808L43.09 29.2639C43.4675 29.5746 43.5649 30.1126 43.3205 30.5359L39.3205 37.4641C39.0761 37.8875 38.5614 38.0721 38.1037 37.9006L33.011 35.9927C32.0507 36.7153 31.0005 37.3255 29.8799 37.8034L28.9864 43.1644C28.906 43.6466 28.4888 44 28 44H20C19.5112 44 19.094 43.6466 19.0136 43.1644L18.1201 37.8034C16.9994 37.3255 15.9492 36.7153 14.9888 35.9926L9.89629 37.9005C9.43852 38.072 8.92386 37.8874 8.67944 37.4641L4.67944 30.5359C4.43502 30.1125 4.53249 29.5745 4.90989 29.2638L9.10793 25.8079C9.03664 25.2148 8.99999 24.6115 8.99999 24C8.99999 23.3885 9.03664 22.7851 9.10794 22.192L4.90994 18.7361C4.53254 18.4254 4.43507 17.8874 4.67949 17.4641L8.67949 10.5358C8.92391 10.1125 9.43857 9.92791 9.89633 10.0994L14.989 12.0073C15.9493 11.2847 16.9995 10.6745 18.1201 10.1966L19.0136 4.8356ZM20.8471 6L20.0008 11.0782C19.9424 11.4285 19.7025 11.7217 19.3706 11.8482C18.0654 12.3457 16.8605 13.0478 15.7951 13.9158C15.5195 14.1403 15.1455 14.2017 14.8126 14.077L9.98797 12.2695L6.8351 17.7304L10.8113 21.0037C11.0852 21.2292 11.2191 21.583 11.1632 21.9334C11.0559 22.6058 11 23.296 11 24C11 24.7039 11.0558 25.3941 11.1632 26.0665C11.2191 26.4169 11.0852 26.7706 10.8113 26.9961L6.83505 30.2695L9.98793 35.7304L14.8125 33.923C15.1454 33.7983 15.5194 33.8596 15.795 34.0841C16.8604 34.9521 18.0654 35.6543 19.3706 36.1518C19.7025 36.2784 19.9424 36.5715 20.0008 36.9218L20.8471 42H27.1529L27.9992 36.9218C28.0576 36.5715 28.2975 36.2783 28.6294 36.1518C29.9346 35.6543 31.1395 34.9522 32.2049 34.0842C32.4805 33.8597 32.8545 33.7983 33.1873 33.923L38.012 35.7305L41.1649 30.2696L37.1887 26.9963C36.9148 26.7708 36.7809 26.417 36.8368 26.0666C36.9441 25.3941 37 24.7039 37 24C37 23.2961 36.9441 22.6059 36.8368 21.9335C36.7809 21.5831 36.9148 21.2294 37.1887 21.0039L41.1649 17.7305L38.0121 12.2696L33.1874 14.077C32.8546 14.2017 32.4806 14.1404 32.205 13.9159C31.1396 13.0479 29.9346 12.3457 28.6294 11.8482C28.2975 11.7217 28.0576 11.4285 27.9992 11.0782L27.1529 6H20.8471Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24 19C21.2386 19 19 21.2386 19 24C19 26.7614 21.2386 29 24 29C26.7614 29 29 26.7614 29 24C29 21.2386 26.7614 19 24 19ZM17 24C17 20.134 20.134 17 24 17C27.866 17 31 20.134 31 24C31 27.866 27.866 31 24 31C20.134 31 17 27.866 17 24Z" fill="currentColor"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="pointer-events:none"><path d="M12.844 1h-1.687a2 2 0 00-1.962 1.616 3 3 0 01-3.92 2.263 2 2 0 00-2.38.891l-.842 1.46a2 2 0 00.417 2.507 3 3 0 010 4.525 2 2 0 00-.417 2.507l.843 1.46a2 2 0 002.38.892 3.001 3.001 0 013.918 2.263A2 2 0 0011.157 23h1.686a2 2 0 001.963-1.615 3.002 3.002 0 013.92-2.263 2 2 0 002.38-.892l.842-1.46a2 2 0 00-.418-2.507 3 3 0 010-4.526 2 2 0 00.418-2.508l-.843-1.46a2 2 0 00-2.38-.891 3 3 0 01-3.919-2.263A2 2 0 0012.844 1Zm-1.767 2.347a6 6 0 00.08-.347h1.687a4.98 4.98 0 002.407 3.37 4.98 4.98 0 004.122.4l.843 1.46A4.98 4.98 0 0018.5 12a4.98 4.98 0 001.716 3.77l-.843 1.46a4.98 4.98 0 00-4.123.4A4.979 4.979 0 0012.843 21h-1.686a4.98 4.98 0 00-2.408-3.371 4.999 4.999 0 00-4.12-.399l-.844-1.46A4.979 4.979 0 005.5 12a4.98 4.98 0 00-1.715-3.77l.842-1.459a4.98 4.98 0 004.123-.399 4.981 4.981 0 002.327-3.025ZM16 12a4 4 0 11-7.999 0 4 4 0 018 0Zm-4 2a2 2 0 100-4 2 2 0 000 4Z" fill="currentColor"></path></svg>
           </button>
         </div>
       </div>

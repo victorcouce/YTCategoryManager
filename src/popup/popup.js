@@ -11,8 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnCancel = document.getElementById('btnCancel');
   const btnOrg    = document.getElementById('btnOrganize');
   const nameInput = document.getElementById('newName');
-  const colorInput= document.getElementById('newColor');
-  const emojiInput= document.getElementById('newEmoji');
+
 
   let editingId = null; // null = crear, string = editar
 
@@ -23,9 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return d.innerHTML;
   }
 
-  function sanitizeColor(c) {
-    return /^#[0-9A-Fa-f]{3,8}$/.test(c) ? c : '#4285F4';
-  }
+
 
   /* ── Render ── */
   async function render() {
@@ -41,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     sorted.forEach((cat) => {
-      const color = sanitizeColor(cat.color);
       const channelCount = Object.values(channelAssignments).filter((ids) =>
         ids.includes(cat.id)
       ).length;
@@ -52,14 +48,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       item.dataset.id = cat.id;
 
       item.innerHTML = `
-        <span class="cat-dot" style="background:${color}" aria-hidden="true"></span>
         <div class="cat-meta">
-          <span class="cat-name">${esc((cat.emoji ? cat.emoji + ' ' : '') + cat.name)}</span>
+          <span class="cat-name">${esc(cat.name)}</span>
           <span class="cat-count">${channelCount} canal${channelCount !== 1 ? 'es' : ''}</span>
         </div>
         <div class="cat-actions" role="group" aria-label="Acciones de ${esc(cat.name)}">
-          <button class="btn-icon btn-edit" data-id="${esc(cat.id)}" aria-label="Editar ${esc(cat.name)}">✏️</button>
-          <button class="btn-icon btn-del"  data-id="${esc(cat.id)}" aria-label="Eliminar ${esc(cat.name)}">🗑️</button>
+          <button class="btn-icon btn-edit" data-id="${esc(cat.id)}" aria-label="Editar ${esc(cat.name)}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
+          <button class="btn-icon btn-del"  data-id="${esc(cat.id)}" aria-label="Eliminar ${esc(cat.name)}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>
         </div>
       `;
 
@@ -81,8 +76,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   function resetForm() {
     editingId = null;
     nameInput.value  = '';
-    colorInput.value = '#4285F4';
-    emojiInput.value = '';
     btnSave.textContent = 'Crear';
     showForm(false);
   }
@@ -90,8 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   function startEdit(cat) {
     editingId = cat.id;
     nameInput.value  = cat.name;
-    colorInput.value = sanitizeColor(cat.color);
-    emojiInput.value = cat.emoji || '';
     btnSave.textContent = 'Guardar';
     showForm(true);
   }
@@ -99,18 +90,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   /* ── CRUD ── */
   async function saveCategory() {
     const name  = nameInput.value.trim();
-    const color = colorInput.value;
-    const emoji = emojiInput.value.trim();
-
     if (!name) {
       nameInput.focus();
       return;
     }
 
     if (editingId) {
-      await YCSM.storage.updateCategory(editingId, { name, color, emoji });
+      await YCSM.storage.updateCategory(editingId, { name });
     } else {
-      await YCSM.storage.addCategory(name, color, emoji);
+      await YCSM.storage.addCategory(name);
     }
 
     resetForm();

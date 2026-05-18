@@ -6,12 +6,12 @@ Extensión de Chrome (Manifest V3) que organiza tus suscripciones de YouTube en 
 
 - **Sidebar con categorías** — acordeón colapsable integrado en el sidebar de YouTube con los canales agrupados por categoría
 - **Panel de organización** — modal flotante con todos tus canales suscritos para asignarlos a categorías de forma rápida
-- **Filtrado por categoría** — haz clic en una etiqueta para ver solo los canales de esa categoría
+- **Filtrado por categoría** — haz clic en una categoría para ver solo los canales de esa categoría
 - **Búsqueda** — filtra canales por nombre en tiempo real, combinable con el filtro de categoría
 - **Ordenación** — por actividad reciente (último vídeo publicado) o alfabética A→Z
 - **Fecha del último vídeo** — visible en cada card, cargada de forma perezosa vía feed RSS
 - **Punto azul** — indica canales con vídeos nuevos sin ver desde tu última visita
-- **Crear y eliminar etiquetas** — directamente desde el panel, con nombre, emoji y color
+- **Crear y eliminar categorías** — directamente desde el panel, con nombre, emoji y color
 - **Asignación masiva** — modo multi-selección para asignar varios canales a una categoría a la vez
 - **Abrir canal** — clic en la card abre el canal en una pestaña nueva
 - **Dark mode** — compatible con el tema oscuro de YouTube

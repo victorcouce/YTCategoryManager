@@ -29,6 +29,14 @@
     injectTimeout = setTimeout(tryInject, delayMs);
   }
 
+  function isChannelPage() {
+    return /^\/(@|channel\/|c\/|user\/)/.test(location.pathname);
+  }
+
+  function shouldShowCategoryButton() {
+    return location.pathname.startsWith('/watch') || isChannelPage();
+  }
+
   /* ═══════════════════════════════════════════════════════════════
      MUTATION OBSERVER — supervisa el sidebar de YouTube
   ═══════════════════════════════════════════════════════════════ */
@@ -48,6 +56,9 @@
       // Si aún no hemos inyectado y el guide-content ya está disponible
       if (!isInjected) {
         scheduleInject(300);
+      }
+      if (shouldShowCategoryButton() && !document.getElementById('ycsm-label-btn')) {
+        YCSM.videoLabel?.scheduleInject(500);
       }
     });
 
@@ -88,11 +99,14 @@
      REACTIVIDAD AL STORAGE
   ═══════════════════════════════════════════════════════════════ */
 
-  YCSM.storage.onChange(() => {
+  YCSM.storage.onChange((changes) => {
     if (document.getElementById('ycsm-sidebar')) {
       YCSM.sidebar.scheduleRender();
     }
-    // Sincronizar el botón de etiquetas con cualquier cambio de storage
+    if (changes.categories && location.pathname === '/feed/subscriptions') {
+      YCSM.subscriptionsFilter?.refreshNav();
+    }
+    // Sincronizar el botón de categorías con cualquier cambio de storage
     if (document.getElementById('ycsm-label-btn')) {
       YCSM.videoLabel?.scheduleButtonStateUpdate();
     }
@@ -112,9 +126,9 @@
     } else {
       YCSM.subscriptionsFilter?.cleanup();
     }
-    // Botón de etiquetas en página de vídeo
+    // Botón de categorías en página de vídeo o canal
     YCSM.videoLabel?.cleanup();
-    if (location.pathname.startsWith('/watch')) {
+    if (shouldShowCategoryButton()) {
       YCSM.videoLabel?.scheduleInject(900);
     }
   });
@@ -125,8 +139,8 @@
     if (location.pathname === '/feed/subscriptions') {
       setTimeout(() => YCSM.subscriptionsFilter?.injectSubscriptionsNav(), 600);
     }
-    // Rein­tentar inyección del botón de etiquetas si la página del vídeo cargó más contenido
-    if (location.pathname.startsWith('/watch')) {
+    // Reintentar inyección del botón de categorías si la página cargó más contenido
+    if (shouldShowCategoryButton()) {
       YCSM.videoLabel?.scheduleInject(600);
     }
   });
@@ -144,8 +158,8 @@
     // Navbar de suscripciones en carga directa (YouTube tarda en renderizar el grid)
     setTimeout(() => YCSM.subscriptionsFilter?.injectSubscriptionsNav(), 1500);
 
-    // Botón de etiquetas en carga directa de página de vídeo
-    if (location.pathname.startsWith('/watch')) {
+    // Botón de categorías en carga directa de página de vídeo o canal
+    if (shouldShowCategoryButton()) {
       YCSM.videoLabel?.scheduleInject(1200);
     }
 
