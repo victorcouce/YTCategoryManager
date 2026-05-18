@@ -27,6 +27,7 @@
   let _pillsOverflowObserver = null;
   let _tooltipEl = null;
   let _lastSeen = {};             // channelId → ISO string (cuándo visitó el canal por última vez)
+  let _panelClickHandler = null;  // referencia al listener de click global para poder eliminarlo al cerrar
 
   /* ── Tooltip flotante (escapa contenedores con overflow) ── */
   function showTooltip(text, anchorEl) {
@@ -2120,7 +2121,7 @@
       const menu = panelEl.querySelector('#ycsm-bulk-cat-menu');
       menu.hidden = !menu.hidden;
     });
-    document.addEventListener('click', (e) => {
+    _panelClickHandler = (e) => {
       const menu = panelEl?.querySelector('#ycsm-bulk-cat-menu');
       if (menu) menu.hidden = true;
       // Cerrar dropdowns de categoría (pueden estar en body como fixed)
@@ -2129,7 +2130,8 @@
         // No cerrar si: el clic fue dentro del dropdown, en el tagBtn (que gestiona su propio toggle), o hay cambios pendientes
         if (!d.contains(e.target) && !e.target.closest('.ycsm-tag-btn') && !d.dataset.hasChanges) d.hidden = true;
       });
-    }, { capture: true });
+    };
+    document.addEventListener('click', _panelClickHandler, { capture: true });
 
     document.addEventListener('keydown', handleEscape);
 
@@ -2143,16 +2145,16 @@
     // Estrategia 1: fetch de /feed/channels → obtiene TODOS los canales sin depender del DOM
     allChannels = await fetchAllSubscriptions();
 
-    // Estrategia 2: DOM scraping del sidebar (fallback)
-    if (allChannels.length === 0) {
-      await expandYouTubeSubscriptions();
-      allChannels = scrapeChannelsFromDOM();
-    }
-
-    // Estrategia 3: caché local de sesiones anteriores
+    // Estrategia 2: caché local de sesiones anteriores (no modifica el DOM de YouTube)
     if (allChannels.length === 0) {
       const { channels } = await YCSM.storage.getCachedChannels();
       allChannels = channels || [];
+    }
+
+    // Estrategia 3: DOM scraping del sidebar (último recurso — puede provocar re-renders en el guide de YouTube)
+    if (allChannels.length === 0) {
+      await expandYouTubeSubscriptions();
+      allChannels = scrapeChannelsFromDOM();
     }
 
     if (allChannels.length > 0) {
@@ -2186,6 +2188,16 @@
     if (_pillsOverflowObserver) { _pillsOverflowObserver.disconnect(); _pillsOverflowObserver = null; }
     if (_tooltipEl) { _tooltipEl.remove(); _tooltipEl = null; }
     document.removeEventListener('keydown', handleEscape);
+    if (_panelClickHandler) {
+      document.removeEventListener('click', _panelClickHandler, { capture: true });
+      _panelClickHandler = null;
+    }
+    // Re-inyectar el sidebar si fue eliminado durante las operaciones del panel
+    setTimeout(() => {
+      if (window.YCSM?.sidebar && !document.getElementById('ycsm-sidebar')) {
+        YCSM.sidebar.injectIntoYouTube();
+      }
+    }, 200);
   }
 
   function handleEscape(e) {
