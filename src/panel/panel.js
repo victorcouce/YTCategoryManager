@@ -24,7 +24,43 @@
   let selectionMode = false;  // true = modo multi-selección activo
   const _dateCache = new Map(); // channelId → ISO date string | null
   let _dateObserver = null;
+  let _pillsOverflowObserver = null;
+  let _tooltipEl = null;
   let _lastSeen = {};             // channelId → ISO string (cuándo visitó el canal por última vez)
+
+  /* ── Tooltip flotante (escapa contenedores con overflow) ── */
+  function showTooltip(text, anchorEl) {
+    if (!_tooltipEl) {
+      _tooltipEl = document.createElement('div');
+      _tooltipEl.style.cssText = [
+        'position:fixed',
+        'padding:6px 10px',
+        'border-radius:8px',
+        'font-size:12px',
+        'font-weight:400',
+        'white-space:nowrap',
+        'background:#616161',
+        'color:#fff',
+        'pointer-events:none',
+        'z-index:2147483647',
+        'font-family:Roboto,Arial,sans-serif',
+        'opacity:0',
+        'transition:opacity 0.2s',
+      ].join(';');
+      document.body.appendChild(_tooltipEl);
+    }
+    _tooltipEl.textContent = text;
+    _tooltipEl.style.display = 'block';
+    const rect = anchorEl.getBoundingClientRect();
+    const w = _tooltipEl.offsetWidth;
+    _tooltipEl.style.left = Math.max(4, rect.left + rect.width / 2 - w / 2) + 'px';
+    _tooltipEl.style.top = (rect.top - _tooltipEl.offsetHeight - 8) + 'px';
+    _tooltipEl.style.opacity = '1';
+  }
+
+  function hideTooltip() {
+    if (_tooltipEl) { _tooltipEl.style.opacity = '0'; _tooltipEl.style.display = 'none'; }
+  }
 
   /* ═══════════════════════════════════════════════════════════════
      ESTRATEGIA 1: Fetch de /feed/channels (más fiable que DOM)
@@ -278,6 +314,7 @@
           <button class="ycsm-btn-select" id="ycsm-btn-select" aria-pressed="false" title="Activar selección múltiple"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Seleccionar</button>
           <button class="ycsm-btn-icon ycsm-panel-x" aria-label="Cerrar panel">✕</button>
         </div>
+        <div class="ycsm-panel-legend" aria-label="Categorías disponibles"></div>
         <div class="ycsm-panel-body">
           <div class="ycsm-panel-toolbar">
             <div class="ycsm-yt-search-container">
@@ -302,8 +339,6 @@
               <option value="activity">Recientes</option>
               <option value="name">A → Z</option>
             </select>
-          </div>
-          <div class="ycsm-panel-legend" aria-label="Categorías disponibles">
           </div>
           <div class="ycsm-panel-channels" role="list" aria-label="Lista de canales suscritos"></div>
         </div>
@@ -700,7 +735,31 @@
       const addBtn = document.createElement('button');
       addBtn.className = 'ycsm-manage-add-btn';
       addBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva categoría`;
-      addBtn.addEventListener('click', () => openEditLabel(null));
+      addBtn.addEventListener('click', () => {
+        // Si ya hay una fila de nueva categoría, enfocar su input
+        const existingNew = body.querySelector('.ycsm-manage-row-new');
+        if (existingNew) { existingNew.querySelector('.ycsm-manage-new-name-input')?.focus(); return; }
+
+        // Obtener o crear la lista
+        let targetList = body.querySelector('.ycsm-manage-list');
+        if (!targetList) {
+          body.querySelector('.ycsm-manage-empty')?.remove();
+          const secTitle = document.createElement('p');
+          secTitle.className = 'ycsm-manage-section-title';
+          secTitle.textContent = 'Categorías existentes';
+          body.insertBefore(secTitle, addBtn);
+          targetList = document.createElement('div');
+          targetList.className = 'ycsm-manage-list';
+          body.insertBefore(targetList, addBtn);
+        }
+
+        const { row, input } = buildInlineNewRow(async (name) => {
+          await YCSM.storage.addCategory(name);
+          await renderManageContent();
+        });
+        targetList.appendChild(row);
+        input.focus();
+      });
       body.appendChild(addBtn);
     }
 
@@ -767,7 +826,7 @@
 
   function openManageDropdown(wrapEl) {
     // Toggle: si ya está abierto, cerrar
-    const existing = wrapEl.querySelector('.ycsm-manage-dropdown');
+    const existing = document.getElementById('ycsm-manage-dropdown-portal');
     if (existing) { existing.remove(); return; }
 
     const PENCIL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
@@ -776,6 +835,7 @@
 
     const dropdown = document.createElement('div');
     dropdown.className = 'ycsm-manage-dropdown';
+    dropdown.id = 'ycsm-manage-dropdown-portal';
 
     // Cabecera
     const header = document.createElement('div');
@@ -803,12 +863,13 @@
 
     closeOnOutside = (e) => {
       if (!dropdown.contains(e.target) && !wrapEl.contains(e.target)) {
+        window.removeEventListener('resize', reposition);
         closeAndRefresh();
       }
     };
 
     onKeydown = (e) => {
-      if (e.key === 'Escape') closeAndRefresh();
+      if (e.key === 'Escape') { window.removeEventListener('resize', reposition); closeAndRefresh(); }
     };
 
     async function renderDropdownContent() {
@@ -925,7 +986,28 @@
       const addBtn = document.createElement('button');
       addBtn.className = 'ycsm-manage-add-btn';
       addBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva categoría`;
-      addBtn.addEventListener('click', () => openDropdownEditLabel(null));
+      addBtn.addEventListener('click', () => {
+        // Si ya hay una fila de nueva categoría, enfocar su input
+        const existingNew = dropBody.querySelector('.ycsm-manage-row-new');
+        if (existingNew) { existingNew.querySelector('.ycsm-manage-new-name-input')?.focus(); return; }
+
+        // Obtener o crear la lista
+        let targetList = dropBody.querySelector('.ycsm-manage-list');
+        if (!targetList) {
+          dropBody.querySelector('.ycsm-manage-empty')?.remove();
+          targetList = document.createElement('div');
+          targetList.className = 'ycsm-manage-list';
+          dropBody.insertBefore(targetList, addBtn);
+        }
+
+        const { row, input } = buildInlineNewRow(async (name) => {
+          await YCSM.storage.addCategory(name);
+          if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
+          await closeAndRefresh();
+        });
+        targetList.appendChild(row);
+        input.focus();
+      });
       dropBody.appendChild(addBtn);
     }
 
@@ -990,12 +1072,174 @@
 
     wrapEl.appendChild(dropdown);
 
+    // Posicionar como portal fixed relativo al botón
+    const rect = wrapEl.getBoundingClientRect();
+    dropdown.style.cssText = `
+      position: fixed;
+      top: ${rect.bottom + 6}px;
+      right: ${window.innerWidth - rect.right}px;
+      z-index: 99999;
+    `;
+    document.body.appendChild(dropdown);
+
+    const reposition = () => {
+      const r = wrapEl.getBoundingClientRect();
+      dropdown.style.top  = `${r.bottom + 6}px`;
+      dropdown.style.right = `${window.innerWidth - r.right}px`;
+    };
+    window.addEventListener('resize', reposition);
+
     setTimeout(() => {
       document.addEventListener('click', closeOnOutside);
       document.addEventListener('keydown', onKeydown);
     }, 0);
 
     renderDropdownContent();
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     HELPERS DE EDICIÓN DE PILLS
+  ═══════════════════════════════════════════════════════════════ */
+
+  function startPillRename(cat, pillBtn) {
+    if (pillBtn.querySelector('.ycsm-pill-rename-input')) return;
+    const currentName = cat.name;
+    const input = document.createElement('input');
+    input.className = 'ycsm-pill-rename-input';
+    input.value = currentName;
+    input.maxLength = 30;
+    input.size = Math.max(currentName.length, 6);
+
+    pillBtn.classList.add('ycsm-pill-editing');
+    pillBtn.textContent = '';
+    pillBtn.appendChild(input);
+    input.focus();
+    input.select();
+
+    let saved = false;
+
+    const commit = async () => {
+      if (saved) return;
+      saved = true;
+      const newName = input.value.trim();
+      pillBtn.classList.remove('ycsm-pill-editing');
+      if (newName && newName !== currentName) {
+        await YCSM.storage.updateCategory(cat.id, { name: newName });
+        if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
+      }
+      await renderPanelContent();
+    };
+
+    input.addEventListener('blur', commit);
+    input.addEventListener('input', () => { input.size = Math.max(input.value.length, 6); });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+      if (e.key === 'Escape') {
+        saved = true;
+        pillBtn.classList.remove('ycsm-pill-editing');
+        pillBtn.textContent = currentName;
+      }
+    });
+  }
+
+  /**
+   * Crea una fila inline de "nueva categoría" para insertar en una lista de gestión.
+   * El botón check ocupa el lugar del grip; se confirma con Enter, click en check o
+   * clic fuera (blur). Se cancela con Escape o blur con campo vacío.
+   * @param {function(string): Promise<void>} onSave - callback con el nombre confirmado
+   * @returns {{ row: HTMLElement, input: HTMLInputElement }}
+   */
+  function buildInlineNewRow(onSave) {
+    const CHECK_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    const row = document.createElement('div');
+    row.className = 'ycsm-manage-row ycsm-manage-row-new';
+
+    const checkBtn = document.createElement('button');
+    checkBtn.type = 'button';
+    checkBtn.className = 'ycsm-manage-check-btn';
+    checkBtn.setAttribute('aria-label', 'Confirmar');
+    checkBtn.innerHTML = CHECK_SVG;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'ycsm-manage-new-name-input';
+    input.placeholder = 'Nombre de categoría…';
+    input.maxLength = 30;
+    input.autocomplete = 'off';
+
+    let saving = false;
+
+    const save = async () => {
+      if (saving) return;
+      const name = input.value.trim();
+      if (!name) { row.remove(); return; }
+      saving = true;
+      row.remove();
+      await onSave(name);
+    };
+
+    // mousedown en check para que no dispare blur antes
+    checkBtn.addEventListener('mousedown', (e) => { e.preventDefault(); save(); });
+    input.addEventListener('blur', () => { if (!saving) save(); });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); save(); }
+      if (e.key === 'Escape') { saving = true; row.remove(); }
+    });
+
+    row.appendChild(checkBtn);
+    row.appendChild(input);
+
+    return { row, input };
+  }
+
+  function insertInlineNewPill(legend, createWrap) {
+    const existing = legend.querySelector('.ycsm-legend-new-pill');
+    if (existing) { existing.querySelector('.ycsm-new-pill-input')?.focus(); return; }
+
+    const pillEl = document.createElement('div');
+    pillEl.className = 'ycsm-legend-new-pill';
+
+    const input = document.createElement('input');
+    input.className = 'ycsm-new-pill-input';
+    input.type = 'text';
+    input.placeholder = 'Nueva categoría…';
+    input.maxLength = 30;
+    input.autocomplete = 'off';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'ycsm-new-pill-cancel';
+    cancelBtn.setAttribute('aria-label', 'Cancelar');
+    cancelBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    pillEl.appendChild(input);
+    pillEl.appendChild(cancelBtn);
+    legend.insertBefore(pillEl, createWrap);  // createWrap es null → appendChild
+    legend.scrollLeft = legend.scrollWidth;   // scroll al final para ver el input
+    input.focus();
+
+    let saving = false;
+
+    const save = async () => {
+      if (saving) return;
+      const name = input.value.trim();
+      if (!name) { cancel(); return; }
+      saving = true;
+      pillEl.remove();
+      await YCSM.storage.addCategory(name);
+      if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
+      await renderPanelContent();
+    };
+
+    const cancel = () => { saving = true; pillEl.remove(); };
+
+    cancelBtn.addEventListener('mousedown', (e) => { e.preventDefault(); cancel(); });
+    input.addEventListener('blur', () => save());
+    input.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); await save(); }
+      if (e.key === 'Escape') cancel();
+    });
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -1013,7 +1257,39 @@
     /* ── Leyenda ── */
     const legend = panelEl.querySelector('.ycsm-panel-legend');
     if (!legend) return;
+
+    // Desconectar observer previo antes de re-renderizar
+    if (_pillsOverflowObserver) {
+      _pillsOverflowObserver.disconnect();
+      _pillsOverflowObserver = null;
+    }
+
     legend.innerHTML = '';
+
+    // Contenedor scrollable para las pills
+    const scrollContainer = document.createElement('div');
+    scrollContainer.className = 'ycsm-legend-scroll';
+
+    // Contenedor fijo derecha: botón "+" + botón gestionar
+    const actionsWrap = document.createElement('div');
+    actionsWrap.className = 'ycsm-legend-actions';
+
+    const createWrap = document.createElement('div');
+    createWrap.className = 'ycsm-legend-create-wrap';
+
+    const createPill = document.createElement('button');
+    createPill.type = 'button';
+    createPill.className = 'ycsm-legend-create-pill';
+    createPill.setAttribute('aria-label', 'Añadir categoría');
+    createPill.textContent = '+';
+    createPill.addEventListener('mouseenter', () => showTooltip('Añadir categoría', createPill));
+    createPill.addEventListener('mouseleave', hideTooltip);
+    createPill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hideTooltip();
+      insertInlineNewPill(scrollContainer, null);
+    });
+    createWrap.appendChild(createPill);
 
     // Botón gestionar categorías (sliders icon)
     const manageWrap = document.createElement('div');
@@ -1028,112 +1304,66 @@
       openManageDropdown(manageWrap);
     });
     manageWrap.appendChild(manageBtn);
-    legend.appendChild(manageWrap);
+
+    actionsWrap.appendChild(createWrap);
+    actionsWrap.appendChild(manageWrap);
 
     if (sortedCats.length === 0) {
       const empty = document.createElement('p');
       empty.style.cssText = 'font-size:13px;color:#606060;margin:0;align-self:center';
-      empty.textContent = 'Sin categorías. Pulsa el icono para crear.';
-      legend.appendChild(empty);
+      empty.textContent = 'Sin categorías. Pulsa "+" para crear.';
+      scrollContainer.appendChild(empty);
+      legend.appendChild(scrollContainer);
+      legend.appendChild(actionsWrap);
     } else {
       // Pill "Todos"
       const allPill = document.createElement('button');
       allPill.className = 'ycsm-legend-pill ycsm-legend-all' + (filterCat === null ? ' ycsm-legend-pill-active' : '');
       allPill.textContent = 'Todos';
       allPill.addEventListener('click', () => { filterCat = null; renderPanelContent(); });
-      legend.appendChild(allPill);
+      scrollContainer.appendChild(allPill);
 
       sortedCats.forEach((cat) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'ycsm-pill-wrap';
+
         const pill = document.createElement('button');
         pill.className = 'ycsm-legend-pill' + (filterCat === cat.id ? ' ycsm-legend-pill-active' : '');
-
-        pill.style.padding = '0 16px';
         pill.textContent = cat.name;
+        pill.title = 'Doble clic para renombrar';
         pill.addEventListener('click', () => {
           filterCat = filterCat === cat.id ? null : cat.id;
           renderPanelContent();
         });
-        legend.appendChild(pill);
+        pill.addEventListener('dblclick', (e) => {
+          e.stopPropagation();
+          startPillRename(cat, pill);
+        });
+
+        wrap.appendChild(pill);
+        scrollContainer.appendChild(wrap);
       });
 
-      // Botón "Crear categoría" al final de los pills — con dropdown inline
-      const createWrap = document.createElement('div');
-      createWrap.className = 'ycsm-legend-create-wrap';
+      legend.appendChild(scrollContainer);
+      legend.appendChild(actionsWrap);
 
-      const createPill = document.createElement('button');
-      createPill.className = 'ycsm-legend-create-pill';
-      createPill.textContent = '+';
-      createPill.dataset.tooltip = 'Añadir categoría';
+      // Colocar el botón "+" inline al final del scroll por defecto.
+      // Si las pills desbordan el contenedor, moverlo a actionsWrap (fijo derecha).
+      scrollContainer.appendChild(createWrap);
 
-      const addDropdown = document.createElement('div');
-      addDropdown.className = 'ycsm-add-cat-dropdown';
-      addDropdown.hidden = true;
-
-      const addInput = document.createElement('input');
-      addInput.className = 'ycsm-add-cat-input';
-      addInput.type = 'text';
-      addInput.placeholder = 'Nombre de la categoría…';
-      addInput.maxLength = 30;
-      addInput.autocomplete = 'off';
-
-      const addBtnRow = document.createElement('div');
-      addBtnRow.className = 'ycsm-add-cat-btns';
-
-      const addSaveBtn = document.createElement('button');
-      addSaveBtn.className = 'ycsm-add-cat-save';
-      addSaveBtn.textContent = 'Añadir';
-
-      const addCancelBtn = document.createElement('button');
-      addCancelBtn.className = 'ycsm-add-cat-cancel';
-      addCancelBtn.textContent = 'Cancelar';
-
-      const saveNewCategory = async () => {
-        const name = addInput.value.trim();
-        if (!name) { addInput.focus(); return; }
-        await YCSM.storage.addCategory(name);
-        addDropdown.hidden = true;
-        addInput.value = '';
-        if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
-        await renderPanelContent();
+      const repositionCreateBtn = () => {
+        const overflows = scrollContainer.scrollWidth > scrollContainer.clientWidth;
+        if (overflows && createWrap.parentElement !== actionsWrap) {
+          actionsWrap.insertBefore(createWrap, manageWrap);
+        } else if (!overflows && createWrap.parentElement !== scrollContainer) {
+          scrollContainer.appendChild(createWrap);
+        }
       };
 
-      addSaveBtn.addEventListener('click', saveNewCategory);
-      addCancelBtn.addEventListener('click', () => {
-        addDropdown.hidden = true;
-        addInput.value = '';
-      });
-      addInput.addEventListener('keydown', async (e) => {
-        if (e.key === 'Enter') await saveNewCategory();
-        if (e.key === 'Escape') { addDropdown.hidden = true; addInput.value = ''; }
-      });
+      requestAnimationFrame(repositionCreateBtn);
 
-      let _closeOnOutside = null;
-      createPill.addEventListener('click', (e) => {
-        e.stopPropagation();
-        addDropdown.hidden = !addDropdown.hidden;
-        if (!addDropdown.hidden) {
-          addInput.focus();
-          _closeOnOutside = (ev) => {
-            if (!createWrap.contains(ev.target)) {
-              addDropdown.hidden = true;
-              addInput.value = '';
-              document.removeEventListener('click', _closeOnOutside);
-            }
-          };
-          // Diferir para que el propio click que abre no lo cierre
-          setTimeout(() => document.addEventListener('click', _closeOnOutside), 0);
-        } else if (_closeOnOutside) {
-          document.removeEventListener('click', _closeOnOutside);
-        }
-      });
-
-      addBtnRow.appendChild(addCancelBtn);
-      addBtnRow.appendChild(addSaveBtn);
-      addDropdown.appendChild(addInput);
-      addDropdown.appendChild(addBtnRow);
-      createWrap.appendChild(createPill);
-      createWrap.appendChild(addDropdown);
-      legend.appendChild(createWrap);
+      _pillsOverflowObserver = new ResizeObserver(repositionCreateBtn);
+      _pillsOverflowObserver.observe(scrollContainer);
     }
 
     /* ── Ordenación ── */
@@ -1292,101 +1522,323 @@
         dropdown.className = 'ycsm-tag-dropdown';
         dropdown.hidden = true;
 
-        // Estado local de cambios pendientes en este dropdown
-        let pendingChanges = new Map(); // catId → true (add) | false (remove)
+        // Snapshot al abrir: para orden fijo y chips de referencia visual
+        let originalAssigned = new Set();
+        // Lista ordenada: se fija al abrir y no salta durante toggles
+        let sortedForDropdown = [];
+        // Bloqueo por doble-click: un toggle a la vez
+        let isToggling = false;
+        // Flag para refrescar el panel al cerrar solo si hubo cambios
+        let hasMadeChanges = false;
 
-        // Orden alfabético para el dropdown
+        // Base alfabética, mutable para creación inline
         const alphaCats = [...sortedCats].sort((a, b) =>
           a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
         );
 
-        // Contar canales por categoría
+        // Conteo de canales por categoría (se actualiza en cada toggle)
         const countByCatDropdown = {};
         Object.values(channelAssignments).forEach((cats) => {
           (cats || []).forEach((cid) => { countByCatDropdown[cid] = (countByCatDropdown[cid] || 0) + 1; });
         });
 
-        function getEffectiveAssigned() {
-          const base = new Set(channelAssignments[channel.id] || []);
-          for (const [catId, add] of pendingChanges) {
-            if (add) base.add(catId);
-            else base.delete(catId);
+        // Orden: asignadas al abrir primero (alfa), luego no asignadas (alfa)
+        function buildSortedList() {
+          const assignedItems = alphaCats.filter((c) => originalAssigned.has(c.id));
+          const unassignedItems = alphaCats.filter((c) => !originalAssigned.has(c.id));
+          sortedForDropdown = [...assignedItems, ...unassignedItems];
+        }
+
+        const CHECK_ON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="currentColor"/><polyline points="9 11 12 14 22 4" stroke="#fff" stroke-width="2.5"/></svg>`;
+        const CHECK_OFF_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>`;
+
+        // Muta solo el ítem afectado en el DOM (sin re-render completo)
+        function toggleItemInDOM(catId, isOn, catName) {
+          const item = dropdown.querySelector(`.ycsm-dd-item[data-catid="${CSS.escape(catId)}"]`);
+          if (!item) return;
+          item.classList.toggle('ycsm-dd-item-assigned', isOn);
+          item.setAttribute('aria-pressed', String(isOn));
+          const checkBtn = item.querySelector('.ycsm-dd-item-check');
+          if (checkBtn) {
+            checkBtn.className = `ycsm-dd-item-check ${isOn ? 'ycsm-dd-item-check-on' : 'ycsm-dd-item-check-off'}`;
+            checkBtn.setAttribute('aria-label', `${isOn ? 'Quitar de' : 'Añadir a'} ${escapeHtml(catName)}`);
+            checkBtn.innerHTML = isOn ? CHECK_ON_SVG : CHECK_OFF_SVG;
           }
-          return base;
+          const countSpan = item.querySelector('.ycsm-dd-item-count');
+          if (countSpan) {
+            const n = countByCatDropdown[catId] || 0;
+            countSpan.textContent = `${n} canal${n !== 1 ? 'es' : ''}`;
+          }
+        }
+
+        // Guarda el toggle inmediatamente en storage y actualiza el DOM
+        async function saveToggle(catId, catName) {
+          if (isToggling) return;
+          isToggling = true;
+          try {
+            const currentAssigned = channelAssignments[channel.id] || [];
+            const currentIsOn = currentAssigned.includes(catId);
+            const newIsOn = !currentIsOn;
+
+            if (currentIsOn) {
+              await YCSM.storage.unassignChannel(channel.id, catId);
+              channelAssignments[channel.id] = currentAssigned.filter((id) => id !== catId);
+              if (channelAssignments[channel.id].length === 0) delete channelAssignments[channel.id];
+              countByCatDropdown[catId] = Math.max(0, (countByCatDropdown[catId] || 1) - 1);
+            } else {
+              await YCSM.storage.assignChannel(channel.id, catId);
+              if (!channelAssignments[channel.id]) channelAssignments[channel.id] = [];
+              if (!channelAssignments[channel.id].includes(catId)) channelAssignments[channel.id].push(catId);
+              countByCatDropdown[catId] = (countByCatDropdown[catId] || 0) + 1;
+            }
+
+            // Comparar estado actual con el snapshot inicial para determinar si hay cambios reales
+            const currentSet = new Set(channelAssignments[channel.id] || []);
+            const hasRealChanges =
+              currentSet.size !== originalAssigned.size ||
+              [...currentSet].some((id) => !originalAssigned.has(id));
+
+            hasMadeChanges = hasRealChanges;
+            if (hasRealChanges) {
+              dropdown.dataset.hasChanges = '1';
+            } else {
+              delete dropdown.dataset.hasChanges;
+            }
+            const _doneBtn = dropdown.querySelector('.ycsm-dd-footer-done');
+            if (_doneBtn) _doneBtn.disabled = !hasRealChanges;
+            toggleItemInDOM(catId, newIsOn, catName);
+            renderTagBtnContent();
+            if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
+          } finally {
+            isToggling = false;
+          }
         }
 
         function renderDropdownContent(filter = '') {
           dropdown.innerHTML = '';
-          const effectiveAssigned = getEffectiveAssigned();
+          // Estado actual real (no pendiente: se guarda inmediatamente)
+          const currentAssigned = new Set(channelAssignments[channel.id] || []);
 
-          // ─── Header: Título + búsqueda + crear ───
+          // ─── Header ───
           const header = document.createElement('div');
           header.className = 'ycsm-dd-header';
 
           const title = document.createElement('h3');
           title.className = 'ycsm-dd-title';
-          title.textContent = 'Añadir a categoría';
+          title.textContent = 'Categorías';
           header.appendChild(title);
 
+          // Fila búsqueda + botón crear (misma fila)
+          const searchRow = document.createElement('div');
+          searchRow.className = 'ycsm-dd-search-row';
+
+          // Search box (estilo modal principal)
+          const searchBox = document.createElement('div');
+          searchBox.className = 'ycsm-dd-search-box';
+
+          const searchIconEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          searchIconEl.setAttribute('viewBox', '0 0 24 24');
+          searchIconEl.setAttribute('fill', 'none');
+          searchIconEl.setAttribute('aria-hidden', 'true');
+          searchIconEl.classList.add('ycsm-dd-search-icon');
+          const _sc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          _sc.setAttribute('cx', '10.5'); _sc.setAttribute('cy', '10.5'); _sc.setAttribute('r', '6.5');
+          _sc.setAttribute('stroke', 'currentColor'); _sc.setAttribute('stroke-width', '2');
+          searchIconEl.appendChild(_sc);
+          const _sp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          _sp.setAttribute('d', 'M15.5 15.5L20 20'); _sp.setAttribute('stroke', 'currentColor');
+          _sp.setAttribute('stroke-width', '2'); _sp.setAttribute('stroke-linecap', 'round');
+          searchIconEl.appendChild(_sp);
+          searchBox.appendChild(searchIconEl);
+
           const searchInput = document.createElement('input');
-          searchInput.className = 'ycsm-tag-search';
-          searchInput.type = 'search';
+          searchInput.className = 'ycsm-dd-search-input';
+          searchInput.type = 'text';
           searchInput.placeholder = 'Buscar categoría…';
           searchInput.autocomplete = 'off';
           searchInput.value = filter;
-          header.appendChild(searchInput);
+          searchBox.appendChild(searchInput);
+
+          const searchClearBtn = document.createElement('button');
+          searchClearBtn.className = 'ycsm-dd-search-clear';
+          searchClearBtn.setAttribute('aria-label', 'Borrar búsqueda');
+          searchClearBtn.hidden = !filter;
+          searchClearBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>`;
+          searchClearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            renderDropdownContent('');
+            const si = dropdown.querySelector('.ycsm-dd-search-input');
+            if (si) si.focus();
+          });
+          searchBox.appendChild(searchClearBtn);
+          searchRow.appendChild(searchBox);
 
           const createBtn = document.createElement('button');
           createBtn.className = 'ycsm-dd-create-btn';
-          createBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Crear categoría`;
-          createBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openManageLabels(true);
-            closeDropdown();
-          });
-          header.appendChild(createBtn);
+          createBtn.setAttribute('aria-label', 'Añadir categoría');
+          createBtn.textContent = '+';
+          createBtn.addEventListener('mouseenter', () => showTooltip('Añadir categoría', createBtn));
+          createBtn.addEventListener('mouseleave', hideTooltip);
+          searchRow.appendChild(createBtn);
+          header.appendChild(searchRow);
+
+          // Área de creación inline (vacía por defecto, se rellena al pulsar "+")
+          const createArea = document.createElement('div');
+          createArea.className = 'ycsm-dd-create-area';
+          header.appendChild(createArea);
 
           dropdown.appendChild(header);
 
-          // ─── Listado completo de categorías (filtrado por búsqueda) ───
-          const filtered = filter
-            ? alphaCats.filter((c) => normalizeSearch(c.name).includes(normalizeSearch(filter)))
-            : alphaCats;
+          // Expandir mini-form de creación inline al hacer click
+          createBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            createArea.innerHTML = '';
 
-          if (filtered.length > 0) {
+            const form = document.createElement('div');
+            form.className = 'ycsm-dd-inline-form';
+
+            const nameInput = document.createElement('input');
+            nameInput.className = 'ycsm-dd-inline-input';
+            nameInput.type = 'text';
+            nameInput.placeholder = 'Nombre de la categoría…';
+            nameInput.maxLength = 50;
+            nameInput.autocomplete = 'off';
+            form.appendChild(nameInput);
+
+            const formActions = document.createElement('div');
+            formActions.className = 'ycsm-dd-inline-actions';
+
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'ycsm-dd-inline-confirm';
+            confirmBtn.textContent = 'Crear';
+            formActions.appendChild(confirmBtn);
+
+            const cancelInlineBtn = document.createElement('button');
+            cancelInlineBtn.className = 'ycsm-dd-inline-cancel';
+            cancelInlineBtn.setAttribute('aria-label', 'Cancelar creación');
+            cancelInlineBtn.textContent = '✕';
+            formActions.appendChild(cancelInlineBtn);
+
+            form.appendChild(formActions);
+            createArea.appendChild(form);
+
+            const errorMsg = document.createElement('p');
+            errorMsg.className = 'ycsm-dd-inline-error';
+            errorMsg.hidden = true;
+            createArea.appendChild(errorMsg);
+
+            nameInput.focus();
+
+            async function handleCreate() {
+              const name = nameInput.value.trim();
+              if (!name) {
+                form.classList.add('ycsm-dd-inline-shake');
+                setTimeout(() => form.classList.remove('ycsm-dd-inline-shake'), 400);
+                return;
+              }
+              const isDuplicate = alphaCats.some(
+                (c) => normalizeSearch(c.name) === normalizeSearch(name)
+              );
+              if (isDuplicate) {
+                errorMsg.textContent = 'Ya existe una categoría con ese nombre';
+                errorMsg.hidden = false;
+                return;
+              }
+              confirmBtn.disabled = true;
+              const newCat = await YCSM.storage.addCategory(name);
+              if (newCat) {
+                alphaCats.push(newCat);
+                alphaCats.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                // Asignar directamente al canal sin esperar saveToggle (cat no existe aún en sortedForDropdown)
+                await YCSM.storage.assignChannel(channel.id, newCat.id);
+                if (!channelAssignments[channel.id]) channelAssignments[channel.id] = [];
+                channelAssignments[channel.id].push(newCat.id);
+                countByCatDropdown[newCat.id] = 1;
+                hasMadeChanges = true;
+                dropdown.dataset.hasChanges = '1';
+                buildSortedList();
+                renderDropdownContent(dropdown.querySelector('.ycsm-dd-search-input')?.value || '');
+                renderTagBtnContent();
+                if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
+              }
+            }
+
+            confirmBtn.addEventListener('click', (ev) => { ev.stopPropagation(); handleCreate(); });
+            nameInput.addEventListener('keydown', (ev) => {
+              ev.stopPropagation();
+              if (ev.key === 'Enter') handleCreate();
+              if (ev.key === 'Escape') { ev.preventDefault(); cancelInlineBtn.click(); }
+            });
+            cancelInlineBtn.addEventListener('click', (ev) => {
+              ev.stopPropagation();
+              createArea.innerHTML = '';
+            });
+          });
+
+          // ─── Listado (filtrado por búsqueda, orden fijo al abrir) ───
+          const visibleCats = filter
+            ? sortedForDropdown.filter((c) => normalizeSearch(c.name).includes(normalizeSearch(filter)))
+            : sortedForDropdown;
+
+          if (visibleCats.length > 0) {
             const catList = document.createElement('div');
             catList.className = 'ycsm-dd-list';
+            catList.setAttribute('role', 'listbox');
+            catList.setAttribute('aria-label', 'Categorías del canal');
 
-            filtered.forEach((cat) => {
-              const isOn = effectiveAssigned.has(cat.id);
+            let dividerNeeded = !filter && originalAssigned.size > 0;
+            visibleCats.forEach((cat) => {
+              if (dividerNeeded && !originalAssigned.has(cat.id)) {
+                dividerNeeded = false;
+                const divider = document.createElement('div');
+                divider.className = 'ycsm-dd-divider';
+                catList.appendChild(divider);
+              }
+              const isOn = currentAssigned.has(cat.id);
               const n = countByCatDropdown[cat.id] || 0;
               const item = document.createElement('div');
               item.className = 'ycsm-dd-item' + (isOn ? ' ycsm-dd-item-assigned' : '');
+              item.setAttribute('role', 'option');
+              item.setAttribute('aria-pressed', String(isOn));
+              item.setAttribute('data-catid', cat.id);
+              item.setAttribute('tabindex', '-1');
               item.innerHTML = `
                 <div class="ycsm-dd-item-info">
                   <span class="ycsm-dd-item-name">${escapeHtml(cat.name)}</span>
                   <span class="ycsm-dd-item-count">${n} canal${n !== 1 ? 'es' : ''}</span>
                 </div>
-                <button class="ycsm-dd-item-check ${isOn ? 'ycsm-dd-item-check-on' : 'ycsm-dd-item-check-off'}" aria-label="${isOn ? 'Quitar de' : 'Añadir a'} ${escapeHtml(cat.name)}">
-                  ${isOn
-                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="currentColor"/><polyline points="9 11 12 14 22 4" stroke="#fff" stroke-width="2.5"/></svg>'
-                    : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>'
-                  }
+                <button class="ycsm-dd-item-check ${isOn ? 'ycsm-dd-item-check-on' : 'ycsm-dd-item-check-off'}" aria-label="${isOn ? 'Quitar de' : 'Añadir a'} ${escapeHtml(cat.name)}" tabindex="-1">
+                  ${isOn ? CHECK_ON_SVG : CHECK_OFF_SVG}
                 </button>
               `;
-              item.querySelector('.ycsm-dd-item-check').addEventListener('click', (e) => {
+
+              // Guardar inmediatamente al hacer click en la fila o en el checkbox
+              item.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                const originallyOn = (channelAssignments[channel.id] || []).includes(cat.id);
-                const newState = !isOn;
-                // Si el nuevo estado coincide con el original, eliminar el cambio pendiente
-                if (newState === originallyOn) {
-                  pendingChanges.delete(cat.id);
-                } else {
-                  pendingChanges.set(cat.id, newState);
-                }
-                renderDropdownContent(searchInput.value);
+                await saveToggle(cat.id, cat.name);
               });
+              item.querySelector('.ycsm-dd-item-check').addEventListener('click', async (e) => {
+                e.stopPropagation(); // no propaga al item; llama directamente
+                await saveToggle(cat.id, cat.name);
+              });
+
               catList.appendChild(item);
+            });
+
+            // Navegación por teclado en la lista
+            catList.addEventListener('keydown', (e) => {
+              const items = [...catList.querySelectorAll('.ycsm-dd-item')];
+              const idx = items.indexOf(document.activeElement);
+              if (e.key === 'ArrowDown') {
+                e.preventDefault(); e.stopPropagation();
+                (items[idx + 1] || items[0])?.focus();
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault(); e.stopPropagation();
+                (items[idx - 1] || items[items.length - 1])?.focus();
+              } else if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault(); e.stopPropagation();
+                document.activeElement?.click();
+              }
             });
 
             dropdown.appendChild(catList);
@@ -1402,85 +1854,71 @@
             dropdown.appendChild(empty);
           }
 
-          // ─── Divisor + sección "Pertenece a" (resumen) ───
-          const assignedCats = alphaCats.filter((c) => effectiveAssigned.has(c.id));
-
-          const divider = document.createElement('div');
-          divider.className = 'ycsm-dd-divider';
-          dropdown.appendChild(divider);
-
-          const belongsTitle = document.createElement('h3');
-          belongsTitle.className = 'ycsm-dd-title ycsm-dd-title-belongs';
-          belongsTitle.textContent = 'Pertenece a';
-          dropdown.appendChild(belongsTitle);
-
-          if (assignedCats.length > 0) {
-            const belongsSummary = document.createElement('div');
-            belongsSummary.className = 'ycsm-dd-belongs-summary';
-            belongsSummary.textContent = assignedCats.map((c) => c.name).join(', ');
-            dropdown.appendChild(belongsSummary);
-          } else {
-            const emptyBelongs = document.createElement('div');
-            emptyBelongs.className = 'ycsm-tag-empty';
-            emptyBelongs.textContent = 'Sin categorías';
-            dropdown.appendChild(emptyBelongs);
-          }
-
-          // ─── Footer ───
+          // ─── Footer: Cerrar + Hecho ───
           const footer = document.createElement('div');
           footer.className = 'ycsm-dd-footer';
 
-          const cancelBtn = document.createElement('button');
-          cancelBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-cancel';
-          cancelBtn.textContent = 'Cancelar';
-          cancelBtn.addEventListener('click', (e) => {
+          const closeBtn = document.createElement('button');
+          closeBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-cancel';
+          closeBtn.textContent = 'Cerrar';
+          closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            pendingChanges.clear();
             closeDropdown();
           });
-          footer.appendChild(cancelBtn);
+          footer.appendChild(closeBtn);
 
-          if (pendingChanges.size > 0) {
-            const doneBtn = document.createElement('button');
-            doneBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-done';
-            doneBtn.textContent = 'Hecho';
-            doneBtn.addEventListener('click', async (e) => {
-              e.stopPropagation();
-              for (const [catId, add] of pendingChanges) {
-                const isCurrentlyOn = (channelAssignments[channel.id] || []).includes(catId);
-                if (add && !isCurrentlyOn) {
-                  await YCSM.storage.toggleChannelCategory(channel.id, catId);
-                } else if (!add && isCurrentlyOn) {
-                  await YCSM.storage.toggleChannelCategory(channel.id, catId);
-                }
-              }
-              pendingChanges.clear();
-              if (document.getElementById('ycsm-sidebar')) YCSM.sidebar.scheduleRender();
-              closeDropdown();
-              await renderPanelContent();
-            });
-            footer.appendChild(doneBtn);
-          }
-
+          const doneBtn = document.createElement('button');
+          doneBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-done';
+          doneBtn.textContent = 'Hecho';
+          doneBtn.disabled = !hasMadeChanges;
+          doneBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeDropdown();
+          });
+          footer.appendChild(doneBtn);
           dropdown.appendChild(footer);
 
           // Reconectar eventos del search
-          const newSearchInput = dropdown.querySelector('.ycsm-tag-search');
+          const newSearchInput = dropdown.querySelector('.ycsm-dd-search-input');
+          const newClearBtn = dropdown.querySelector('.ycsm-dd-search-clear');
+          const newSearchBox = dropdown.querySelector('.ycsm-dd-search-box');
           newSearchInput.addEventListener('input', (e) => {
             e.stopPropagation();
-            renderDropdownContent(e.target.value);
-            // Re-enfocar el input tras re-render
-            const si = dropdown.querySelector('.ycsm-tag-search');
+            const val = e.target.value;
+            if (newClearBtn) newClearBtn.hidden = !val;
+            renderDropdownContent(val);
+            const si = dropdown.querySelector('.ycsm-dd-search-input');
             if (si) { si.focus(); si.setSelectionRange(si.value.length, si.value.length); }
           });
+          newSearchInput.addEventListener('focus', () => { if (newSearchBox) newSearchBox.classList.add('ycsm-dd-search-focused'); });
+          newSearchInput.addEventListener('blur', () => { if (newSearchBox) newSearchBox.classList.remove('ycsm-dd-search-focused'); });
           newSearchInput.addEventListener('click', (e) => e.stopPropagation());
-          newSearchInput.addEventListener('keydown', (e) => e.stopPropagation());
+          newSearchInput.addEventListener('keydown', (e) => {
+            e.stopPropagation();
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              dropdown.querySelector('.ycsm-dd-item')?.focus();
+            }
+          });
         }
 
         function closeDropdown() {
           dropdown.hidden = true;
+          delete dropdown.dataset.hasChanges;
           if (dropdown.parentNode !== tagWrap) tagWrap.appendChild(dropdown);
+          if (hasMadeChanges) {
+            hasMadeChanges = false;
+            renderPanelContent();
+          }
         }
+
+        // Escape cierra el dropdown sin propagar al panel
+        dropdown.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            e.stopPropagation();
+            closeDropdown();
+          }
+        });
 
         renderDropdownContent();
 
@@ -1498,8 +1936,8 @@
           if (!isOpen) {
             // Calcular posición fixed para escapar de cualquier overflow
             const btnRect = tagBtn.getBoundingClientRect();
-            const DROPDOWN_W = 260;
-            const DROPDOWN_MAX_H = 380;
+            const DROPDOWN_W = 280;
+            const DROPDOWN_MAX_H = 400;
             const GAP = 6;
 
             // Alinear a la derecha del botón, sin salirse del viewport
@@ -1526,13 +1964,15 @@
             // Mover al body para escapar de todos los stacking contexts
             document.body.appendChild(dropdown);
 
-            pendingChanges.clear();
+            // Snapshot al abrir: define orden de la lista y chips de referencia
+            originalAssigned = new Set(channelAssignments[channel.id] || []);
+            hasMadeChanges = false;
+            buildSortedList();
             renderDropdownContent();
-            const si = dropdown.querySelector('.ycsm-tag-search');
+            const si = dropdown.querySelector('.ycsm-dd-search-input');
             if (si) setTimeout(() => si.focus(), 0);
           } else {
-            // Devolver al wrap cuando se cierra
-            pendingChanges.clear();
+            // Cerrar: closeDropdown refresca el panel si hubo cambios
             closeDropdown();
           }
         });
@@ -1680,13 +2120,14 @@
       const menu = panelEl.querySelector('#ycsm-bulk-cat-menu');
       menu.hidden = !menu.hidden;
     });
-    // Cerrar menú si se hace click fuera
-    document.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
       const menu = panelEl?.querySelector('#ycsm-bulk-cat-menu');
       if (menu) menu.hidden = true;
       // Cerrar dropdowns de categoría (pueden estar en body como fixed)
+      // Solo cerrar si no hay cambios pendientes de confirmar
       document.querySelectorAll('.ycsm-tag-dropdown:not([hidden])').forEach((d) => {
-        d.hidden = true;
+        // No cerrar si: el clic fue dentro del dropdown, en el tagBtn (que gestiona su propio toggle), o hay cambios pendientes
+        if (!d.contains(e.target) && !e.target.closest('.ycsm-tag-btn') && !d.dataset.hasChanges) d.hidden = true;
       });
     }, { capture: true });
 
@@ -1742,6 +2183,8 @@
     selectionMode = false;
     selectedIds.clear();
     if (_dateObserver) { _dateObserver.disconnect(); _dateObserver = null; }
+    if (_pillsOverflowObserver) { _pillsOverflowObserver.disconnect(); _pillsOverflowObserver = null; }
+    if (_tooltipEl) { _tooltipEl.remove(); _tooltipEl = null; }
     document.removeEventListener('keydown', handleEscape);
   }
 
