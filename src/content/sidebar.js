@@ -8,6 +8,8 @@
   let sidebarRoot = null;
   let dragState = null;
 
+  const { t } = YCSM.i18n;
+
   /* ═══════════════════════════════════════════════════════════════
      UTILIDADES
   ═══════════════════════════════════════════════════════════════ */
@@ -93,7 +95,7 @@
     el.setAttribute('draggable', 'false');
 
     el.innerHTML = `
-      <span class="ycsm-drag-handle" title="Reordenar categoría" aria-hidden="true">⋮⋮</span>
+      <span class="ycsm-drag-handle" title="${escapeHtml(t('reorderCategory'))}" aria-hidden="true">⋮⋮</span>
       <span class="ycsm-cat-entry-label">
         <span class="ycsm-cat-entry-name">${escapeHtml(label)}</span>
       </span>
@@ -133,7 +135,7 @@
       .map((id) => allCategories[id]?.name)
       .filter(Boolean);
     if (catNames.length > 1) {
-      el.title = `${channel.name}\nCategorías: ${catNames.join(', ')}`;
+      el.title = `${channel.name}\n${t('categories')}: ${catNames.join(', ')}`;
     } else {
       el.title = channel.name;
     }
@@ -145,7 +147,7 @@
     el.innerHTML = `
       ${avatarHtml}
       <span class="ycsm-channel-name">${escapeHtml(channel.name)}</span>
-      ${categoryIds.length > 1 ? '<span class="ycsm-multicat" aria-label="En varias categorías">◈</span>' : ''}
+      ${categoryIds.length > 1 ? `<span class="ycsm-multicat" aria-label="${escapeHtml(t('inMultipleCategories'))}">◈</span>` : ''}
     `;
 
     // Botón contextual al hacer hover
@@ -153,8 +155,8 @@
       if (el.querySelector('.ycsm-ctx-btn')) return;
       const btn = document.createElement('button');
       btn.className = 'ycsm-btn-icon ycsm-ctx-btn';
-      btn.title = 'Gestionar categorías';
-      btn.setAttribute('aria-label', 'Gestionar categorías del canal');
+      btn.title = t('manageCategories');
+      btn.setAttribute('aria-label', t('manageChannelCategories'));
       btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>';
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -196,7 +198,7 @@
     input.className = 'ycsm-rename-input';
     input.value = currentName;
     input.maxLength = 50;
-    input.setAttribute('aria-label', 'Nuevo nombre de categoría');
+    input.setAttribute('aria-label', t('newCategoryName'));
 
     const originalText = nameEl.textContent;
     nameEl.textContent = '';
@@ -234,7 +236,7 @@
   async function promptDelete(categoryId, categoryName) {
     if (
       confirm(
-        `¿Eliminar la categoría "${categoryName}"?\nLos canales no se perderán, solo se desasignarán.`
+        t('deleteCategoryConfirmLong', [categoryName])
       )
     ) {
       await YCSM.storage.deleteCategory(categoryId);
@@ -408,7 +410,7 @@
 
     if (sorted.length === 0) {
       list.innerHTML =
-        '<div class="ycsm-empty-cat" style="padding:10px 14px">Sin categorías. Crea la primera.</div>';
+        `<div class="ycsm-empty-cat" style="padding:10px 14px">${escapeHtml(t('emptyCategoriesSidebar'))}</div>`;
       return;
     }
 
@@ -425,17 +427,17 @@
     const root = document.createElement('div');
     root.id = 'ycsm-sidebar';
     root.setAttribute('role', 'navigation');
-    root.setAttribute('aria-label', 'Mis categorías de YouTube');
+    root.setAttribute('aria-label', t('myYoutubeCategories'));
     root.innerHTML = `
       <div class="ycsm-sidebar-header">
-        <h3 class="ycsm-sidebar-title">Mis categorías</h3>
+        <h3 class="ycsm-sidebar-title">${escapeHtml(t('myCategories'))}</h3>
         <div class="ycsm-sidebar-header-actions">
-          <button class="ycsm-hdr-btn" id="ycsm-btn-organize" title="Organizar suscripciones" aria-label="Organizar suscripciones">
+          <button class="ycsm-hdr-btn" id="ycsm-btn-organize" title="${escapeHtml(t('organizeSubscriptions'))}" aria-label="${escapeHtml(t('organizeSubscriptions'))}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" focusable="false" aria-hidden="true" style="pointer-events:none"><path d="M12.844 1h-1.687a2 2 0 00-1.962 1.616 3 3 0 01-3.92 2.263 2 2 0 00-2.38.891l-.842 1.46a2 2 0 00.417 2.507 3 3 0 010 4.525 2 2 0 00-.417 2.507l.843 1.46a2 2 0 002.38.892 3.001 3.001 0 013.918 2.263A2 2 0 0011.157 23h1.686a2 2 0 001.963-1.615 3.002 3.002 0 013.92-2.263 2 2 0 002.38-.892l.842-1.46a2 2 0 00-.418-2.507 3 3 0 010-4.526 2 2 0 00.418-2.508l-.843-1.46a2 2 0 00-2.38-.891 3 3 0 01-3.919-2.263A2 2 0 0012.844 1Zm-1.767 2.347a6 6 0 00.08-.347h1.687a4.98 4.98 0 002.407 3.37 4.98 4.98 0 004.122.4l.843 1.46A4.98 4.98 0 0018.5 12a4.98 4.98 0 001.716 3.77l-.843 1.46a4.98 4.98 0 00-4.123.4A4.979 4.979 0 0012.843 21h-1.686a4.98 4.98 0 00-2.408-3.371 4.999 4.999 0 00-4.12-.399l-.844-1.46A4.979 4.979 0 005.5 12a4.98 4.98 0 00-1.715-3.77l.842-1.459a4.98 4.98 0 004.123-.399 4.981 4.981 0 002.327-3.025ZM16 12a4 4 0 11-7.999 0 4 4 0 018 0Zm-4 2a2 2 0 100-4 2 2 0 000 4Z" fill="currentColor"></path></svg>
           </button>
         </div>
       </div>
-      <div class="ycsm-categories-list" role="listbox" aria-label="Categorías"></div>
+      <div class="ycsm-categories-list" role="listbox" aria-label="${escapeHtml(t('categories'))}"></div>
     `;
     return root;
   }

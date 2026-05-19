@@ -3,6 +3,9 @@
  * Depende de storage.js (window.YCSM.storage).
  */
 document.addEventListener('DOMContentLoaded', async () => {
+  const { t, count, apply } = YCSM.i18n;
+  document.title = t('appName');
+  apply();
   /* ── Refs DOM ── */
   const catList   = document.getElementById('catList');
   const addForm   = document.getElementById('addForm');
@@ -33,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (sorted.length === 0) {
       catList.innerHTML =
-        '<div class="empty">Sin categorías.<br>Crea la primera abajo.</div>';
+        `<div class="empty">${t('emptyCategoriesPopup')}</div>`;
       return;
     }
 
@@ -50,11 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       item.innerHTML = `
         <div class="cat-meta">
           <span class="cat-name">${esc(cat.name)}</span>
-          <span class="cat-count">${channelCount} canal${channelCount !== 1 ? 'es' : ''}</span>
+          <span class="cat-count">${count('channelCount', channelCount)}</span>
         </div>
-        <div class="cat-actions" role="group" aria-label="Acciones de ${esc(cat.name)}">
-          <button class="btn-icon btn-edit" data-id="${esc(cat.id)}" aria-label="Editar ${esc(cat.name)}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
-          <button class="btn-icon btn-del"  data-id="${esc(cat.id)}" aria-label="Eliminar ${esc(cat.name)}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>
+        <div class="cat-actions" role="group" aria-label="${esc(t('categoryActions', [cat.name]))}">
+          <button class="btn-icon btn-edit" data-id="${esc(cat.id)}" aria-label="${esc(t('editCategoryName', [cat.name]))}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
+          <button class="btn-icon btn-del"  data-id="${esc(cat.id)}" aria-label="${esc(t('deleteCategoryName', [cat.name]))}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button>
         </div>
       `;
 
@@ -76,14 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   function resetForm() {
     editingId = null;
     nameInput.value  = '';
-    btnSave.textContent = 'Crear';
+    btnSave.textContent = t('create');
     showForm(false);
   }
 
   function startEdit(cat) {
     editingId = cat.id;
     nameInput.value  = cat.name;
-    btnSave.textContent = 'Guardar';
+    btnSave.textContent = t('save');
     showForm(true);
   }
 
@@ -107,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function deleteCat(id, name) {
-    if (confirm(`¿Eliminar "${name}"?\nLos canales no se perderán, solo se desasignarán.`)) {
+    if (confirm(t('deleteCategoryConfirm', [name]))) {
       await YCSM.storage.deleteCategory(id);
       await render();
       notifyTab('refreshSidebar');

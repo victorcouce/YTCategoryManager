@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "YouTube श्रेणी प्रबंधक"
+  },
+  "appDescription": {
+    "message": "अपने YouTube सब्सक्रिप्शन को सीधे साइडबार में कस्टम श्रेणियों में व्यवस्थित करें।"
+  },
+  "myCategories": {
+    "message": "मेरी श्रेणियां"
+  },
+  "organize": {
+    "message": "व्यवस्थित करें"
+  },
+  "organizeSubscriptions": {
+    "message": "सब्सक्रिप्शन व्यवस्थित करें"
+  },
+  "organizeSubscriptionsYoutube": {
+    "message": "YouTube पर सब्सक्रिप्शन व्यवस्थित करें"
+  },
+  "categories": {
+    "message": "श्रेणियां"
+  },
+  "loading": {
+    "message": "लोड हो रहा है..."
+  },
+  "categoryForm": {
+    "message": "श्रेणी फ़ॉर्म"
+  },
+  "categoryName": {
+    "message": "श्रेणी का नाम"
+  },
+  "categoryNamePlaceholder": {
+    "message": "श्रेणी का नाम..."
+  },
+  "create": {
+    "message": "बनाएं"
+  },
+  "cancel": {
+    "message": "रद्द करें"
+  },
+  "newCategory": {
+    "message": "नई श्रेणी"
+  },
+  "emptyCategoriesPopup": {
+    "message": "कोई श्रेणी नहीं।<br>नीचे पहली बनाएं।"
+  },
+  "categoryActions": {
+    "message": "$CATEGORY$ के लिए कार्रवाइयां",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "editCategoryName": {
+    "message": "$CATEGORY$ संपादित करें",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryName": {
+    "message": "$CATEGORY$ हटाएं",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryConfirm": {
+    "message": "\"$CATEGORY$\" हटाएं?\\nचैनल नहीं हटेंगे, केवल असाइनमेंट हटेगा।",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountOne": {
+    "message": "$COUNT$ चैनल",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountMany": {
+    "message": "$COUNT$ चैनल",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "सहेजें"
+  },
+  "all": {
+    "message": "सभी"
+  },
+  "reorderCategory": {
+    "message": "श्रेणी का क्रम बदलें"
+  },
+  "inMultipleCategories": {
+    "message": "कई श्रेणियों में"
+  },
+  "manageCategories": {
+    "message": "श्रेणियां प्रबंधित करें"
+  },
+  "manageChannelCategories": {
+    "message": "चैनल श्रेणियां प्रबंधित करें"
+  },
+  "newCategoryName": {
+    "message": "नई श्रेणी का नाम"
+  },
+  "deleteCategoryConfirmLong": {
+    "message": "श्रेणी \"$CATEGORY$\" हटाएं?\\nचैनल नहीं हटेंगे, केवल असाइनमेंट हटेगा।",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "emptyCategoriesSidebar": {
+    "message": "कोई श्रेणी नहीं। पहली बनाएं।"
+  },
+  "myYoutubeCategories": {
+    "message": "मेरी YouTube श्रेणियां"
+  },
+  "assignCategoryToChannel": {
+    "message": "चैनल को श्रेणी असाइन करें"
+  },
+  "categorizeChannel": {
+    "message": "चैनल को श्रेणी दें"
+  },
+  "searchCategoryPlaceholder": {
+    "message": "श्रेणी खोजें..."
+  },
+  "searchCategory": {
+    "message": "श्रेणी खोजें"
+  },
+  "availableCategories": {
+    "message": "उपलब्ध श्रेणियां"
+  },
+  "noCategoriesCreateSidebar": {
+    "message": "कोई श्रेणी नहीं। साइड पैनल में एक बनाएं।"
+  },
+  "categorize": {
+    "message": "श्रेणी दें"
+  },
+  "assignThisChannelToCategory": {
+    "message": "इस चैनल को किसी श्रेणी में असाइन करें"
+  },
+  "organizeSubscriptionsPageTitle": {
+    "message": "सब्सक्रिप्शन व्यवस्थित करें - YouTube श्रेणी प्रबंधक"
+  },
+  "organizeSubscriptionsTitle": {
+    "message": "सब्सक्रिप्शन व्यवस्थित करें"
+  },
+  "searchChannelPlaceholder": {
+    "message": "चैनल खोजें..."
+  },
+  "searchChannel": {
+    "message": "चैनल खोजें"
+  },
+  "subscribedChannels": {
+    "message": "सब्सक्राइब किए गए चैनल"
+  },
+  "organizeYoutubeSubscriptions": {
+    "message": "YouTube सब्सक्रिप्शन व्यवस्थित करें"
+  },
+  "activateMultiSelect": {
+    "message": "मल्टी-सिलेक्ट चालू करें"
+  },
+  "select": {
+    "message": "चुनें"
+  },
+  "closePanel": {
+    "message": "पैनल बंद करें"
+  },
+  "searchChannelByName": {
+    "message": "नाम से चैनल खोजें"
+  },
+  "clearSearch": {
+    "message": "खोज साफ करें"
+  },
+  "search": {
+    "message": "खोजें"
+  },
+  "recent": {
+    "message": "हाल के"
+  },
+  "subscribedChannelsList": {
+    "message": "सब्सक्राइब किए गए चैनलों की सूची"
+  },
+  "assignCategory": {
+    "message": "श्रेणी असाइन करें"
+  },
+  "close": {
+    "message": "बंद करें"
+  },
+  "selectedChannelCountOne": {
+    "message": "$COUNT$ चैनल चुना गया",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectedChannelCountMany": {
+    "message": "$COUNT$ चैनल चुने गए",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "today": {
+    "message": "आज"
+  },
+  "yesterday": {
+    "message": "कल"
+  },
+  "daysAgoOne": {
+    "message": "$COUNT$ दिन पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgoMany": {
+    "message": "$COUNT$ दिन पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoOne": {
+    "message": "$COUNT$ सप्ताह पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoMany": {
+    "message": "$COUNT$ सप्ताह पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoOne": {
+    "message": "$COUNT$ महीना पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoMany": {
+    "message": "$COUNT$ महीने पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoOne": {
+    "message": "$COUNT$ साल पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoMany": {
+    "message": "$COUNT$ साल पहले",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "loadingChannels": {
+    "message": "चैनल लोड हो रहे हैं..."
+  },
+  "loadingDates": {
+    "message": "क्रमबद्ध करने के लिए तारीखें लोड हो रही हैं..."
+  },
+  "noResults": {
+    "message": "कोई परिणाम नहीं"
+  },
+  "noCategoriesCreated": {
+    "message": "कोई श्रेणी नहीं बनाई गई"
+  },
+  "done": {
+    "message": "हो गया"
+  },
+  "back": {
+    "message": "वापस"
+  },
+  "emptyCategoriesPlus": {
+    "message": "कोई श्रेणी नहीं। बनाने के लिए \"+\" दबाएं।"
+  }
+}

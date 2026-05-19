@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organizar Suscripciones — YouTube Category Manager</title>
+  <title>__MSG_organizeSubscriptionsPageTitle__</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -209,7 +209,7 @@
 </head>
 <body>
   <header class="page-header">
-    <h1><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:text-bottom"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> Organizar Suscripciones</h1>
+    <h1><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="vertical-align:text-bottom"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> <span data-i18n="organizeSubscriptionsTitle">Organize Subscriptions</span></h1>
     <span id="page-count" class="count"></span>
   </header>
 
@@ -224,15 +224,16 @@
       type="search"
       id="search"
       class="search-bar"
-      placeholder="Buscar canal…"
-      aria-label="Buscar canal"
+      data-i18n-placeholder="searchChannelPlaceholder"
+      data-i18n-aria-label="searchChannel"
     >
 
-    <div class="legend" id="legend" aria-label="Categorías"></div>
-    <div id="channel-list" role="list" aria-label="Canales suscritos"></div>
+    <div class="legend" id="legend" data-i18n-aria-label="categories"></div>
+    <div id="channel-list" role="list" data-i18n-aria-label="subscribedChannels"></div>
     <div class="footer"><span class="count" id="footer-count"></span></div>
   </main>
 
+  <script src="../shared/i18n.js"></script>
   <script src="../shared/storage.js"></script>
   <script>
     /* Panel standalone — funciona sin acceso al DOM de YouTube.
@@ -240,6 +241,7 @@
 
     let allChannels = [];
     let filterText = '';
+    const { t, count, apply } = YCSM.i18n;
 
     function esc(v) {
       const d = document.createElement('div');
@@ -267,8 +269,8 @@
           )
         : allChannels;
 
-      document.getElementById('page-count').textContent = `${visible.length} canal${visible.length !== 1 ? 'es' : ''}`;
-      document.getElementById('footer-count').textContent = `${visible.length} canal${visible.length !== 1 ? 'es' : ''}`;
+      document.getElementById('page-count').textContent = count('channelCount', visible.length);
+      document.getElementById('footer-count').textContent = count('channelCount', visible.length);
 
       const list = document.getElementById('channel-list');
       list.innerHTML = '';
@@ -324,6 +326,8 @@
     }
 
     async function init() {
+      document.title = t('organizeSubscriptionsPageTitle');
+      apply();
       const { channels } = await YCSM.storage.getCachedChannels();
       allChannels = channels;
 

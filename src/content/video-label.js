@@ -13,6 +13,8 @@
   let currentChannelData = null;
   let injectTimeout = null;
 
+  const { t } = YCSM.i18n;
+
   /* ═══════════════════════════════════════════════════════════════
      UTILIDADES
   ═══════════════════════════════════════════════════════════════ */
@@ -89,11 +91,11 @@
     dropdownEl.id = 'ycsm-video-dropdown';
     dropdownEl.className = 'ycsm-video-dropdown';
     dropdownEl.setAttribute('role', 'dialog');
-    dropdownEl.setAttribute('aria-label', 'Asignar categoría al canal');
+    dropdownEl.setAttribute('aria-label', t('assignCategoryToChannel'));
 
     dropdownEl.innerHTML = `
       <div class="ycsm-vd-header">
-        <span class="ycsm-vd-title">Categorizar canal</span>
+        <span class="ycsm-vd-title">${escapeHtml(t('categorizeChannel'))}</span>
         <span class="ycsm-vd-subtitle">${escapeHtml(currentChannelName)}</span>
       </div>
       <div class="ycsm-vd-search-wrap">
@@ -104,16 +106,16 @@
           id="ycsm-vd-search"
           class="ycsm-vd-search"
           type="search"
-          placeholder="Buscar categoría…"
+          placeholder="${escapeHtml(t('searchCategoryPlaceholder'))}"
           autocomplete="off"
           spellcheck="false"
-          aria-label="Buscar categoría"
+          aria-label="${escapeHtml(t('searchCategory'))}"
         />
       </div>
-      <ul class="ycsm-vd-list" role="listbox" aria-label="Categorías disponibles">
+      <ul class="ycsm-vd-list" role="listbox" aria-label="${escapeHtml(t('availableCategories'))}">
         ${
           catList.length === 0
-            ? '<li class="ycsm-vd-empty">No hay categorías. Crea una en el panel lateral.</li>'
+            ? `<li class="ycsm-vd-empty">${escapeHtml(t('noCategoriesCreateSidebar'))}</li>`
             : catList
                 .map((cat) => {
                   const isChecked = assigned.includes(cat.id);
@@ -474,7 +476,7 @@
     if (!textEl) return true;
 
     if (!hasLabels) {
-      textEl.textContent = 'Categorizar';
+      textEl.textContent = t('categorize');
     } else if (assignedCats.length === 1) {
       const cat = assignedCats[0];
       textEl.textContent = cat.name;
@@ -512,14 +514,14 @@
     const btn = document.createElement('button');
     btn.id = 'ycsm-label-btn';
     btn.className = 'ycsm-video-label-btn';
-    btn.setAttribute('aria-label', 'Categorizar canal');
-    btn.setAttribute('title', 'Asignar este canal a una categoría');
+    btn.setAttribute('aria-label', t('categorizeChannel'));
+    btn.setAttribute('title', t('assignThisChannelToCategory'));
 
     btn.innerHTML = `
       <svg class="ycsm-label-btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
         <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
       </svg>
-      <span class="ycsm-label-btn-text">Categorizar</span>
+      <span class="ycsm-label-btn-text">${escapeHtml(t('categorize'))}</span>
     `;
 
     btn.addEventListener('click', (e) => {

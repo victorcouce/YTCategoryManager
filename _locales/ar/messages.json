@@ -1,0 +1,309 @@
+{
+  "appName": {
+    "message": "مدير فئات YouTube"
+  },
+  "appDescription": {
+    "message": "نظّم اشتراكات YouTube في فئات مخصصة قابلة للطي مباشرة في الشريط الجانبي."
+  },
+  "myCategories": {
+    "message": "فئاتي"
+  },
+  "organize": {
+    "message": "تنظيم"
+  },
+  "organizeSubscriptions": {
+    "message": "تنظيم الاشتراكات"
+  },
+  "organizeSubscriptionsYoutube": {
+    "message": "تنظيم الاشتراكات على YouTube"
+  },
+  "categories": {
+    "message": "الفئات"
+  },
+  "loading": {
+    "message": "جار التحميل..."
+  },
+  "categoryForm": {
+    "message": "نموذج الفئة"
+  },
+  "categoryName": {
+    "message": "اسم الفئة"
+  },
+  "categoryNamePlaceholder": {
+    "message": "اسم الفئة..."
+  },
+  "create": {
+    "message": "إنشاء"
+  },
+  "cancel": {
+    "message": "إلغاء"
+  },
+  "newCategory": {
+    "message": "فئة جديدة"
+  },
+  "emptyCategoriesPopup": {
+    "message": "لا توجد فئات.<br>أنشئ الأولى أدناه."
+  },
+  "categoryActions": {
+    "message": "إجراءات $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "editCategoryName": {
+    "message": "تعديل $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryName": {
+    "message": "حذف $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryConfirm": {
+    "message": "حذف \"$CATEGORY$\"؟\\nلن تضيع القنوات، بل ستتم إزالة تعيينها فقط.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountOne": {
+    "message": "$COUNT$ قناة",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountMany": {
+    "message": "$COUNT$ قنوات",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "حفظ"
+  },
+  "all": {
+    "message": "الكل"
+  },
+  "reorderCategory": {
+    "message": "إعادة ترتيب الفئة"
+  },
+  "inMultipleCategories": {
+    "message": "ضمن عدة فئات"
+  },
+  "manageCategories": {
+    "message": "إدارة الفئات"
+  },
+  "manageChannelCategories": {
+    "message": "إدارة فئات القناة"
+  },
+  "newCategoryName": {
+    "message": "اسم الفئة الجديدة"
+  },
+  "deleteCategoryConfirmLong": {
+    "message": "حذف الفئة \"$CATEGORY$\"؟\\nلن تضيع القنوات، بل ستتم إزالة تعيينها فقط.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "emptyCategoriesSidebar": {
+    "message": "لا توجد فئات. أنشئ الأولى."
+  },
+  "myYoutubeCategories": {
+    "message": "فئات YouTube الخاصة بي"
+  },
+  "assignCategoryToChannel": {
+    "message": "تعيين فئة للقناة"
+  },
+  "categorizeChannel": {
+    "message": "تصنيف القناة"
+  },
+  "searchCategoryPlaceholder": {
+    "message": "بحث عن فئة..."
+  },
+  "searchCategory": {
+    "message": "بحث عن فئة"
+  },
+  "availableCategories": {
+    "message": "الفئات المتاحة"
+  },
+  "noCategoriesCreateSidebar": {
+    "message": "لا توجد فئات. أنشئ واحدة في اللوحة الجانبية."
+  },
+  "categorize": {
+    "message": "تصنيف"
+  },
+  "assignThisChannelToCategory": {
+    "message": "تعيين هذه القناة إلى فئة"
+  },
+  "organizeSubscriptionsPageTitle": {
+    "message": "تنظيم الاشتراكات - مدير فئات YouTube"
+  },
+  "organizeSubscriptionsTitle": {
+    "message": "تنظيم الاشتراكات"
+  },
+  "searchChannelPlaceholder": {
+    "message": "بحث عن قناة..."
+  },
+  "searchChannel": {
+    "message": "بحث عن قناة"
+  },
+  "subscribedChannels": {
+    "message": "القنوات المشترَك بها"
+  },
+  "organizeYoutubeSubscriptions": {
+    "message": "تنظيم اشتراكات YouTube"
+  },
+  "activateMultiSelect": {
+    "message": "تفعيل التحديد المتعدد"
+  },
+  "select": {
+    "message": "تحديد"
+  },
+  "closePanel": {
+    "message": "إغلاق اللوحة"
+  },
+  "searchChannelByName": {
+    "message": "بحث عن قناة بالاسم"
+  },
+  "clearSearch": {
+    "message": "مسح البحث"
+  },
+  "search": {
+    "message": "بحث"
+  },
+  "recent": {
+    "message": "الأحدث"
+  },
+  "subscribedChannelsList": {
+    "message": "قائمة القنوات المشترَك بها"
+  },
+  "assignCategory": {
+    "message": "تعيين فئة"
+  },
+  "close": {
+    "message": "إغلاق"
+  },
+  "selectedChannelCountOne": {
+    "message": "تم تحديد $COUNT$ قناة",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectedChannelCountMany": {
+    "message": "تم تحديد $COUNT$ قنوات",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "today": {
+    "message": "اليوم"
+  },
+  "yesterday": {
+    "message": "أمس"
+  },
+  "daysAgoOne": {
+    "message": "قبل $COUNT$ يوم",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgoMany": {
+    "message": "قبل $COUNT$ أيام",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoOne": {
+    "message": "قبل $COUNT$ أسبوع",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoMany": {
+    "message": "قبل $COUNT$ أسابيع",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoOne": {
+    "message": "قبل $COUNT$ شهر",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoMany": {
+    "message": "قبل $COUNT$ أشهر",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoOne": {
+    "message": "قبل $COUNT$ سنة",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoMany": {
+    "message": "قبل $COUNT$ سنوات",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "loadingChannels": {
+    "message": "جار تحميل القنوات..."
+  },
+  "loadingDates": {
+    "message": "جار تحميل التواريخ للفرز..."
+  },
+  "noResults": {
+    "message": "لا توجد نتائج"
+  },
+  "noCategoriesCreated": {
+    "message": "لم يتم إنشاء فئات"
+  },
+  "done": {
+    "message": "تم"
+  },
+  "back": {
+    "message": "رجوع"
+  },
+  "emptyCategoriesPlus": {
+    "message": "لا توجد فئات. اضغط \"+\" لإنشاء واحدة."
+  }
+}

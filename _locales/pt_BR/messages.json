@@ -1,51 +1,51 @@
 {
   "appName": {
-    "message": "YouTube Category Manager"
+    "message": "Gerenciador de Categorias do YouTube"
   },
   "appDescription": {
-    "message": "Organize your YouTube subscriptions into custom collapsible categories, directly in the sidebar."
+    "message": "Organize suas inscrições do YouTube em categorias personalizadas recolhíveis, diretamente na barra lateral."
   },
   "myCategories": {
-    "message": "My Categories"
+    "message": "Minhas categorias"
   },
   "organize": {
-    "message": "Organize"
+    "message": "Organizar"
   },
   "organizeSubscriptions": {
-    "message": "Organize subscriptions"
+    "message": "Organizar inscrições"
   },
   "organizeSubscriptionsYoutube": {
-    "message": "Organize subscriptions on YouTube"
+    "message": "Organizar inscrições no YouTube"
   },
   "categories": {
-    "message": "Categories"
+    "message": "Categorias"
   },
   "loading": {
-    "message": "Loading..."
+    "message": "Carregando..."
   },
   "categoryForm": {
-    "message": "Category form"
+    "message": "Formulário de categoria"
   },
   "categoryName": {
-    "message": "Category name"
+    "message": "Nome da categoria"
   },
   "categoryNamePlaceholder": {
-    "message": "Category name..."
+    "message": "Nome da categoria..."
   },
   "create": {
-    "message": "Create"
+    "message": "Criar"
   },
   "cancel": {
-    "message": "Cancel"
+    "message": "Cancelar"
   },
   "newCategory": {
-    "message": "New category"
+    "message": "Nova categoria"
   },
   "emptyCategoriesPopup": {
-    "message": "No categories.<br>Create the first one below."
+    "message": "Sem categorias.<br>Crie a primeira abaixo."
   },
   "categoryActions": {
-    "message": "Actions for $CATEGORY$",
+    "message": "Ações de $CATEGORY$",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -53,7 +53,7 @@
     }
   },
   "editCategoryName": {
-    "message": "Edit $CATEGORY$",
+    "message": "Editar $CATEGORY$",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -61,7 +61,7 @@
     }
   },
   "deleteCategoryName": {
-    "message": "Delete $CATEGORY$",
+    "message": "Excluir $CATEGORY$",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -69,7 +69,7 @@
     }
   },
   "deleteCategoryConfirm": {
-    "message": "Delete \"$CATEGORY$\"?\\nChannels will not be lost, only unassigned.",
+    "message": "Excluir \"$CATEGORY$\"?\\nOs canais não serão perdidos, apenas desatribuídos.",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -77,7 +77,7 @@
     }
   },
   "channelCountOne": {
-    "message": "$COUNT$ channel",
+    "message": "$COUNT$ canal",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -85,7 +85,7 @@
     }
   },
   "channelCountMany": {
-    "message": "$COUNT$ channels",
+    "message": "$COUNT$ canais",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -93,28 +93,28 @@
     }
   },
   "save": {
-    "message": "Save"
+    "message": "Salvar"
   },
   "all": {
-    "message": "All"
+    "message": "Todos"
   },
   "reorderCategory": {
-    "message": "Reorder category"
+    "message": "Reordenar categoria"
   },
   "inMultipleCategories": {
-    "message": "In multiple categories"
+    "message": "Em várias categorias"
   },
   "manageCategories": {
-    "message": "Manage categories"
+    "message": "Gerenciar categorias"
   },
   "manageChannelCategories": {
-    "message": "Manage channel categories"
+    "message": "Gerenciar categorias do canal"
   },
   "newCategoryName": {
-    "message": "New category name"
+    "message": "Novo nome da categoria"
   },
   "deleteCategoryConfirmLong": {
-    "message": "Delete the category \"$CATEGORY$\"?\\nChannels will not be lost, only unassigned.",
+    "message": "Excluir a categoria \"$CATEGORY$\"?\\nOs canais não serão perdidos, apenas desatribuídos.",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -122,85 +122,85 @@
     }
   },
   "emptyCategoriesSidebar": {
-    "message": "No categories. Create the first one."
+    "message": "Sem categorias. Crie a primeira."
   },
   "myYoutubeCategories": {
-    "message": "My YouTube categories"
+    "message": "Minhas categorias do YouTube"
   },
   "assignCategoryToChannel": {
-    "message": "Assign category to channel"
+    "message": "Atribuir categoria ao canal"
   },
   "categorizeChannel": {
-    "message": "Categorize channel"
+    "message": "Categorizar canal"
   },
   "searchCategoryPlaceholder": {
-    "message": "Search category..."
+    "message": "Buscar categoria..."
   },
   "searchCategory": {
-    "message": "Search category"
+    "message": "Buscar categoria"
   },
   "availableCategories": {
-    "message": "Available categories"
+    "message": "Categorias disponíveis"
   },
   "noCategoriesCreateSidebar": {
-    "message": "No categories. Create one in the side panel."
+    "message": "Sem categorias. Crie uma no painel lateral."
   },
   "categorize": {
-    "message": "Categorize"
+    "message": "Categorizar"
   },
   "assignThisChannelToCategory": {
-    "message": "Assign this channel to a category"
+    "message": "Atribuir este canal a uma categoria"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "Organize Subscriptions - YouTube Category Manager"
+    "message": "Organizar inscrições - Gerenciador de Categorias do YouTube"
   },
   "organizeSubscriptionsTitle": {
-    "message": "Organize Subscriptions"
+    "message": "Organizar inscrições"
   },
   "searchChannelPlaceholder": {
-    "message": "Search channel..."
+    "message": "Buscar canal..."
   },
   "searchChannel": {
-    "message": "Search channel"
+    "message": "Buscar canal"
   },
   "subscribedChannels": {
-    "message": "Subscribed channels"
+    "message": "Canais inscritos"
   },
   "organizeYoutubeSubscriptions": {
-    "message": "Organize YouTube subscriptions"
+    "message": "Organizar inscrições do YouTube"
   },
   "activateMultiSelect": {
-    "message": "Enable multi-select"
+    "message": "Ativar seleção múltipla"
   },
   "select": {
-    "message": "Select"
+    "message": "Selecionar"
   },
   "closePanel": {
-    "message": "Close panel"
+    "message": "Fechar painel"
   },
   "searchChannelByName": {
-    "message": "Search channel by name"
+    "message": "Buscar canal por nome"
   },
   "clearSearch": {
-    "message": "Clear search"
+    "message": "Limpar busca"
   },
   "search": {
-    "message": "Search"
+    "message": "Buscar"
   },
   "recent": {
-    "message": "Recent"
+    "message": "Recentes"
   },
   "subscribedChannelsList": {
-    "message": "Subscribed channels list"
+    "message": "Lista de canais inscritos"
   },
   "assignCategory": {
-    "message": "Assign category"
+    "message": "Atribuir categoria"
   },
   "close": {
-    "message": "Close"
+    "message": "Fechar"
   },
   "selectedChannelCountOne": {
-    "message": "$COUNT$ channel selected",
+    "message": "$COUNT$ canal selecionado",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -208,7 +208,7 @@
     }
   },
   "selectedChannelCountMany": {
-    "message": "$COUNT$ channels selected",
+    "message": "$COUNT$ canais selecionados",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -216,13 +216,13 @@
     }
   },
   "today": {
-    "message": "today"
+    "message": "hoje"
   },
   "yesterday": {
-    "message": "yesterday"
+    "message": "ontem"
   },
   "daysAgoOne": {
-    "message": "$COUNT$ day ago",
+    "message": "há $COUNT$ dia",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -230,7 +230,7 @@
     }
   },
   "daysAgoMany": {
-    "message": "$COUNT$ days ago",
+    "message": "há $COUNT$ dias",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -238,7 +238,7 @@
     }
   },
   "weeksAgoOne": {
-    "message": "$COUNT$ week ago",
+    "message": "há $COUNT$ semana",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -246,7 +246,7 @@
     }
   },
   "weeksAgoMany": {
-    "message": "$COUNT$ weeks ago",
+    "message": "há $COUNT$ semanas",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -254,7 +254,7 @@
     }
   },
   "monthsAgoOne": {
-    "message": "$COUNT$ month ago",
+    "message": "há $COUNT$ mês",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -262,7 +262,7 @@
     }
   },
   "monthsAgoMany": {
-    "message": "$COUNT$ months ago",
+    "message": "há $COUNT$ meses",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -270,7 +270,7 @@
     }
   },
   "yearsAgoOne": {
-    "message": "$COUNT$ year ago",
+    "message": "há $COUNT$ ano",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -278,7 +278,7 @@
     }
   },
   "yearsAgoMany": {
-    "message": "$COUNT$ years ago",
+    "message": "há $COUNT$ anos",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -286,24 +286,24 @@
     }
   },
   "loadingChannels": {
-    "message": "Loading channels..."
+    "message": "Carregando canais..."
   },
   "loadingDates": {
-    "message": "Loading dates to sort..."
+    "message": "Carregando datas para ordenar..."
   },
   "noResults": {
-    "message": "No results"
+    "message": "Sem resultados"
   },
   "noCategoriesCreated": {
-    "message": "No categories created"
+    "message": "Nenhuma categoria criada"
   },
   "done": {
-    "message": "Done"
+    "message": "Concluído"
   },
   "back": {
-    "message": "Back"
+    "message": "Voltar"
   },
   "emptyCategoriesPlus": {
-    "message": "No categories. Press \"+\" to create one."
+    "message": "Sem categorias. Pressione \"+\" para criar uma."
   }
 }

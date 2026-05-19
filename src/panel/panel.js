@@ -29,6 +29,8 @@
   let _lastSeen = {};             // channelId → ISO string (cuándo visitó el canal por última vez)
   let _panelClickHandler = null;  // referencia al listener de click global para poder eliminarlo al cerrar
 
+  const { t, count } = YCSM.i18n;
+
   async function refreshLegendOrder() {
     if (!panelEl || panelEl.querySelector('.ycsm-manage-view')) return;
 
@@ -326,17 +328,17 @@
     overlay.className = 'ycsm-panel-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
-    overlay.setAttribute('aria-label', 'Organizar suscripciones de YouTube');
+    overlay.setAttribute('aria-label', t('organizeYoutubeSubscriptions'));
 
     overlay.innerHTML = `
       <div class="ycsm-panel-backdrop" aria-hidden="true"></div>
       <div class="ycsm-panel-box">
         <div class="ycsm-panel-head">
-          <h2>Organizar Suscripciones</h2>
-          <button class="ycsm-btn-select" id="ycsm-btn-select" aria-pressed="false" title="Activar selección múltiple"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Seleccionar</button>
-          <button class="ycsm-btn-icon ycsm-panel-x" aria-label="Cerrar panel">✕</button>
+          <h2>${escapeHtml(t('organizeSubscriptionsTitle'))}</h2>
+          <button class="ycsm-btn-select" id="ycsm-btn-select" aria-pressed="false" title="${escapeHtml(t('activateMultiSelect'))}"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> ${escapeHtml(t('select'))}</button>
+          <button class="ycsm-btn-icon ycsm-panel-x" aria-label="${escapeHtml(t('closePanel'))}">✕</button>
         </div>
-        <div class="ycsm-panel-legend" aria-label="Categorías disponibles"></div>
+        <div class="ycsm-panel-legend" aria-label="${escapeHtml(t('availableCategories'))}"></div>
         <div class="ycsm-panel-body">
           <div class="ycsm-panel-toolbar">
             <div class="ycsm-yt-search-container">
@@ -345,30 +347,30 @@
                 <input
                   class="ycsm-yt-search-input"
                   type="text"
-                  placeholder="Buscar canal…"
-                  aria-label="Buscar canal por nombre"
+                  placeholder="${escapeHtml(t('searchChannelPlaceholder'))}"
+                  aria-label="${escapeHtml(t('searchChannelByName'))}"
                   autocomplete="off"
                 >
-                <button class="ycsm-yt-search-clear" aria-label="Borrar búsqueda" hidden>
+                <button class="ycsm-yt-search-clear" aria-label="${escapeHtml(t('clearSearch'))}" hidden>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
                 </button>
               </div>
-              <button class="ycsm-yt-search-btn" aria-label="Buscar">
+              <button class="ycsm-yt-search-btn" aria-label="${escapeHtml(t('search'))}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
               </button>
             </div>
             <select class="ycsm-panel-sort" aria-label="Ordenar canales">
-              <option value="activity">Recientes</option>
+              <option value="activity">${escapeHtml(t('recent'))}</option>
               <option value="name">A → Z</option>
             </select>
           </div>
-          <div class="ycsm-panel-channels" role="list" aria-label="Lista de canales suscritos"></div>
+          <div class="ycsm-panel-channels" role="list" aria-label="${escapeHtml(t('subscribedChannelsList'))}"></div>
         </div>
         <div class="ycsm-panel-bulk" id="ycsm-panel-bulk" hidden>
           <span class="ycsm-bulk-count" id="ycsm-bulk-count">0 seleccionados</span>
           <div class="ycsm-bulk-actions">
             <div class="ycsm-bulk-cat-wrap">
-              <button class="ycsm-bulk-cat-btn" id="ycsm-bulk-cat-btn">Asignar categoría</button>
+              <button class="ycsm-bulk-cat-btn" id="ycsm-bulk-cat-btn">${escapeHtml(t('assignCategory'))}</button>
               <div class="ycsm-bulk-cat-menu" id="ycsm-bulk-cat-menu" popover="manual"></div>
             </div>
 
@@ -376,7 +378,7 @@
         </div>
         <div class="ycsm-panel-foot">
           <span class="ycsm-panel-count" aria-live="polite"></span>
-          <button class="ycsm-panel-close-btn">Cerrar</button>
+          <button class="ycsm-panel-close-btn">${escapeHtml(t('close'))}</button>
         </div>
       </div>
     `;
@@ -398,7 +400,7 @@
     const countEl = panelEl.querySelector('#ycsm-bulk-count');
     const n = selectedIds.size;
     bar.hidden = !selectionMode;
-    countEl.textContent = `${n} canal${n !== 1 ? 'es' : ''} seleccionado${n !== 1 ? 's' : ''}`;
+    countEl.textContent = count('selectedChannelCount', n);
     panelEl.querySelector('#ycsm-bulk-cat-btn').disabled = n === 0;
   }
 
@@ -463,15 +465,15 @@
     const date = new Date(isoStr);
     if (isNaN(date.getTime())) return '';
     const diffDays = Math.floor((Date.now() - date.getTime()) / 86400000);
-    if (diffDays === 0) return 'hoy';
-    if (diffDays === 1) return 'ayer';
-    if (diffDays < 7) return `hace ${diffDays} días`;
+    if (diffDays === 0) return t('today');
+    if (diffDays === 1) return t('yesterday');
+    if (diffDays < 7) return count('daysAgo', diffDays);
     const w = Math.floor(diffDays / 7);
-    if (w < 5) return `hace ${w} semana${w > 1 ? 's' : ''}`;
+    if (w < 5) return count('weeksAgo', w);
     const m = Math.floor(diffDays / 30);
-    if (m < 12) return `hace ${m} mes${m > 1 ? 'es' : ''}`;
+    if (m < 12) return count('monthsAgo', m);
     const y = Math.floor(diffDays / 365);
-    return `hace ${y} año${y > 1 ? 's' : ''}`;
+    return count('yearsAgo', y);
   }
 
   function fetchLastVideoDate(channelId) {
@@ -611,16 +613,16 @@
     head.innerHTML = '';
     const backBtn = document.createElement('button');
     backBtn.className = 'ycsm-manage-back-btn';
-    backBtn.setAttribute('aria-label', 'Volver');
-    backBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg> Volver`;
+    backBtn.setAttribute('aria-label', t('back'));
+    backBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg> ${escapeHtml(t('back'))}`;
     backBtn.addEventListener('click', goBack);
 
     const headTitle = document.createElement('h2');
-    headTitle.textContent = 'Gestionar categorías';
+    headTitle.textContent = t('manageCategories');
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'ycsm-btn-icon ycsm-panel-x';
-    closeBtn.setAttribute('aria-label', 'Cerrar panel');
+    closeBtn.setAttribute('aria-label', t('closePanel'));
     closeBtn.textContent = '✕';
     closeBtn.addEventListener('click', () => panelEl.remove());
 
@@ -1334,7 +1336,7 @@
     if (sortedCats.length === 0) {
       const empty = document.createElement('p');
       empty.style.cssText = 'font-size:13px;color:#606060;margin:0;align-self:center';
-      empty.textContent = 'Sin categorías. Pulsa "+" para crear.';
+      empty.textContent = t('emptyCategoriesPlus');
       scrollContainer.appendChild(empty);
       legend.appendChild(scrollContainer);
       legend.appendChild(actionsWrap);
@@ -1342,7 +1344,7 @@
       // Pill "Todos"
       const allPill = document.createElement('button');
       allPill.className = 'ycsm-legend-pill ycsm-legend-all' + (filterCat === null ? ' ycsm-legend-pill-active' : '');
-      allPill.textContent = 'Todos';
+      allPill.textContent = t('all');
       allPill.addEventListener('click', () => { filterCat = null; renderPanelContent(); });
       scrollContainer.appendChild(allPill);
 
@@ -1402,7 +1404,7 @@
       const needsFetch = allChannels.some((ch) => !_dateCache.has(ch.id));
       if (needsFetch) {
         const list = panelEl.querySelector('.ycsm-panel-channels');
-        list.innerHTML = '<div class="ycsm-panel-empty" style="grid-column:1/-1">Cargando fechas para ordenar…</div>';
+        list.innerHTML = `<div class="ycsm-panel-empty" style="grid-column:1/-1">${escapeHtml(t('loadingDates'))}</div>`;
         await fetchAllDates(allChannels);
         if (!panelEl) return; // panel cerrado mientras cargaba
       }
@@ -1459,7 +1461,7 @@
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.className = 'ycsm-dd-search-input ycsm-bulk-cat-search-input';
-    searchInput.placeholder = 'Buscar categoría…';
+    searchInput.placeholder = t('searchCategoryPlaceholder');
     searchInput.autocomplete = 'off';
     const clearBtn = document.createElement('button');
     clearBtn.type = 'button';
@@ -1734,7 +1736,7 @@
           const searchInput = document.createElement('input');
           searchInput.className = 'ycsm-dd-search-input';
           searchInput.type = 'text';
-          searchInput.placeholder = 'Buscar categoría…';
+          searchInput.placeholder = t('searchCategoryPlaceholder');
           searchInput.autocomplete = 'off';
           searchInput.value = filter;
           searchBox.appendChild(searchInput);
@@ -1925,12 +1927,12 @@
           } else if (filter) {
             const noResults = document.createElement('div');
             noResults.className = 'ycsm-tag-empty';
-            noResults.textContent = 'Sin resultados';
+            noResults.textContent = t('noResults');
             dropdown.appendChild(noResults);
           } else {
             const empty = document.createElement('div');
             empty.className = 'ycsm-tag-empty';
-            empty.textContent = 'Sin categorías creadas';
+            empty.textContent = t('noCategoriesCreated');
             dropdown.appendChild(empty);
           }
 
@@ -1940,7 +1942,7 @@
 
           const closeBtn = document.createElement('button');
           closeBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-cancel';
-          closeBtn.textContent = 'Cerrar';
+          closeBtn.textContent = t('close');
           closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             closeDropdown();
@@ -1949,7 +1951,7 @@
 
           const doneBtn = document.createElement('button');
           doneBtn.className = 'ycsm-dd-footer-btn ycsm-dd-footer-done';
-          doneBtn.textContent = 'Hecho';
+          doneBtn.textContent = t('done');
           doneBtn.disabled = !hasMadeChanges;
           doneBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -2242,7 +2244,7 @@
 
     // Mostrar estado de carga mientras obtenemos canales
     const list = panelEl.querySelector('.ycsm-panel-channels');
-    list.innerHTML = '<div class="ycsm-panel-empty" style="grid-column:1/-1">Cargando canales…</div>';
+    list.innerHTML = `<div class="ycsm-panel-empty" style="grid-column:1/-1">${escapeHtml(t('loadingChannels'))}</div>`;
 
     // Estrategia 1: fetch de /feed/channels → obtiene TODOS los canales sin depender del DOM
     allChannels = await fetchAllSubscriptions();

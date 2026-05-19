@@ -35,7 +35,7 @@ Extensión de Chrome (Manifest V3) que organiza tus suscripciones de YouTube en 
 ├── storage.js          # Capa de abstracción sobre chrome.storage
 ├── background.js       # Service worker
 ├── popup.html/js/css   # Popup de la extensión (configuración básica)
-└── _locales/           # Internacionalización (en / es)
+└── _locales/           # Internacionalización (en, es, ar, hi, id, pt_BR, zh_CN)
 ```
 
 ## 🔧 Permisos

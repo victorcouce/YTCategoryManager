@@ -10,6 +10,8 @@
   let filterObserver = null;
   let navEl = null;
   let _hrefToId = {};        // href normalizado → channelId canónico
+
+  const { t } = YCSM.i18n;
   let _injectVersion = 0;    // se incrementa en cada llamada; las anteriores se autoinvalidan
 
   /* ─── Utilidades ──────────────────────────────────────────── */
@@ -154,7 +156,7 @@
     scrollWrap.className = 'ycsm-subs-nav-scroll';
 
     // Pill "Todos"
-    const allPill = makePill('Todos', null, activeFilter === null);
+    const allPill = makePill(t('all'), null, activeFilter === null);
     allPill.addEventListener('click', () => {
       activeFilter = null;
       refreshPills();

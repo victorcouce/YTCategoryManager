@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube Category Manager</title>
+  <title>__MSG_appName__</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -11,43 +11,44 @@
 
     <!-- Header -->
     <header class="popup-header">
-      <h1 class="popup-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> Mis Categorías</h1>
-      <button class="btn-organize" id="btnOrganize" aria-label="Organizar suscripciones en YouTube">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.61 3.61 0 018.4 12 3.61 3.61 0 0112 8.4a3.61 3.61 0 013.6 3.6 3.61 3.61 0 01-3.6 3.6z"/></svg> Organizar
+      <h1 class="popup-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg> <span data-i18n="myCategories">My Categories</span></h1>
+      <button class="btn-organize" id="btnOrganize" data-i18n-aria-label="organizeSubscriptionsYoutube">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.61 3.61 0 018.4 12 3.61 3.61 0 0112 8.4a3.61 3.61 0 013.6 3.6 3.61 3.61 0 01-3.6 3.6z"/></svg> <span data-i18n="organize">Organize</span>
       </button>
     </header>
 
     <!-- Lista de categorías -->
-    <main class="cat-list" id="catList" role="list" aria-label="Categorías">
-      <div class="loading">Cargando…</div>
+    <main class="cat-list" id="catList" role="list" data-i18n-aria-label="categories">
+      <div class="loading" data-i18n="loading">Loading...</div>
     </main>
 
     <!-- Formulario añadir / editar -->
-    <section class="add-form" id="addForm" hidden aria-label="Formulario de categoría">
+    <section class="add-form" id="addForm" hidden data-i18n-aria-label="categoryForm">
       <div class="form-row">
         <input
           type="text"
           id="newName"
           class="field-input"
-          placeholder="Nombre de la categoría…"
+          data-i18n-placeholder="categoryNamePlaceholder"
           maxlength="50"
-          aria-label="Nombre de la categoría"
+          data-i18n-aria-label="categoryName"
           autocomplete="off"
         >
       </div>
       <div class="form-actions">
-        <button class="btn-primary" id="btnSave">Crear</button>
-        <button class="btn-secondary" id="btnCancel">Cancelar</button>
+        <button class="btn-primary" id="btnSave" data-i18n="create">Create</button>
+        <button class="btn-secondary" id="btnCancel" data-i18n="cancel">Cancel</button>
       </div>
     </section>
 
     <!-- Footer -->
     <footer class="popup-footer">
-      <button class="btn-add" id="btnAdd" aria-expanded="false">＋ Nueva categoría</button>
+      <button class="btn-add" id="btnAdd" aria-expanded="false"><span aria-hidden="true">＋</span> <span data-i18n="newCategory">New category</span></button>
     </footer>
 
   </div>
 
+  <script src="../shared/i18n.js"></script>
   <script src="../shared/storage.js"></script>
   <script src="popup.js"></script>
 </body>

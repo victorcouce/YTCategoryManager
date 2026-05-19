@@ -1,51 +1,51 @@
 {
   "appName": {
-    "message": "YouTube Category Manager"
+    "message": "Pengelola Kategori YouTube"
   },
   "appDescription": {
-    "message": "Organize your YouTube subscriptions into custom collapsible categories, directly in the sidebar."
+    "message": "Atur langganan YouTube Anda ke dalam kategori khusus yang dapat diciutkan, langsung di sidebar."
   },
   "myCategories": {
-    "message": "My Categories"
+    "message": "Kategori saya"
   },
   "organize": {
-    "message": "Organize"
+    "message": "Atur"
   },
   "organizeSubscriptions": {
-    "message": "Organize subscriptions"
+    "message": "Atur langganan"
   },
   "organizeSubscriptionsYoutube": {
-    "message": "Organize subscriptions on YouTube"
+    "message": "Atur langganan di YouTube"
   },
   "categories": {
-    "message": "Categories"
+    "message": "Kategori"
   },
   "loading": {
-    "message": "Loading..."
+    "message": "Memuat..."
   },
   "categoryForm": {
-    "message": "Category form"
+    "message": "Formulir kategori"
   },
   "categoryName": {
-    "message": "Category name"
+    "message": "Nama kategori"
   },
   "categoryNamePlaceholder": {
-    "message": "Category name..."
+    "message": "Nama kategori..."
   },
   "create": {
-    "message": "Create"
+    "message": "Buat"
   },
   "cancel": {
-    "message": "Cancel"
+    "message": "Batal"
   },
   "newCategory": {
-    "message": "New category"
+    "message": "Kategori baru"
   },
   "emptyCategoriesPopup": {
-    "message": "No categories.<br>Create the first one below."
+    "message": "Tidak ada kategori.<br>Buat yang pertama di bawah."
   },
   "categoryActions": {
-    "message": "Actions for $CATEGORY$",
+    "message": "Tindakan untuk $CATEGORY$",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -61,7 +61,7 @@
     }
   },
   "deleteCategoryName": {
-    "message": "Delete $CATEGORY$",
+    "message": "Hapus $CATEGORY$",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -69,7 +69,7 @@
     }
   },
   "deleteCategoryConfirm": {
-    "message": "Delete \"$CATEGORY$\"?\\nChannels will not be lost, only unassigned.",
+    "message": "Hapus \"$CATEGORY$\"?\\nChannel tidak akan hilang, hanya dilepas dari kategori.",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -85,7 +85,7 @@
     }
   },
   "channelCountMany": {
-    "message": "$COUNT$ channels",
+    "message": "$COUNT$ channel",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -93,28 +93,28 @@
     }
   },
   "save": {
-    "message": "Save"
+    "message": "Simpan"
   },
   "all": {
-    "message": "All"
+    "message": "Semua"
   },
   "reorderCategory": {
-    "message": "Reorder category"
+    "message": "Urutkan ulang kategori"
   },
   "inMultipleCategories": {
-    "message": "In multiple categories"
+    "message": "Dalam beberapa kategori"
   },
   "manageCategories": {
-    "message": "Manage categories"
+    "message": "Kelola kategori"
   },
   "manageChannelCategories": {
-    "message": "Manage channel categories"
+    "message": "Kelola kategori channel"
   },
   "newCategoryName": {
-    "message": "New category name"
+    "message": "Nama kategori baru"
   },
   "deleteCategoryConfirmLong": {
-    "message": "Delete the category \"$CATEGORY$\"?\\nChannels will not be lost, only unassigned.",
+    "message": "Hapus kategori \"$CATEGORY$\"?\\nChannel tidak akan hilang, hanya dilepas dari kategori.",
     "placeholders": {
       "category": {
         "content": "$1"
@@ -122,85 +122,85 @@
     }
   },
   "emptyCategoriesSidebar": {
-    "message": "No categories. Create the first one."
+    "message": "Tidak ada kategori. Buat yang pertama."
   },
   "myYoutubeCategories": {
-    "message": "My YouTube categories"
+    "message": "Kategori YouTube saya"
   },
   "assignCategoryToChannel": {
-    "message": "Assign category to channel"
+    "message": "Tetapkan kategori ke channel"
   },
   "categorizeChannel": {
-    "message": "Categorize channel"
+    "message": "Kategorikan channel"
   },
   "searchCategoryPlaceholder": {
-    "message": "Search category..."
+    "message": "Cari kategori..."
   },
   "searchCategory": {
-    "message": "Search category"
+    "message": "Cari kategori"
   },
   "availableCategories": {
-    "message": "Available categories"
+    "message": "Kategori tersedia"
   },
   "noCategoriesCreateSidebar": {
-    "message": "No categories. Create one in the side panel."
+    "message": "Tidak ada kategori. Buat satu di panel samping."
   },
   "categorize": {
-    "message": "Categorize"
+    "message": "Kategorikan"
   },
   "assignThisChannelToCategory": {
-    "message": "Assign this channel to a category"
+    "message": "Tetapkan channel ini ke kategori"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "Organize Subscriptions - YouTube Category Manager"
+    "message": "Atur Langganan - Pengelola Kategori YouTube"
   },
   "organizeSubscriptionsTitle": {
-    "message": "Organize Subscriptions"
+    "message": "Atur Langganan"
   },
   "searchChannelPlaceholder": {
-    "message": "Search channel..."
+    "message": "Cari channel..."
   },
   "searchChannel": {
-    "message": "Search channel"
+    "message": "Cari channel"
   },
   "subscribedChannels": {
-    "message": "Subscribed channels"
+    "message": "Channel langganan"
   },
   "organizeYoutubeSubscriptions": {
-    "message": "Organize YouTube subscriptions"
+    "message": "Atur langganan YouTube"
   },
   "activateMultiSelect": {
-    "message": "Enable multi-select"
+    "message": "Aktifkan pilihan ganda"
   },
   "select": {
-    "message": "Select"
+    "message": "Pilih"
   },
   "closePanel": {
-    "message": "Close panel"
+    "message": "Tutup panel"
   },
   "searchChannelByName": {
-    "message": "Search channel by name"
+    "message": "Cari channel berdasarkan nama"
   },
   "clearSearch": {
-    "message": "Clear search"
+    "message": "Hapus pencarian"
   },
   "search": {
-    "message": "Search"
+    "message": "Cari"
   },
   "recent": {
-    "message": "Recent"
+    "message": "Terbaru"
   },
   "subscribedChannelsList": {
-    "message": "Subscribed channels list"
+    "message": "Daftar channel langganan"
   },
   "assignCategory": {
-    "message": "Assign category"
+    "message": "Tetapkan kategori"
   },
   "close": {
-    "message": "Close"
+    "message": "Tutup"
   },
   "selectedChannelCountOne": {
-    "message": "$COUNT$ channel selected",
+    "message": "$COUNT$ channel dipilih",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -208,7 +208,7 @@
     }
   },
   "selectedChannelCountMany": {
-    "message": "$COUNT$ channels selected",
+    "message": "$COUNT$ channel dipilih",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -216,13 +216,13 @@
     }
   },
   "today": {
-    "message": "today"
+    "message": "hari ini"
   },
   "yesterday": {
-    "message": "yesterday"
+    "message": "kemarin"
   },
   "daysAgoOne": {
-    "message": "$COUNT$ day ago",
+    "message": "$COUNT$ hari lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -230,7 +230,7 @@
     }
   },
   "daysAgoMany": {
-    "message": "$COUNT$ days ago",
+    "message": "$COUNT$ hari lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -238,7 +238,7 @@
     }
   },
   "weeksAgoOne": {
-    "message": "$COUNT$ week ago",
+    "message": "$COUNT$ minggu lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -246,7 +246,7 @@
     }
   },
   "weeksAgoMany": {
-    "message": "$COUNT$ weeks ago",
+    "message": "$COUNT$ minggu lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -254,7 +254,7 @@
     }
   },
   "monthsAgoOne": {
-    "message": "$COUNT$ month ago",
+    "message": "$COUNT$ bulan lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -262,7 +262,7 @@
     }
   },
   "monthsAgoMany": {
-    "message": "$COUNT$ months ago",
+    "message": "$COUNT$ bulan lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -270,7 +270,7 @@
     }
   },
   "yearsAgoOne": {
-    "message": "$COUNT$ year ago",
+    "message": "$COUNT$ tahun lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -278,7 +278,7 @@
     }
   },
   "yearsAgoMany": {
-    "message": "$COUNT$ years ago",
+    "message": "$COUNT$ tahun lalu",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -286,24 +286,24 @@
     }
   },
   "loadingChannels": {
-    "message": "Loading channels..."
+    "message": "Memuat channel..."
   },
   "loadingDates": {
-    "message": "Loading dates to sort..."
+    "message": "Memuat tanggal untuk mengurutkan..."
   },
   "noResults": {
-    "message": "No results"
+    "message": "Tidak ada hasil"
   },
   "noCategoriesCreated": {
-    "message": "No categories created"
+    "message": "Belum ada kategori dibuat"
   },
   "done": {
-    "message": "Done"
+    "message": "Selesai"
   },
   "back": {
-    "message": "Back"
+    "message": "Kembali"
   },
   "emptyCategoriesPlus": {
-    "message": "No categories. Press \"+\" to create one."
+    "message": "Tidak ada kategori. Tekan \"+\" untuk membuat."
   }
 }
