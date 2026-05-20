@@ -35,7 +35,10 @@
         "src/content/video-label.js",
         "src/content/content.js"
       ],
-      "css": ["src/content/sidebar.css"],
+      "css": [
+        "src/shared/roboto.css",
+        "src/content/sidebar.css"
+      ],
       "run_at": "document_idle"
     }
   ],
@@ -56,8 +59,11 @@
         "src/panel/panel.html",
         "src/panel/panel.css",
         "src/panel/panel-ui.js",
+        "src/shared/roboto.css",
         "src/shared/i18n.js",
-        "src/shared/storage.js"
+        "src/shared/storage.js",
+        "assets/fonts/roboto-latin.woff2",
+        "assets/fonts/roboto-latin-ext.woff2"
       ],
       "matches": ["https://www.youtube.com/*"]
     }
