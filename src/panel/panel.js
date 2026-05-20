@@ -1887,7 +1887,7 @@
       const isNew = hasNewVideo(channel.id);
       card.innerHTML = `
         <div class="ycsm-card-thumb-wrap">
-          <div class="ycsm-card-check" aria-hidden="true">✓</div>
+          <div class="ycsm-card-check" aria-hidden="true"></div>
           ${avatarHtml}
           ${isNew ? '<span class="ycsm-card-new-dot" aria-label="Nuevos vídeos sin ver"></span>' : ''}
         </div>
@@ -1932,15 +1932,24 @@
             (channelAssignments[channel.id] || []).includes(cat.id)
           );
           if (currentAssigned.length === 0) {
+            tagBtn.classList.remove('ycsm-tag-btn--multi');
             tagBtn.classList.add('ycsm-tag-btn-secondary');
             tagBtn.innerHTML = PLUS_SVG + `<span class="ycsm-tag-btn-empty">Categoría</span>`;
           } else if (currentAssigned.length === 1) {
+            tagBtn.classList.remove('ycsm-tag-btn--multi');
             tagBtn.classList.remove('ycsm-tag-btn-secondary');
             const cat = currentAssigned[0];
             tagBtn.innerHTML = TAG_SVG + `<span class="ycsm-tag-btn-label">${escapeHtml(cat.name)}</span>`;
           } else {
             tagBtn.classList.remove('ycsm-tag-btn-secondary');
-            tagBtn.innerHTML = TAG_SVG + `<span class="ycsm-tag-btn-count">${currentAssigned.length} categorías</span>`;
+            tagBtn.classList.add('ycsm-tag-btn--multi');
+            const shown = currentAssigned.slice(0, 2);
+            const extra = currentAssigned.length - 2;
+            const chipsHtml = shown.map((cat) => {
+              const color = escapeHtml(cat.color || '#999');
+              return `<span class="ycsm-tag-cat-chip" style="--cat-color:${color}"><span class="ycsm-tag-cat-dot"></span><span class="ycsm-tag-cat-name">${escapeHtml(cat.name)}</span></span>`;
+            }).join('');
+            tagBtn.innerHTML = chipsHtml + (extra > 0 ? `<span class="ycsm-tag-extra-count">+${extra}</span>` : '');
           }
         }
 

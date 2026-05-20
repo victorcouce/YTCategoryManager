@@ -1371,7 +1371,7 @@ html[dark] .ycsm-legend-form-cancel { background: var(--ycsm-chip); color: var(-
 .ycsm-panel-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   padding: 14px;
   border-radius: 14px;
@@ -1432,7 +1432,7 @@ html[dark] .ycsm-panel-card:hover { background: var(--ycsm-action-soft); }
 .ycsm-card-name {
   font-size: 12.5px;
   font-weight: 500;
-  text-align: left;
+  text-align: center;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1451,7 +1451,7 @@ html[dark] .ycsm-card-name {
 .ycsm-card-date {
   font-size: 10.5px;
   color: var(--ycsm-text-muted);
-  text-align: left;
+  text-align: center;
   width: 100%;
   min-height: 14px;
   margin-top: -5px;
@@ -1460,7 +1460,7 @@ html[dark] .ycsm-card-name {
   word-spacing: 3px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 3px;
 }
 
@@ -1484,7 +1484,7 @@ html[dark] .ycsm-date-icon {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   margin-top: auto;
   padding-top: 4px;
@@ -1777,6 +1777,47 @@ html[dark] .ycsm-selecting .ycsm-panel-card:hover .ycsm-tag-btn.ycsm-tag-btn-sec
   font-family: 'Roboto', Arial, sans-serif;
   color: inherit;
   white-space: nowrap;
+}
+
+/* Chips de categorías (modo multi, max 2 visible) */
+.ycsm-tag-btn.ycsm-tag-btn--multi {
+  height: auto;
+  min-height: 26px;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  gap: 4px;
+}
+.ycsm-tag-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: var(--cat-color, #999);
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 72px;
+}
+.ycsm-tag-cat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-color, #999);
+  flex-shrink: 0;
+}
+.ycsm-tag-cat-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ycsm-tag-extra-count {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Roboto', Arial, sans-serif;
+  color: var(--ycsm-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Dropdown ── */
@@ -2842,29 +2883,35 @@ html[dark] .ycsm-manage-edit-cancel { background: var(--ycsm-surface); border-co
 
 .ycsm-card-check {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--ycsm-surface) 88%, transparent);
-  border: 1.5px solid color-mix(in srgb, var(--ycsm-line) 70%, transparent);
+  top: 6px;
+  left: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: transparent;
+  border: 2px solid var(--ycsm-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 8px;
-  color: transparent;
   z-index: 2;
-  transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+  transition: background 0.12s, border-color 0.12s;
   pointer-events: auto;
-  opacity: 0;
-}
-.ycsm-panel-card:hover .ycsm-card-check { opacity: 1; }
-.ycsm-card-selected .ycsm-card-check {
   opacity: 1;
-  background: var(--ycsm-action);
-  border-color: var(--ycsm-action);
-  color: var(--ycsm-on-action);
+}
+.ycsm-panel-card:hover .ycsm-card-check { border-color: var(--ycsm-text-primary); }
+.ycsm-card-selected .ycsm-card-check {
+  background: #3ea6ff;
+  border-color: #3ea6ff;
+}
+.ycsm-card-selected .ycsm-card-check::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
 }
 .ycsm-card-selected {
   background: var(--ycsm-action-soft);
@@ -3434,7 +3481,7 @@ html[dark] .ycsm-view-btn.is-active { background: var(--ycsm-chip-hover); }
 }
 .ycsm-panel-channels--grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px; padding: 16px;
 }
 
