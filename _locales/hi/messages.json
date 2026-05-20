@@ -305,5 +305,14 @@
   },
   "emptyCategoriesPlus": {
     "message": "कोई श्रेणी नहीं। बनाने के लिए \"+\" दबाएं।"
+  },
+  "addCategory": {
+    "message": "श्रेणी जोड़ें"
+  },
+  "editAction": {
+    "message": "संपादित करें"
+  },
+  "deleteAction": {
+    "message": "हटाएं"
   }
 }

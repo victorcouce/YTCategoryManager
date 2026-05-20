@@ -305,5 +305,14 @@
   },
   "emptyCategoriesPlus": {
     "message": "Tidak ada kategori. Tekan \"+\" untuk membuat."
+  },
+  "addCategory": {
+    "message": "Tambah kategori"
+  },
+  "editAction": {
+    "message": "Edit"
+  },
+  "deleteAction": {
+    "message": "Hapus"
   }
 }

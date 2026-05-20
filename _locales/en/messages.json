@@ -305,5 +305,14 @@
   },
   "emptyCategoriesPlus": {
     "message": "No categories. Press \"+\" to create one."
+  },
+  "addCategory": {
+    "message": "Add category"
+  },
+  "editAction": {
+    "message": "Edit"
+  },
+  "deleteAction": {
+    "message": "Delete"
   }
 }

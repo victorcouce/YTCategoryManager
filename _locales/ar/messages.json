@@ -305,5 +305,14 @@
   },
   "emptyCategoriesPlus": {
     "message": "لا توجد فئات. اضغط \"+\" لإنشاء واحدة."
+  },
+  "addCategory": {
+    "message": "إضافة فئة"
+  },
+  "editAction": {
+    "message": "تعديل"
+  },
+  "deleteAction": {
+    "message": "حذف"
   }
 }

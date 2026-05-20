@@ -304,6 +304,15 @@
     "message": "返回"
   },
   "emptyCategoriesPlus": {
-    "message": "没有分类。按“+”创建一个。"
+    "message": "没有分类。按\"+\"创建一个。"
+  },
+  "addCategory": {
+    "message": "添加分类"
+  },
+  "editAction": {
+    "message": "编辑"
+  },
+  "deleteAction": {
+    "message": "删除"
   }
 }
