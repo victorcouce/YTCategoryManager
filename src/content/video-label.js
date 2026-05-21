@@ -14,27 +14,14 @@
   let injectTimeout = null;
 
   const { t } = YCSM.i18n;
+  const { escapeHtml, isWatchPage, isChannelPage } = YCSM.utils;
 
   /* ═══════════════════════════════════════════════════════════════
      UTILIDADES
   ═══════════════════════════════════════════════════════════════ */
 
-  function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(String(value ?? '')));
-    return div.innerHTML;
-  }
-
   function normalizeHref(href) {
     return (href || '').split('?')[0];
-  }
-
-  function isWatchPage() {
-    return location.pathname.startsWith('/watch');
-  }
-
-  function isChannelPage() {
-    return /^\/(@|channel\/|c\/|user\/)/.test(location.pathname);
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -372,7 +359,6 @@
 
     const channelLink = avatarLink || nameLink;
     if (!channelLink) {
-      console.log('[YCSM] getChannelIds: no se encontró enlace del canal');
       return null;
     }
 

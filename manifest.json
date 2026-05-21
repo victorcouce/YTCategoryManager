@@ -27,6 +27,7 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "js": [
+        "src/shared/utils.js",
         "src/shared/i18n.js",
         "src/shared/storage.js",
         "src/content/sidebar.js",
@@ -61,6 +62,7 @@
         "src/panel/panel.css",
         "src/panel/panel-ui.js",
         "src/shared/roboto.css",
+        "src/shared/utils.js",
         "src/shared/i18n.js",
         "src/shared/storage.js",
         "assets/fonts/roboto-latin.woff2",

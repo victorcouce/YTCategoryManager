@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "Hapus"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "viewAll": {
+    "message": "Semua langganan"
+  },
+  "viewUncategorized": {
+    "message": "Tidak dikategorikan"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "Kelompokkan saluran Anda ke dalam kategori untuk menyaring feed Anda."
+  },
+  "headChannel": {
+    "message": "Saluran"
+  },
+  "headCategories": {
+    "message": "Kategori"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "Urutan default"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "Semua sudah dikategorikan!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "Setiap saluran dalam daftar Anda memiliki setidaknya satu kategori."
+  },
+  "emptySearchSub": {
+    "message": "Coba nama lain atau hapus filter."
+  },
+  "emptyCategorySub": {
+    "message": "Tambahkan saluran ke kategori ini dari daftar «Semua»."
+  },
+  "pickerEmpty": {
+    "message": "Tidak ada hasil"
+  },
+  "dragToReorder": {
+    "message": "Seret untuk mengurutkan ulang"
+  },
+  "changeColor": {
+    "message": "Ubah warna"
+  },
+  "rename": {
+    "message": "Ganti nama"
+  },
+  "delete": {
+    "message": "Hapus"
+  },
+  "searchOrCreateCategory": {
+    "message": "Cari atau buat kategori…"
+  },
+  "viewList": {
+    "message": "Tampilan daftar"
+  },
+  "viewGrid": {
+    "message": "Tampilan kisi"
   }
 }

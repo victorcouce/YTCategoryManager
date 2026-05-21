@@ -8,30 +8,7 @@
   let sidebarRoot = null;
 
   const { t } = YCSM.i18n;
-
-  /* ═══════════════════════════════════════════════════════════════
-     UTILIDADES
-  ═══════════════════════════════════════════════════════════════ */
-
-  function escapeHtml(value) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(String(value ?? '')));
-    return div.innerHTML;
-  }
-
-  function hashHue(value) {
-    let n = 0;
-    const s = String(value || '');
-    for (let i = 0; i < s.length; i++) n = (n * 31 + s.charCodeAt(i)) | 0;
-    return Math.abs(n) % 360;
-  }
-
-  function categoryColor(category) {
-    const hue = typeof category.color === 'number'
-      ? category.color
-      : (typeof category.hue === 'number' ? category.hue : hashHue(category.id || category.name));
-    return `oklch(0.72 0.16 ${hue})`;
-  }
+  const { escapeHtml, categoryColor } = YCSM.utils;
 
 
   /* ═══════════════════════════════════════════════════════════════
@@ -397,7 +374,9 @@
      INYECCIÓN EN YOUTUBE
   ═══════════════════════════════════════════════════════════════ */
 
-  async function injectIntoYouTube() {
+  const INJECT_MAX_RETRIES = 20; // 20 × 500ms = 10s máximo de espera
+
+  async function injectIntoYouTube(retries = 0) {
     // Evitar doble inyección
     if (document.getElementById('ycsm-sidebar')) return true;
 
@@ -415,9 +394,11 @@
     const sections = [...guideContent.querySelectorAll('ytd-guide-section-renderer')];
 
     if (sections.length === 0) {
-      // Secciones aún no renderizadas, reintentar
+      // Secciones aún no renderizadas, reintentar con límite
       sidebarRoot = null;
-      setTimeout(() => injectIntoYouTube(), 500);
+      if (retries < INJECT_MAX_RETRIES) {
+        setTimeout(() => injectIntoYouTube(retries + 1), 500);
+      }
       return false;
     }
 

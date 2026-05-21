@@ -135,12 +135,11 @@
 
   /* ─── CRUD Categorías ──────────────────────────────────────────── */
 
-  const HUE_PALETTE = [0, 22, 50, 90, 145, 195, 220, 260, 295, 330];
-
   async function addCategory(name) {
     const categories = await getCategories();
     const id = generateId();
     const order = Object.keys(categories).length;
+    const { HUE_PALETTE } = window.YCSM.utils;
     const hue = HUE_PALETTE[order % HUE_PALETTE.length];
     categories[id] = { id, name, order, hue, collapsed: false };
     await saveCategories(categories);

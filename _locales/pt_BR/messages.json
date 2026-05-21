@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "Excluir"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "viewAll": {
+    "message": "Todas as inscrições"
+  },
+  "viewUncategorized": {
+    "message": "Sem categoria"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "Agrupe seus canais em categorias para filtrar seu feed."
+  },
+  "headChannel": {
+    "message": "Canal"
+  },
+  "headCategories": {
+    "message": "Categorias"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "Ordem padrão"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "Tudo categorizado!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "Cada canal da sua lista tem pelo menos uma categoria."
+  },
+  "emptySearchSub": {
+    "message": "Tente um nome diferente ou remova os filtros."
+  },
+  "emptyCategorySub": {
+    "message": "Atribua canais a esta categoria na lista \"Todos\"."
+  },
+  "pickerEmpty": {
+    "message": "Sem resultados"
+  },
+  "dragToReorder": {
+    "message": "Arrastar para reordenar"
+  },
+  "changeColor": {
+    "message": "Alterar cor"
+  },
+  "rename": {
+    "message": "Renomear"
+  },
+  "delete": {
+    "message": "Excluir"
+  },
+  "searchOrCreateCategory": {
+    "message": "Buscar ou criar categoria…"
+  },
+  "viewList": {
+    "message": "Visualização em lista"
+  },
+  "viewGrid": {
+    "message": "Visualização em grade"
   }
 }

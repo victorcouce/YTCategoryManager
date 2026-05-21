@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "Delete"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "viewAll": {
+    "message": "All subscriptions"
+  },
+  "viewUncategorized": {
+    "message": "Uncategorized"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "Group your channels into categories to filter your feed."
+  },
+  "headChannel": {
+    "message": "Channel"
+  },
+  "headCategories": {
+    "message": "Categories"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "Default order"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "All categorized!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "Every channel in your list has at least one category."
+  },
+  "emptySearchSub": {
+    "message": "Try a different name or remove the filters."
+  },
+  "emptyCategorySub": {
+    "message": "Assign channels to this category from the \"All\" list."
+  },
+  "pickerEmpty": {
+    "message": "No results"
+  },
+  "dragToReorder": {
+    "message": "Drag to reorder"
+  },
+  "changeColor": {
+    "message": "Change color"
+  },
+  "rename": {
+    "message": "Rename"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "searchOrCreateCategory": {
+    "message": "Search or create category…"
+  },
+  "viewList": {
+    "message": "List view"
+  },
+  "viewGrid": {
+    "message": "Grid view"
   }
 }

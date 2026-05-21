@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "हटाएं"
+  },
+  "edit": {
+    "message": "संपादित करें"
+  },
+  "viewAll": {
+    "message": "सभी सदस्यताएं"
+  },
+  "viewUncategorized": {
+    "message": "अवर्गीकृत"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "अपने फ़ीड को फ़िल्टर करने के लिए चैनलों को श्रेणियों में व्यवस्थित करें।"
+  },
+  "headChannel": {
+    "message": "चैनल"
+  },
+  "headCategories": {
+    "message": "श्रेणियां"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "डिफ़ॉल्ट क्रम"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "सब कुछ वर्गीकृत है!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "आपकी सूची के हर चैनल में कम से कम एक श्रेणी है।"
+  },
+  "emptySearchSub": {
+    "message": "कोई अलग नाम आज़माएं या फ़िल्टर हटाएं।"
+  },
+  "emptyCategorySub": {
+    "message": "«सभी» सूची से इस श्रेणी में चैनल जोड़ें।"
+  },
+  "pickerEmpty": {
+    "message": "कोई परिणाम नहीं"
+  },
+  "dragToReorder": {
+    "message": "पुनः क्रमित करने के लिए खींचें"
+  },
+  "changeColor": {
+    "message": "रंग बदलें"
+  },
+  "rename": {
+    "message": "नाम बदलें"
+  },
+  "delete": {
+    "message": "हटाएं"
+  },
+  "searchOrCreateCategory": {
+    "message": "श्रेणी खोजें या बनाएं…"
+  },
+  "viewList": {
+    "message": "सूची दृश्य"
+  },
+  "viewGrid": {
+    "message": "ग्रिड दृश्य"
   }
 }

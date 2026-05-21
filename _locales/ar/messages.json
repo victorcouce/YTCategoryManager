@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "حذف"
+  },
+  "edit": {
+    "message": "تعديل"
+  },
+  "viewAll": {
+    "message": "جميع الاشتراكات"
+  },
+  "viewUncategorized": {
+    "message": "غير مصنف"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "اجمع قنواتك في فئات لتصفية خلاصتك."
+  },
+  "headChannel": {
+    "message": "القناة"
+  },
+  "headCategories": {
+    "message": "الفئات"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "الترتيب الافتراضي"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "تم تصنيف الكل!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "كل قناة في قائمتك لها فئة واحدة على الأقل."
+  },
+  "emptySearchSub": {
+    "message": "جرب اسمًا مختلفًا أو أزل عوامل التصفية."
+  },
+  "emptyCategorySub": {
+    "message": "أضف قنوات إلى هذه الفئة من قائمة «الكل»."
+  },
+  "pickerEmpty": {
+    "message": "لا نتائج"
+  },
+  "dragToReorder": {
+    "message": "اسحب لإعادة الترتيب"
+  },
+  "changeColor": {
+    "message": "تغيير اللون"
+  },
+  "rename": {
+    "message": "إعادة تسمية"
+  },
+  "delete": {
+    "message": "حذف"
+  },
+  "searchOrCreateCategory": {
+    "message": "ابحث أو أنشئ فئة…"
+  },
+  "viewList": {
+    "message": "عرض القائمة"
+  },
+  "viewGrid": {
+    "message": "عرض الشبكة"
   }
 }

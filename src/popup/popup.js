@@ -4,6 +4,7 @@
  */
 document.addEventListener('DOMContentLoaded', async () => {
   const { t, count, apply } = YCSM.i18n;
+  const { escapeHtml: esc } = YCSM.utils;
   document.title = t('appName');
   apply();
   /* ── Refs DOM ── */
@@ -15,15 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnOrg    = document.getElementById('btnOrganize');
   const nameInput = document.getElementById('newName');
 
-
   let editingId = null; // null = crear, string = editar
-
-  /* ── Utilidades ── */
-  function esc(v) {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(String(v ?? '')));
-    return d.innerHTML;
-  }
 
 
 
@@ -35,8 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     catList.innerHTML = '';
 
     if (sorted.length === 0) {
-      catList.innerHTML =
-        `<div class="empty">${t('emptyCategoriesPopup')}</div>`;
+      const emptyDiv = document.createElement('div');
+      emptyDiv.className = 'empty';
+      t('emptyCategoriesPopup').split('<br>').forEach((part, i, arr) => {
+        emptyDiv.appendChild(document.createTextNode(part));
+        if (i < arr.length - 1) emptyDiv.appendChild(document.createElement('br'));
+      });
+      catList.appendChild(emptyDiv);
       return;
     }
 

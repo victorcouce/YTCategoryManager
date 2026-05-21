@@ -296,6 +296,7 @@
   }
 
   function handleMessage(e) {
+    if (e.origin !== 'https://www.youtube.com') return;
     if (!e?.data) return;
     if (e.data.type === 'YCSM_PANEL_CLOSE') close();
     if (e.data.type === 'YCSM_NAVIGATE') {

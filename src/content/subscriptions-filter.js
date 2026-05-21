@@ -13,6 +13,8 @@
 (function () {
   if (!window.YCSM) window.YCSM = {};
 
+  const { isSubscriptionsPage } = YCSM.utils;
+
   let activeFilter = null;      // null = Todos, string = categoryId
   let filterObserver = null;    // observa el grid para vídeos lazy-loaded
   let navEl = null;
@@ -24,10 +26,6 @@
   const { t } = YCSM.i18n;
 
   /* ─── Utilidades ──────────────────────────────────────────── */
-
-  function isSubscriptionsPage() {
-    return location.pathname === '/feed/subscriptions';
-  }
 
   function normalizeHref(href) {
     if (!href) return null;

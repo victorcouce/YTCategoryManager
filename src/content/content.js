@@ -3,6 +3,8 @@
  * Gestiona inyección, setInterval y navegación SPA de YouTube.
  */
 (function () {
+  const { isSubscriptionsPage, isChannelPage } = YCSM.utils;
+
   let isInjected = false;
   let injectInterval = null;
 
@@ -47,14 +49,6 @@
       clearInterval(injectInterval);
       injectInterval = null;
     }
-  }
-
-  function isSubscriptionsPage() {
-    return location.pathname === '/feed/subscriptions';
-  }
-
-  function isChannelPage() {
-    return /^\/(@|channel\/|c\/|user\/)/.test(location.pathname);
   }
 
   function shouldShowCategoryButton() {

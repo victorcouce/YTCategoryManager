@@ -320,5 +320,65 @@
   },
   "deleteAction": {
     "message": "删除"
+  },
+  "edit": {
+    "message": "编辑"
+  },
+  "viewAll": {
+    "message": "所有订阅"
+  },
+  "viewUncategorized": {
+    "message": "未分类"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "将频道分组到分类中以筛选您的订阅。"
+  },
+  "headChannel": {
+    "message": "频道"
+  },
+  "headCategories": {
+    "message": "分类"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "默认顺序"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "全部已分类！"
+  },
+  "emptyUncategorizedSub": {
+    "message": "您列表中的每个频道至少有一个分类。"
+  },
+  "emptySearchSub": {
+    "message": "尝试其他名称或移除筛选条件。"
+  },
+  "emptyCategorySub": {
+    "message": "从「全部」列表中将频道添加到此分类。"
+  },
+  "pickerEmpty": {
+    "message": "无结果"
+  },
+  "dragToReorder": {
+    "message": "拖动以重新排序"
+  },
+  "changeColor": {
+    "message": "更改颜色"
+  },
+  "rename": {
+    "message": "重命名"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "searchOrCreateCategory": {
+    "message": "搜索或创建分类…"
+  },
+  "viewList": {
+    "message": "列表视图"
+  },
+  "viewGrid": {
+    "message": "网格视图"
   }
 }

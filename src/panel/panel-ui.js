@@ -18,6 +18,7 @@
   const i18n = window.YCSM.i18n || { t: (k) => k, count: (k, n) => String(n), apply: () => {} };
   const storage = window.YCSM.storage;
   const { t, count: ct, apply: applyI18n } = i18n;
+  const { HUE_PALETTE, hashHue } = window.YCSM.utils;
 
   /* ─── DOM helper ─────────────────────────────────────────────── */
   const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -83,13 +84,6 @@
   };
 
   /* ─── Category color helpers ─────────────────────────────────── */
-  const HUE_PALETTE = [0, 22, 50, 90, 145, 195, 220, 260, 295, 330];
-  function hashHue(s) {
-    let n = 0;
-    s = String(s || '');
-    for (let i = 0; i < s.length; i++) n = (n * 31 + s.charCodeAt(i)) | 0;
-    return Math.abs(n) % 360;
-  }
   function catHue(c) {
     if (!c) return 0;
     if (typeof c.color === 'number') return c.color;
@@ -260,7 +254,7 @@
         class: 'icon-btn',
         i18nAria: 'close',
         'aria-label': 'Cerrar',
-        onclick: () => window.parent.postMessage({ type: 'YCSM_PANEL_CLOSE' }, '*'),
+        onclick: () => window.parent.postMessage({ type: 'YCSM_PANEL_CLOSE' }, 'https://www.youtube.com'),
       }, icon(ICONS.close, { size: 20 }))
     );
   }
@@ -709,7 +703,7 @@
       role: 'button',
       onclick: selecting
         ? () => { toggleSelect(ch.id); render(); }
-        : () => { window.parent.postMessage({ type: 'YCSM_NAVIGATE', href: ch.href }, '*'); },
+        : () => { window.parent.postMessage({ type: 'YCSM_NAVIGATE', href: ch.href }, 'https://www.youtube.com'); },
     });
 
     card.appendChild(h('button', {
