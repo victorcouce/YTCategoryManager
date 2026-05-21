@@ -66,6 +66,13 @@ node --check storage.js
 - **Caché en memoria** — `storage.js` usa un caché en memoria para evitar lecturas repetidas a `chrome.storage`
 - **IDs canónicos** — migración automática de IDs legacy (`/@handle`) a IDs canónicos (`UCxxxxx`) al abrir el panel
 
+## 🔒 Privacidad
+
+Esta extensión no recopila ningún dato personal. Toda la información (categorías y asignaciones) se guarda localmente en `chrome.storage` y, si Chrome Sync está activo, se sincroniza entre tus dispositivos a través de tu propia cuenta de Google.
+
+Consulta la política de privacidad completa en:
+**https://victorcouce.github.io/YTCategoryManager/privacy**
+
 ## 📄 Licencia
 
 MIT
