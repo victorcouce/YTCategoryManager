@@ -380,5 +380,16 @@
   },
   "viewGrid": {
     "message": "Visualização em grade"
+  },
+  "emptySearchTitle": {
+    "message": "Sem resultados para \"$QUERY$\"",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» está vazia",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "Limpar seleção"
   }
 }

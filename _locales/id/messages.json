@@ -380,5 +380,16 @@
   },
   "viewGrid": {
     "message": "Tampilan kisi"
+  },
+  "emptySearchTitle": {
+    "message": "Tidak ada hasil untuk \"$QUERY$\"",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» kosong",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "Hapus pilihan"
   }
 }

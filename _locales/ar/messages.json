@@ -380,5 +380,16 @@
   },
   "viewGrid": {
     "message": "عرض الشبكة"
+  },
+  "emptySearchTitle": {
+    "message": "لا توجد نتائج لـ \"$QUERY$\"",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» فارغة",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "مسح التحديد"
   }
 }

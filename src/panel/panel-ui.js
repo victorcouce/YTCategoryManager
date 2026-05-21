@@ -567,7 +567,7 @@
     if (state.search) {
       return h('div', { class: 'empty' },
         h('div', { class: 'empty-icon' }, icon(ICONS.search, { size: 28, stroke: 'var(--text-dimmer)' })),
-        h('div', { class: 'empty-title' }, `Sin resultados para “${state.search}”`),
+        h('div', { class: 'empty-title' }, t('emptySearchTitle', state.search)),
         h('div', { class: 'empty-sub', i18n: 'emptySearchSub' }, 'Prueba con otro nombre o quita los filtros.')
       );
     }
@@ -580,7 +580,7 @@
     }
     return h('div', { class: 'empty' },
       h('div', { class: 'empty-icon' }, icon(ICONS.folderPlus, { size: 28, stroke: 'var(--text-dimmer)' })),
-      h('div', { class: 'empty-title' }, `«${viewLabel().text}» está vacía`),
+      h('div', { class: 'empty-title' }, t('emptyCategoryTitle', viewLabel().text)),
       h('div', { class: 'empty-sub', i18n: 'emptyCategorySub' }, 'Asigna canales a esta categoría desde la lista «Todas».')
     );
   }
@@ -876,7 +876,7 @@
     const bar = h('div', { class: 'select-bar' + (n > 0 ? ' is-visible' : '') });
     bar.appendChild(h('button', {
       class: 'select-bar-clear',
-      'aria-label': 'Limpiar selección',
+      i18nAria: 'clearSelection',
       onclick: () => { state.selected = new Set(); state.picker = null; render(); },
     }, icon(ICONS.close, { size: 14, sw: 2.5 })));
     bar.appendChild(h('span', { class: 'select-bar-count' },

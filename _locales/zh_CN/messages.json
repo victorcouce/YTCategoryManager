@@ -380,5 +380,16 @@
   },
   "viewGrid": {
     "message": "网格视图"
+  },
+  "emptySearchTitle": {
+    "message": "\"$QUERY$\" 无结果",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» 为空",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "清除选择"
   }
 }

@@ -380,5 +380,16 @@
   },
   "viewGrid": {
     "message": "ग्रिड दृश्य"
+  },
+  "emptySearchTitle": {
+    "message": "\"$QUERY$\" के लिए कोई परिणाम नहीं",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» खाली है",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "चयन हटाएं"
   }
 }
