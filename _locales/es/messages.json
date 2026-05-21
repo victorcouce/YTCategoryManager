@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "YouTube Category Manager"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "Organiza tus suscripciones de YouTube en categorías personalizadas y colapsables, directamente en la barra lateral."
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "Mis categorías"
@@ -152,7 +152,7 @@
     "message": "Asignar este canal a una categoría"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "Organizar Suscripciones - YouTube Category Manager"
+    "message": "Organizar Suscripciones - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "Organizar Suscripciones"

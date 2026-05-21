@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "YouTube श्रेणी प्रबंधक"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "अपने YouTube सब्सक्रिप्शन को सीधे साइडबार में कस्टम श्रेणियों में व्यवस्थित करें।"
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "मेरी श्रेणियां"
@@ -152,7 +152,7 @@
     "message": "इस चैनल को किसी श्रेणी में असाइन करें"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "सब्सक्रिप्शन व्यवस्थित करें - YouTube श्रेणी प्रबंधक"
+    "message": "सब्सक्रिप्शन व्यवस्थित करें - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "सब्सक्रिप्शन व्यवस्थित करें"

@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "Pengelola Kategori YouTube"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "Atur langganan YouTube Anda ke dalam kategori khusus yang dapat diciutkan, langsung di sidebar."
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "Kategori saya"
@@ -152,7 +152,7 @@
     "message": "Tetapkan channel ini ke kategori"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "Atur Langganan - Pengelola Kategori YouTube"
+    "message": "Atur Langganan - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "Atur Langganan"

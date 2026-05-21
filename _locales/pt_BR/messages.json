@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "Gerenciador de Categorias do YouTube"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "Organize suas inscrições do YouTube em categorias personalizadas recolhíveis, diretamente na barra lateral."
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "Minhas categorias"
@@ -152,7 +152,7 @@
     "message": "Atribuir este canal a uma categoria"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "Organizar inscrições - Gerenciador de Categorias do YouTube"
+    "message": "Organizar inscrições - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "Organizar inscrições"

@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "مدير فئات YouTube"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "نظّم اشتراكات YouTube في فئات مخصصة قابلة للطي مباشرة في الشريط الجانبي."
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "فئاتي"
@@ -152,7 +152,7 @@
     "message": "تعيين هذه القناة إلى فئة"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "تنظيم الاشتراكات - مدير فئات YouTube"
+    "message": "تنظيم الاشتراكات - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "تنظيم الاشتراكات"

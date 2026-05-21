@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Chrome extension (Manifest V3) that injects a category sidebar into YouTube. No build step, no bundler — files are loaded directly as content scripts.
+Sidefold is a Chrome extension (Manifest V3) that injects a category sidebar into YouTube. No build step, no bundler — files are loaded directly as content scripts.
 
 ## Development workflow
 

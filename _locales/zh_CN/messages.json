@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "YouTube 分类管理器"
+    "message": "Sidefold"
   },
   "appDescription": {
-    "message": "直接在侧边栏中将 YouTube 订阅整理到自定义可折叠分类中。"
+    "message": "Organize Subscriptions for YouTube™"
   },
   "myCategories": {
     "message": "我的分类"
@@ -152,7 +152,7 @@
     "message": "将此频道分配到分类"
   },
   "organizeSubscriptionsPageTitle": {
-    "message": "整理订阅 - YouTube 分类管理器"
+    "message": "整理订阅 - Sidefold"
   },
   "organizeSubscriptionsTitle": {
     "message": "整理订阅"

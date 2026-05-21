@@ -1,6 +1,8 @@
-# 📂 Channel Folders for YouTube
+# Sidefold
 
-A Chrome extension (Manifest V3) that organizes your YouTube subscriptions into custom folders, directly in the sidebar.
+Organize Subscriptions for YouTube™.
+
+Sidefold is a Chrome extension (Manifest V3) that organizes your YouTube subscriptions into custom folders, directly in the sidebar.
 
 ## ✨ Features
 
@@ -93,7 +95,7 @@ node --check src/shared/i18n.js
 
 This extension collects no personal data. All information (folders and assignments) is stored locally via `chrome.storage` and, if Chrome Sync is enabled, synced across your devices through your own Google account. No external servers, no analytics, no tracking.
 
-Full privacy policy: **https://victorcouce.github.io/YTCategoryManager/privacy**
+Full privacy policy: **[Privacy policy](https://victorcouce.github.io/Sidefold/privacy)**
 
 ## 📄 License
 
