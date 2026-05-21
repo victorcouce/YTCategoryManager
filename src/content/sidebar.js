@@ -360,7 +360,7 @@
     }
 
     sorted.forEach((cat) => {
-      const el = createCategoryElement(cat, channels, channelAssignments, categories);
+      const el = createCategoryElement(cat, channels, channelAssignments);
       list.appendChild(el);
     });
   }
