@@ -531,9 +531,9 @@ input, select { font-family: inherit; color: inherit; }
 
 /* ─── Picker popover ─────────────────────────────────────── */
 .picker {
-  position: absolute;
-  z-index: 60;
-  top: calc(100% + 6px); right: 0;
+  position: absolute; /* overridden to fixed by JS */
+  z-index: 1000;
+  top: calc(100% + 6px); right: 0; /* fallback if JS unavailable */
   min-width: 240px; max-height: 320px;
   background: var(--surface);
   border: 1px solid var(--border-2);
@@ -545,8 +545,6 @@ input, select { font-family: inherit; color: inherit; }
 @media (prefers-color-scheme: dark) {
   .picker { box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
 }
-.picker.is-up { top: auto; bottom: calc(100% + 6px); }
-.picker.is-left { right: auto; left: 0; }
 
 .picker-search {
   display: flex; align-items: center; gap: 8px;
