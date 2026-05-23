@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.vscode/
+.claude/
+*.swp
+*.swo
+
+# Node (por si se añade en el futuro)
+node_modules/
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Build artifacts
+*.zip

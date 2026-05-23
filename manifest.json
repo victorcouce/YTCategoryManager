@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_appName__",
+  "short_name": "__MSG_appName__",
+  "version": "1.0.0",
+  "description": "__MSG_appDescription__",
+  "default_locale": "en",
+  "homepage_url": "https://victorcouce.github.io/Sidefold/privacy",
+
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*"
+  ],
+
+  "background": {
+    "service_worker": "src/background/background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": [
+        "src/shared/utils.js",
+        "src/shared/i18n.js",
+        "src/shared/storage.js",
+        "src/content/sidebar.js",
+        "src/panel/panel.js",
+        "src/content/subscriptions-filter.js",
+        "src/content/video-label.js",
+        "src/content/content.js"
+      ],
+      "css": [
+        "src/shared/roboto.css",
+        "src/content/sidebar.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_title": "__MSG_appName__",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/panel/panel.html",
+        "src/panel/panel.css",
+        "src/panel/panel-ui.js",
+        "src/shared/roboto.css",
+        "src/shared/utils.js",
+        "src/shared/i18n.js",
+        "src/shared/storage.js",
+        "assets/fonts/roboto-latin.woff2",
+        "assets/fonts/roboto-latin-ext.woff2"
+      ],
+      "matches": ["https://www.youtube.com/*"]
+    }
+  ]
+}

@@ -1,0 +1,395 @@
+{
+  "appName": {
+    "message": "Sidefold"
+  },
+  "appDescription": {
+    "message": "Organize Subscriptions for YouTube™"
+  },
+  "myCategories": {
+    "message": "Kategori saya"
+  },
+  "organize": {
+    "message": "Atur"
+  },
+  "organizeSubscriptions": {
+    "message": "Atur langganan"
+  },
+  "organizeSubscriptionsYoutube": {
+    "message": "Atur langganan di YouTube"
+  },
+  "categories": {
+    "message": "Kategori"
+  },
+  "loading": {
+    "message": "Memuat..."
+  },
+  "categoryForm": {
+    "message": "Formulir kategori"
+  },
+  "categoryName": {
+    "message": "Nama kategori"
+  },
+  "categoryNamePlaceholder": {
+    "message": "Nama kategori..."
+  },
+  "create": {
+    "message": "Buat"
+  },
+  "cancel": {
+    "message": "Batal"
+  },
+  "newCategory": {
+    "message": "Kategori baru"
+  },
+  "emptyCategoriesPopup": {
+    "message": "Tidak ada kategori.<br>Buat yang pertama di bawah."
+  },
+  "categoryActions": {
+    "message": "Tindakan untuk $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "editCategoryName": {
+    "message": "Edit $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryName": {
+    "message": "Hapus $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryConfirm": {
+    "message": "Hapus \"$CATEGORY$\"?\\nChannel tidak akan hilang, hanya dilepas dari kategori.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountOne": {
+    "message": "$COUNT$ channel",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountMany": {
+    "message": "$COUNT$ channel",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Simpan"
+  },
+  "all": {
+    "message": "Semua"
+  },
+  "reorderCategory": {
+    "message": "Urutkan ulang kategori"
+  },
+  "inMultipleCategories": {
+    "message": "Dalam beberapa kategori"
+  },
+  "manageCategories": {
+    "message": "Kelola kategori"
+  },
+  "manageChannelCategories": {
+    "message": "Kelola kategori channel"
+  },
+  "newCategoryName": {
+    "message": "Nama kategori baru"
+  },
+  "deleteCategoryConfirmLong": {
+    "message": "Hapus kategori \"$CATEGORY$\"?\\nChannel tidak akan hilang, hanya dilepas dari kategori.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "emptyCategoriesSidebar": {
+    "message": "Tidak ada kategori. Buat yang pertama."
+  },
+  "myYoutubeCategories": {
+    "message": "Kategori YouTube saya"
+  },
+  "assignCategoryToChannel": {
+    "message": "Tetapkan kategori ke channel"
+  },
+  "categorizeChannel": {
+    "message": "Kategorikan channel"
+  },
+  "searchCategoryPlaceholder": {
+    "message": "Cari kategori..."
+  },
+  "searchCategory": {
+    "message": "Cari kategori"
+  },
+  "availableCategories": {
+    "message": "Kategori tersedia"
+  },
+  "noCategoriesCreateSidebar": {
+    "message": "Tidak ada kategori. Buat satu di panel samping."
+  },
+  "categorize": {
+    "message": "Kategorikan"
+  },
+  "assignThisChannelToCategory": {
+    "message": "Tetapkan channel ini ke kategori"
+  },
+  "organizeSubscriptionsPageTitle": {
+    "message": "Atur Langganan - Sidefold"
+  },
+  "organizeSubscriptionsTitle": {
+    "message": "Atur Langganan"
+  },
+  "searchChannelPlaceholder": {
+    "message": "Cari channel..."
+  },
+  "searchChannel": {
+    "message": "Cari channel"
+  },
+  "subscribedChannels": {
+    "message": "Channel langganan"
+  },
+  "organizeYoutubeSubscriptions": {
+    "message": "Atur langganan YouTube"
+  },
+  "activateMultiSelect": {
+    "message": "Aktifkan pilihan ganda"
+  },
+  "select": {
+    "message": "Pilih"
+  },
+  "closePanel": {
+    "message": "Tutup panel"
+  },
+  "searchChannelByName": {
+    "message": "Cari channel berdasarkan nama"
+  },
+  "clearSearch": {
+    "message": "Hapus pencarian"
+  },
+  "search": {
+    "message": "Cari"
+  },
+  "recent": {
+    "message": "Terbaru"
+  },
+  "subscribedChannelsList": {
+    "message": "Daftar channel langganan"
+  },
+  "assignCategory": {
+    "message": "Tetapkan kategori"
+  },
+  "close": {
+    "message": "Tutup"
+  },
+  "selectedChannelCountOne": {
+    "message": "$COUNT$ channel dipilih",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectedChannelCountMany": {
+    "message": "$COUNT$ channel dipilih",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelsSelectedOne": {
+    "message": "channel dipilih"
+  },
+  "channelsSelectedMany": {
+    "message": "channel dipilih"
+  },
+  "today": {
+    "message": "hari ini"
+  },
+  "yesterday": {
+    "message": "kemarin"
+  },
+  "daysAgoOne": {
+    "message": "$COUNT$ hari lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgoMany": {
+    "message": "$COUNT$ hari lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoOne": {
+    "message": "$COUNT$ minggu lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoMany": {
+    "message": "$COUNT$ minggu lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoOne": {
+    "message": "$COUNT$ bulan lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoMany": {
+    "message": "$COUNT$ bulan lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoOne": {
+    "message": "$COUNT$ tahun lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoMany": {
+    "message": "$COUNT$ tahun lalu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "loadingChannels": {
+    "message": "Memuat channel..."
+  },
+  "loadingDates": {
+    "message": "Memuat tanggal untuk mengurutkan..."
+  },
+  "noResults": {
+    "message": "Tidak ada hasil"
+  },
+  "noCategoriesCreated": {
+    "message": "Belum ada kategori dibuat"
+  },
+  "done": {
+    "message": "Selesai"
+  },
+  "back": {
+    "message": "Kembali"
+  },
+  "emptyCategoriesPlus": {
+    "message": "Tidak ada kategori. Tekan \"+\" untuk membuat."
+  },
+  "addCategory": {
+    "message": "Tambah kategori"
+  },
+  "editAction": {
+    "message": "Edit"
+  },
+  "deleteAction": {
+    "message": "Hapus"
+  },
+  "edit": {
+    "message": "Edit"
+  },
+  "viewAll": {
+    "message": "Semua langganan"
+  },
+  "viewUncategorized": {
+    "message": "Tidak dikategorikan"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "Kelompokkan saluran Anda ke dalam kategori untuk menyaring feed Anda."
+  },
+  "headChannel": {
+    "message": "Saluran"
+  },
+  "headCategories": {
+    "message": "Kategori"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "Urutan default"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "Semua sudah dikategorikan!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "Setiap saluran dalam daftar Anda memiliki setidaknya satu kategori."
+  },
+  "emptySearchSub": {
+    "message": "Coba nama lain atau hapus filter."
+  },
+  "emptyCategorySub": {
+    "message": "Tambahkan saluran ke kategori ini dari daftar «Semua»."
+  },
+  "pickerEmpty": {
+    "message": "Tidak ada hasil"
+  },
+  "dragToReorder": {
+    "message": "Seret untuk mengurutkan ulang"
+  },
+  "changeColor": {
+    "message": "Ubah warna"
+  },
+  "rename": {
+    "message": "Ganti nama"
+  },
+  "delete": {
+    "message": "Hapus"
+  },
+  "searchOrCreateCategory": {
+    "message": "Cari atau buat kategori…"
+  },
+  "viewList": {
+    "message": "Tampilan daftar"
+  },
+  "viewGrid": {
+    "message": "Tampilan kisi"
+  },
+  "emptySearchTitle": {
+    "message": "Tidak ada hasil untuk \"$QUERY$\"",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» kosong",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "Hapus pilihan"
+  }
+}

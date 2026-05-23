@@ -1,0 +1,395 @@
+{
+  "appName": {
+    "message": "Sidefold"
+  },
+  "appDescription": {
+    "message": "Organize Subscriptions for YouTube™"
+  },
+  "myCategories": {
+    "message": "Mis categorías"
+  },
+  "organize": {
+    "message": "Organizar"
+  },
+  "organizeSubscriptions": {
+    "message": "Organizar suscripciones"
+  },
+  "organizeSubscriptionsYoutube": {
+    "message": "Organizar suscripciones en YouTube"
+  },
+  "categories": {
+    "message": "Categorías"
+  },
+  "loading": {
+    "message": "Cargando..."
+  },
+  "categoryForm": {
+    "message": "Formulario de categoría"
+  },
+  "categoryName": {
+    "message": "Nombre de la categoría"
+  },
+  "categoryNamePlaceholder": {
+    "message": "Nombre de la categoría..."
+  },
+  "create": {
+    "message": "Crear"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "newCategory": {
+    "message": "Nueva categoría"
+  },
+  "emptyCategoriesPopup": {
+    "message": "Sin categorías.<br>Crea la primera abajo."
+  },
+  "categoryActions": {
+    "message": "Acciones de $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "editCategoryName": {
+    "message": "Editar $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryName": {
+    "message": "Eliminar $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryConfirm": {
+    "message": "¿Eliminar \"$CATEGORY$\"?\\nLos canales no se perderán, solo se desasignarán.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountOne": {
+    "message": "$COUNT$ canal",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountMany": {
+    "message": "$COUNT$ canales",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "all": {
+    "message": "Todos"
+  },
+  "reorderCategory": {
+    "message": "Reordenar categoría"
+  },
+  "inMultipleCategories": {
+    "message": "En varias categorías"
+  },
+  "manageCategories": {
+    "message": "Gestionar categorías"
+  },
+  "manageChannelCategories": {
+    "message": "Gestionar categorías del canal"
+  },
+  "newCategoryName": {
+    "message": "Nuevo nombre de categoría"
+  },
+  "deleteCategoryConfirmLong": {
+    "message": "¿Eliminar la categoría \"$CATEGORY$\"?\\nLos canales no se perderán, solo se desasignarán.",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "emptyCategoriesSidebar": {
+    "message": "Sin categorías. Crea la primera."
+  },
+  "myYoutubeCategories": {
+    "message": "Mis categorías de YouTube"
+  },
+  "assignCategoryToChannel": {
+    "message": "Asignar categoría al canal"
+  },
+  "categorizeChannel": {
+    "message": "Categorizar canal"
+  },
+  "searchCategoryPlaceholder": {
+    "message": "Buscar categoría..."
+  },
+  "searchCategory": {
+    "message": "Buscar categoría"
+  },
+  "availableCategories": {
+    "message": "Categorías disponibles"
+  },
+  "noCategoriesCreateSidebar": {
+    "message": "No hay categorías. Crea una en el panel lateral."
+  },
+  "categorize": {
+    "message": "Categorizar"
+  },
+  "assignThisChannelToCategory": {
+    "message": "Asignar este canal a una categoría"
+  },
+  "organizeSubscriptionsPageTitle": {
+    "message": "Organizar Suscripciones - Sidefold"
+  },
+  "organizeSubscriptionsTitle": {
+    "message": "Organizar Suscripciones"
+  },
+  "searchChannelPlaceholder": {
+    "message": "Buscar canal..."
+  },
+  "searchChannel": {
+    "message": "Buscar canal"
+  },
+  "subscribedChannels": {
+    "message": "Canales suscritos"
+  },
+  "organizeYoutubeSubscriptions": {
+    "message": "Organizar suscripciones de YouTube"
+  },
+  "activateMultiSelect": {
+    "message": "Activar selección múltiple"
+  },
+  "select": {
+    "message": "Seleccionar"
+  },
+  "closePanel": {
+    "message": "Cerrar panel"
+  },
+  "searchChannelByName": {
+    "message": "Buscar canal por nombre"
+  },
+  "clearSearch": {
+    "message": "Borrar búsqueda"
+  },
+  "search": {
+    "message": "Buscar"
+  },
+  "recent": {
+    "message": "Recientes"
+  },
+  "subscribedChannelsList": {
+    "message": "Lista de canales suscritos"
+  },
+  "assignCategory": {
+    "message": "Asignar categoría"
+  },
+  "close": {
+    "message": "Cerrar"
+  },
+  "selectedChannelCountOne": {
+    "message": "$COUNT$ canal seleccionado",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectedChannelCountMany": {
+    "message": "$COUNT$ canales seleccionados",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelsSelectedOne": {
+    "message": "canal seleccionado"
+  },
+  "channelsSelectedMany": {
+    "message": "canales seleccionados"
+  },
+  "today": {
+    "message": "hoy"
+  },
+  "yesterday": {
+    "message": "ayer"
+  },
+  "daysAgoOne": {
+    "message": "hace $COUNT$ día",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgoMany": {
+    "message": "hace $COUNT$ días",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoOne": {
+    "message": "hace $COUNT$ semana",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoMany": {
+    "message": "hace $COUNT$ semanas",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoOne": {
+    "message": "hace $COUNT$ mes",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoMany": {
+    "message": "hace $COUNT$ meses",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoOne": {
+    "message": "hace $COUNT$ año",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoMany": {
+    "message": "hace $COUNT$ años",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "loadingChannels": {
+    "message": "Cargando canales..."
+  },
+  "loadingDates": {
+    "message": "Cargando fechas para ordenar..."
+  },
+  "noResults": {
+    "message": "Sin resultados"
+  },
+  "noCategoriesCreated": {
+    "message": "Sin categorías creadas"
+  },
+  "done": {
+    "message": "Hecho"
+  },
+  "back": {
+    "message": "Volver"
+  },
+  "emptyCategoriesPlus": {
+    "message": "Sin categorías. Pulsa \"+\" para crear."
+  },
+  "addCategory": {
+    "message": "Añadir categoría"
+  },
+  "editAction": {
+    "message": "Editar"
+  },
+  "deleteAction": {
+    "message": "Eliminar"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "viewAll": {
+    "message": "Todas las suscripciones"
+  },
+  "viewUncategorized": {
+    "message": "Sin categorizar"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "Agrupa tus canales en categorías para filtrar tu feed."
+  },
+  "headChannel": {
+    "message": "Canal"
+  },
+  "headCategories": {
+    "message": "Categorías"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "Orden por defecto"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "¡Todo categorizado!"
+  },
+  "emptyUncategorizedSub": {
+    "message": "Cada canal de tu lista tiene al menos una categoría."
+  },
+  "emptySearchSub": {
+    "message": "Prueba con otro nombre o quita los filtros."
+  },
+  "emptyCategorySub": {
+    "message": "Asigna canales a esta categoría desde la lista «Todos»."
+  },
+  "pickerEmpty": {
+    "message": "Sin resultados"
+  },
+  "dragToReorder": {
+    "message": "Arrastrar para reordenar"
+  },
+  "changeColor": {
+    "message": "Cambiar color"
+  },
+  "rename": {
+    "message": "Renombrar"
+  },
+  "delete": {
+    "message": "Eliminar"
+  },
+  "searchOrCreateCategory": {
+    "message": "Buscar o crear categoría…"
+  },
+  "viewList": {
+    "message": "Vista de lista"
+  },
+  "viewGrid": {
+    "message": "Vista de cuadrícula"
+  },
+  "emptySearchTitle": {
+    "message": "Sin resultados para \"$QUERY$\"",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» está vacía",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "Borrar selección"
+  }
+}

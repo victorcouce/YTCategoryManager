@@ -1,0 +1,3879 @@
+/* ═══════════════════════════════════════════════════════════════
+   sidebar.css — Estilos del sidebar + panel inyectado en YouTube
+   Prefijo: ycsm-  (evita colisiones con estilos de YouTube)
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── Overrides de YouTube ──────────────────────────────────── */
+#sections.ytd-guide-renderer > .ytd-guide-renderer:first-child:not(:last-child) {
+  border-bottom: none !important;
+}
+
+/* ─── Tokens compartidos, basados en el sistema de YouTube ───── */
+#ycsm-sidebar,
+.ycsm-panel-box,
+.ycsm-ctx-menu,
+.ycsm-manage-dropdown,
+.ycsm-tag-dropdown,
+.ycsm-bulk-cat-menu,
+.ycsm-add-cat-dropdown,
+#ycsm-subs-nav,
+#ycsm-video-label-btn,
+.ycsm-video-label-btn,
+#ycsm-video-dropdown,
+.ycsm-cat-picker {
+  --ycsm-surface: var(--yt-spec-base-background, #fff);
+  --ycsm-surface-alt: var(--yt-spec-general-background-a, #fff);
+  --ycsm-chip: var(--yt-spec-badge-chip-background, rgba(0, 0, 0, 0.05));
+  --ycsm-chip-hover: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.10));
+  --ycsm-text-primary: var(--yt-spec-text-primary, #0f0f0f);
+  --ycsm-text-muted: var(--yt-spec-text-secondary, #606060);
+  --ycsm-line: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.10));
+  --ycsm-action: var(--yt-spec-text-primary, #0f0f0f);
+  --ycsm-on-action: #fff;
+  --ycsm-action-soft: rgba(0, 0, 0, 0.08);
+  --ycsm-danger: var(--ycsm-text-primary);
+}
+
+[dark] #ycsm-sidebar,
+[dark] .ycsm-panel-box,
+[dark] .ycsm-ctx-menu,
+[dark] .ycsm-manage-dropdown,
+[dark] .ycsm-tag-dropdown,
+[dark] .ycsm-bulk-cat-menu,
+[dark] .ycsm-add-cat-dropdown,
+[dark] #ycsm-subs-nav,
+[dark] #ycsm-video-label-btn,
+[dark] .ycsm-video-label-btn,
+[dark] #ycsm-video-dropdown,
+[dark] .ycsm-cat-picker {
+  --ycsm-surface: #0f0f0f;
+  --ycsm-surface-alt: #0f0f0f;
+  --ycsm-chip: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.10));
+  --ycsm-chip-hover: var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.14));
+  --ycsm-text-primary: #f1f1f1;
+  --ycsm-text-muted: #aaa;
+  --ycsm-line: var(--yt-spec-10-percent-layer, rgba(255, 255, 255, 0.14));
+  --ycsm-action: var(--yt-spec-text-primary, #f1f1f1);
+  --ycsm-on-action: #0f0f0f;
+  --ycsm-action-soft: rgba(255, 255, 255, 0.10);
+  --ycsm-danger: var(--ycsm-text-primary);
+}
+
+/* ─── Variables de tema ─────────────────────────────────────── */
+#ycsm-sidebar {
+  --ycsm-bg: var(--ycsm-surface-alt);
+  --ycsm-bg-hover: var(--ycsm-chip);
+  --ycsm-bg-active: var(--ycsm-chip-hover);
+  --ycsm-text: var(--ycsm-text-primary);
+  --ycsm-text-sub: var(--ycsm-text-muted);
+  --ycsm-border: var(--ycsm-line);
+  --ycsm-accent: var(--ycsm-action);
+  --ycsm-radius: 8px;
+  --ycsm-font: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ycsm-anim: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  font-family: var(--ycsm-font);
+  color: var(--ycsm-text);
+  background: transparent;
+  padding: 8px 0;
+  border-top: 1px solid var(--ycsm-border);
+  border-bottom: 1px solid var(--ycsm-border);
+  margin: 8px 0;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* Botones genéricos (formulario nueva categoría) */
+.ycsm-btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--ycsm-text-sub);
+  transition: background var(--ycsm-anim), color var(--ycsm-anim);
+  padding: 0;
+}
+.ycsm-btn-icon:hover {
+  background: var(--ycsm-bg-hover);
+  color: var(--ycsm-text);
+}
+
+.ycsm-btn-primary {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  border: none;
+  border-radius: var(--ycsm-radius);
+  cursor: pointer;
+  font-family: var(--ycsm-font);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px;
+  transition: opacity var(--ycsm-anim);
+}
+.ycsm-btn-primary:hover { opacity: 0.85; }
+
+/* ─── Header del sidebar ─────────────────────────────────────── */
+.ycsm-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 4px;
+}
+
+/* Mismo estilo que ytd-guide-entry-renderer[is-header] .title */
+.ycsm-sidebar-title {
+  padding-right: 8px;
+  flex: none;
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+  font-weight: 500;
+  overflow: hidden;
+  max-height: 2.2rem;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: normal;
+  color: var(--yt-spec-text-primary, var(--ycsm-text));
+  margin: 0;
+}
+
+.ycsm-sidebar-header-actions {
+  display: flex;
+  gap: 0;
+}
+
+/* Botones SVG del header (estilo nativo YouTube) */
+.ycsm-hdr-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ycsm-text);
+  padding: 0;
+  transition: background 0.1s;
+}
+.ycsm-hdr-btn svg {
+  pointer-events: none;
+}
+.ycsm-hdr-btn:hover {
+  background: var(--ycsm-bg-hover);
+}
+.ycsm-hdr-btn:focus-visible {
+  outline: 2px solid var(--ycsm-accent);
+  outline-offset: 1px;
+}
+
+/* ─── Lista de categorías ────────────────────────────────────── */
+.ycsm-categories-list {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.ycsm-categories-list::-webkit-scrollbar {
+  width: 4px;
+}
+.ycsm-categories-list::-webkit-scrollbar-thumb {
+  background: var(--ycsm-line);
+  border-radius: 2px;
+}
+
+/* ─── Entrada de categoría (estilo nativo ytd-guide-entry) ──── */
+.ycsm-cat-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  height: 40px;
+  text-decoration: none;
+  color: var(--ycsm-text);
+  font-family: var(--ycsm-font);
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 10px;
+  margin: 0 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+  position: relative;
+  box-sizing: border-box;
+}
+.ycsm-cat-entry:hover {
+  background: var(--ycsm-bg-hover);
+}
+
+.ycsm-cat-entry-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.ycsm-cat-entry-label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.ycsm-cat-entry-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ycsm-cat-entry-count {
+  flex: 0 0 auto;
+  min-width: 2ch;
+  color: var(--ycsm-text-sub);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 40px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.ycsm-channel-item {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  padding: 4px 12px 4px 28px;
+  margin: 0 12px;
+  border-radius: 10px;
+  color: var(--ycsm-text);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.ycsm-channel-item:hover {
+  background: var(--ycsm-bg-hover);
+  color: var(--ycsm-text);
+  text-decoration: none;
+}
+
+.ycsm-channel-item:focus-visible {
+  outline: 2px solid var(--ycsm-accent);
+  outline-offset: -2px;
+}
+
+.ycsm-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ycsm-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ycsm-accent);
+  color: var(--ycsm-on-action);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ycsm-channel-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ycsm-multicat {
+  font-size: 11px;
+  color: var(--ycsm-text-sub);
+  flex-shrink: 0;
+}
+
+.ycsm-ctx-btn {
+  position: absolute;
+  right: 6px;
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 12px !important;
+}
+
+/* ─── Input de renombrado inline ────────────────────────────── */
+.ycsm-rename-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ycsm-accent);
+  outline: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ycsm-text);
+  font-family: var(--ycsm-font);
+  width: 100%;
+  min-width: 0;
+}
+
+/* ─── Formulario de nueva categoría ────────────────────────── */
+.ycsm-add-form {
+  padding: 8px 12px;
+  border-top: 1px solid var(--ycsm-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ycsm-add-form[hidden] {
+  display: none;
+}
+
+.ycsm-add-form-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ycsm-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--ycsm-border);
+  border-radius: var(--ycsm-radius);
+  background: var(--ycsm-bg);
+  color: var(--ycsm-text);
+  font-size: 13px;
+  font-family: var(--ycsm-font);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color var(--ycsm-anim);
+}
+
+.ycsm-input:focus {
+  border-color: var(--ycsm-accent);
+}
+
+#ycsm-new-color {
+  width: 34px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+  background: none;
+}
+
+/* ─── Estado vacío ──────────────────────────────────────────── */
+.ycsm-empty-cat {
+  font-size: 12px;
+  color: var(--ycsm-text-sub);
+  padding: 8px 12px 8px 30px;
+}
+
+.ycsm-link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ycsm-accent);
+  font-size: 12px;
+  font-family: var(--ycsm-font);
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ─── Menú contextual de canal ──────────────────────────────── */
+.ycsm-ctx-menu {
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  min-width: 190px;
+  max-width: 250px;
+  overflow: hidden;
+  padding: 4px 0;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ycsm-ctx-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ycsm-text-primary);
+  transition: background 0.15s;
+}
+
+.ycsm-ctx-menu-item:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+.ycsm-ctx-menu-item input[type='checkbox'] {
+  accent-color: var(--ycsm-action);
+  cursor: pointer;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PANEL DE ASIGNACIÓN MASIVA — Grid de tarjetas
+═══════════════════════════════════════════════════════════════ */
+
+.ycsm-panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ycsm-panel-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+.ycsm-panel-box {
+  position: relative;
+  --ycsm-text: var(--ycsm-text-primary);
+  --ycsm-text-sub: var(--ycsm-text-muted);
+  --ycsm-bg: var(--ycsm-surface);
+  --ycsm-bg-secondary: var(--ycsm-surface-alt);
+  --ycsm-border: var(--ycsm-line);
+  --ycsm-accent: var(--ycsm-action);
+  background: var(--ycsm-bg);
+  color: var(--ycsm-text);
+  border-radius: 16px;
+  width: min(1200px, 100vw - 64px);
+  height: min(760px, 100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
+  overflow: hidden;
+  z-index: 1;
+}
+
+html:not([dark]) .ycsm-panel-box {
+  box-shadow: 0 24px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* ─── Cabecera del panel ─────────────────────────────────────── */
+.ycsm-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 26px 16px;
+  border-bottom: 1px solid var(--ycsm-border);
+  flex-shrink: 0;
+  background: var(--ycsm-bg);
+}
+
+.ycsm-panel-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+/* ─── Cuerpo scrollable ──────────────────────────────────────── */
+.ycsm-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 26px;
+  background: var(--ycsm-bg-secondary);
+}
+
+/* ─── Toolbar (búsqueda + ordenación) ───────────────────────── */
+.ycsm-panel-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* ── Search wrap con icono integrado ── */
+.ycsm-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.ycsm-search-icon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--yt-spec-text-secondary, #909090);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+html[dark] .ycsm-search-icon { color: var(--yt-spec-text-secondary, #aaa); }
+
+/* ── Base search input (reutilizable) ── */
+.ycsm-search {
+  width: 100%;
+  padding: 11px 16px 11px 42px;
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 28px;
+  font-size: 14px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  outline: none;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  box-sizing: border-box;
+  transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ycsm-search:focus {
+  border-color: var(--ycsm-action);
+  box-shadow: 0 0 0 2px rgba(6, 95, 212, 0.15);
+}
+
+.ycsm-search::placeholder {
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-search {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-search:focus {
+  border-color: var(--ycsm-action);
+  box-shadow: 0 0 0 2px rgba(62, 166, 255, 0.15);
+}
+
+/* Compact variant (tag dropdown, video-label) */
+.ycsm-search--compact {
+  padding: 7px 12px 7px 32px;
+  font-size: 12px;
+  border-radius: 20px;
+  border-width: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   YouTube-style Search Bar (panel)
+   Replica del buscador principal de YouTube
+═══════════════════════════════════════════════════════════════ */
+.ycsm-yt-search-container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.ycsm-yt-search-box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 40px;
+  border: 1px solid var(--ycsm-line);
+  border-radius: 40px 0 0 40px;
+  background: var(--ycsm-surface);
+  padding-left: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ycsm-yt-search-box.ycsm-yt-search-focused {
+  border-color: var(--ycsm-action);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  padding-left: 0;
+}
+
+.ycsm-yt-search-left-icon {
+  display: none;
+  width: 20px;
+  height: 20px;
+  color: var(--ycsm-text-primary);
+  flex-shrink: 0;
+  margin-left: 14px;
+  margin-right: 4px;
+}
+
+.ycsm-yt-search-focused .ycsm-yt-search-left-icon {
+  display: block;
+}
+
+.ycsm-yt-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 2px 6px 2px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  line-height: 24px;
+}
+
+.ycsm-yt-search-input::placeholder {
+  color: var(--ycsm-text-muted);
+}
+
+.ycsm-yt-search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--ycsm-text-primary);
+  flex-shrink: 0;
+  margin-right: 4px;
+  transition: background 0.15s;
+}
+
+.ycsm-yt-search-clear:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+.ycsm-yt-search-clear svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ycsm-yt-search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 40px;
+  border: 1px solid var(--ycsm-line);
+  border-left: none;
+  border-radius: 0 40px 40px 0;
+  background: var(--ycsm-chip);
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  transition: background 0.15s;
+}
+
+.ycsm-yt-search-btn:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+.ycsm-yt-search-btn svg {
+  width: 22px;
+  height: 22px;
+  color: var(--ycsm-text-primary);
+}
+
+/* Dark mode */
+html[dark] .ycsm-yt-search-box {
+  border-color: var(--ycsm-line);
+  background: var(--ycsm-surface);
+}
+
+html[dark] .ycsm-yt-search-box.ycsm-yt-search-focused {
+  border-color: var(--ycsm-action);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+
+html[dark] .ycsm-yt-search-left-icon {
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-yt-search-input {
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-yt-search-input::placeholder {
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-yt-search-clear {
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-yt-search-clear:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-yt-search-btn {
+  border-color: var(--ycsm-line);
+  background: var(--ycsm-chip);
+}
+
+html[dark] .ycsm-yt-search-btn:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-yt-search-btn svg {
+  color: var(--ycsm-text-primary);
+}
+
+/* ── Sort select estilizado ── */
+/* ─── Sort selector custom (estilo chip YouTube) ────────────── */
+.ycsm-sort-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.ycsm-sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px 0 14px;
+  border: none;
+  border-radius: 18px;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  outline-offset: 2px;
+}
+.ycsm-sort-btn:hover { background: var(--ycsm-chip-hover); }
+.ycsm-sort-btn[aria-expanded="true"] { background: var(--ycsm-chip-hover); }
+.ycsm-sort-chevron {
+  color: var(--ycsm-text-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ycsm-sort-btn[aria-expanded="true"] .ycsm-sort-chevron { transform: rotate(180deg); }
+
+.ycsm-sort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 150px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  overflow: hidden;
+  padding: 6px 0;
+}
+.ycsm-sort-menu:not([hidden]) {
+  animation: ycsm-sort-in 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes ycsm-sort-in {
+  from { opacity: 0; transform: translateY(-4px) scaleY(0.96); transform-origin: top right; }
+  to   { opacity: 1; transform: translateY(0)  scaleY(1);    transform-origin: top right; }
+}
+html[dark] .ycsm-sort-menu { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45); }
+
+.ycsm-sort-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.ycsm-sort-item:hover { background: var(--ycsm-chip-hover); }
+.ycsm-sort-item-check {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.ycsm-sort-item[aria-selected="true"] .ycsm-sort-item-check { opacity: 1; }
+
+/* ─── Leyenda de categorías ──────────────────────────────────── */
+.ycsm-panel-legend {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--ycsm-border, #e8e8e8);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Contenedor scrollable de pills (sin wrapping vertical, estilo ytd chip bar) */
+.ycsm-legend-scroll {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 44px 14px 26px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ycsm-legend-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Botón sliders — gestionar categorías */
+.ycsm-legend-manage-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: none;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+  cursor: pointer;
+  transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Tooltip CSS del botón gestionar */
+.ycsm-legend-manage-btn::after {
+  content: 'Gestionar categorías';
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  transform: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+  background: #616161;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 300;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ycsm-legend-manage-btn:hover::after {
+  opacity: 1;
+}
+
+.ycsm-legend-manage-btn:hover {
+  background: var(--ycsm-chip-hover);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-legend-manage-btn {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-legend-manage-btn:hover {
+  background: var(--ycsm-chip-hover);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-panel-legend {
+  border-color: var(--ycsm-line);
+}
+
+/* Contenedor fijo derecha: botón + y botón gestionar */
+.ycsm-legend-actions {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 0;
+  align-self: stretch;
+}
+
+/* Fade gradient a la izquierda para indicar scroll */
+.ycsm-legend-actions::before {
+  content: '';
+  position: absolute;
+  left: -36px;
+  top: 0;
+  bottom: 0;
+  width: 36px;
+  background: linear-gradient(to right, transparent, var(--ycsm-bg, #fff));
+  pointer-events: none;
+}
+
+html[dark] .ycsm-legend-actions::before {
+  background: linear-gradient(to right, transparent, var(--ycsm-bg, #212121));
+}
+
+/* Wrapper para anclar el dropdown de gestión de categorías */
+.ycsm-legend-manage-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── Dropdown de gestión de categorías ── */
+.ycsm-manage-dropdown {
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ycsm-manage-dropdown-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--ycsm-line);
+}
+
+.ycsm-manage-dropdown-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ycsm-text-primary);
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.ycsm-manage-dropdown-body {
+  padding: 10px 8px 12px;
+  overflow-y: auto;
+  max-height: 340px;
+  display: flex;
+  flex-direction: column;
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-manage-dropdown {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+html[dark] .ycsm-manage-dropdown-header {
+  border-color: var(--ycsm-line);
+}
+
+html[dark] .ycsm-manage-dropdown-title { color: var(--ycsm-text-primary); }
+
+html[dark] .ycsm-manage-dropdown-body { background: var(--ycsm-surface); }
+
+/* ── Pills base ── */
+.ycsm-legend-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ycsm-text-primary);
+  background: var(--ycsm-chip);
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ycsm-legend-pill:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+/* "Todos" (botón simple, sin label+del internos) */
+.ycsm-legend-all {
+  padding: 0 16px;
+}
+
+.ycsm-legend-all.ycsm-legend-pill-active {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+
+.ycsm-legend-all.ycsm-legend-pill-active:hover {
+  background: color-mix(in srgb, var(--ycsm-text-primary) 80%, transparent);
+}
+
+html[dark] .ycsm-legend-all.ycsm-legend-pill-active {
+  background: var(--yt-spec-text-primary, #f1f1f1);
+  color: var(--yt-spec-base-background, #0f0f0f);
+}
+
+/* Pills de categoría: padding horizontal estándar */
+.ycsm-pill-wrap .ycsm-legend-pill {
+  padding: 0 16px;
+}
+
+/* Pills de categoría (span contenedor con label + × internos) */
+.ycsm-legend-pill-active {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+
+.ycsm-legend-pill-active:hover {
+  background: color-mix(in srgb, var(--ycsm-text-primary) 80%, transparent);
+}
+
+html[dark] .ycsm-legend-pill {
+  color: var(--ycsm-text-primary);
+  background: var(--ycsm-chip);
+}
+
+html[dark] .ycsm-legend-pill:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-legend-pill.ycsm-legend-pill-active {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+
+/* Botón "Crear categoría" en la leyenda */
+.ycsm-legend-create-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ycsm-text-primary);
+  background: var(--ycsm-chip);
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.2s;
+}
+.ycsm-legend-create-pill:hover {
+  background: var(--ycsm-chip-hover);
+  color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-legend-create-pill { background: var(--ycsm-chip); color: var(--ycsm-text-muted); }
+html[dark] .ycsm-legend-create-pill:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+
+/* Wrapper del botón + para anclar el dropdown */
+.ycsm-legend-create-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ─── Wrapper de pill de categoría (para el × de eliminar) ─────── */
+.ycsm-pill-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ycsm-pill-delete-btn {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 10;
+  padding: 0;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ycsm-pill-wrap:hover .ycsm-pill-delete-btn {
+  opacity: 1;
+}
+
+html[dark] .ycsm-pill-delete-btn {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+
+/* ─── Pill en modo edición (doble clic para renombrar) ─────────── */
+.ycsm-legend-pill.ycsm-pill-editing {
+  border: 1.5px solid var(--ycsm-text-primary);
+  padding: 0 8px;
+  cursor: text;
+}
+
+html[dark] .ycsm-legend-pill.ycsm-pill-editing {
+  border-color: var(--ycsm-text-primary);
+}
+
+.ycsm-pill-rename-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: inherit;
+  min-width: 40px;
+  width: auto;
+}
+
+/* ─── Pill nueva inline (al crear categoría) ───────────────────── */
+.ycsm-legend-new-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 36px;
+  padding: 0 4px 0 12px;
+  border-radius: 8px;
+  background: var(--ycsm-chip);
+  border: 1.5px solid var(--ycsm-text-primary);
+  animation: ycsm-pill-in 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes ycsm-pill-in {
+  from { transform: scaleX(0.8); opacity: 0; }
+  to   { transform: scaleX(1);   opacity: 1; }
+}
+
+html[dark] .ycsm-legend-new-pill {
+  background: var(--ycsm-chip);
+  border-color: var(--ycsm-text-primary);
+}
+
+.ycsm-new-pill-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  width: 120px;
+  min-width: 0;
+}
+
+html[dark] .ycsm-new-pill-input {
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-new-pill-confirm,
+.ycsm-new-pill-cancel {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  padding: 0;
+}
+
+.ycsm-new-pill-confirm {
+  background: var(--ycsm-action);
+  color: var(--ycsm-on-action);
+}
+
+.ycsm-new-pill-confirm:hover {
+  filter: brightness(0.92);
+}
+
+.ycsm-new-pill-cancel {
+  background: transparent;
+  color: var(--ycsm-text-muted);
+}
+
+.ycsm-new-pill-cancel:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-new-pill-confirm {
+  background: var(--ycsm-action);
+  color: var(--ycsm-on-action);
+}
+
+html[dark] .ycsm-new-pill-confirm:hover {
+  filter: brightness(1.08);
+}
+
+html[dark] .ycsm-new-pill-cancel:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+/* Dropdown de nueva categoría (legacy — mantenido por compatibilidad) */
+.ycsm-add-cat-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 200;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ycsm-add-cat-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  outline: none;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  transition: border-color 0.2s;
+}
+.ycsm-add-cat-input:focus { border-color: var(--ycsm-action); }
+.ycsm-add-cat-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.ycsm-add-cat-save {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: none;
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.2s;
+}
+.ycsm-add-cat-save:hover { opacity: 0.86; }
+.ycsm-add-cat-cancel {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: none;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.2s;
+}
+.ycsm-add-cat-cancel:hover { background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-add-cat-dropdown {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+html[dark] .ycsm-add-cat-input {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-add-cat-cancel {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-add-cat-cancel:hover { background: var(--ycsm-chip-hover); }
+
+/* Formulario inline nueva categoría (legacy — no usado) */
+.ycsm-legend-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 12px;
+  flex-wrap: wrap;
+}
+.ycsm-legend-form-name {
+  flex: 1;
+  min-width: 140px;
+  padding: 7px 12px;
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  outline: none;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  transition: border-color 0.2s;
+}
+.ycsm-legend-form-name:focus { border-color: var(--ycsm-action); }
+html[dark] .ycsm-legend-form-name { background: var(--ycsm-surface); border-color: var(--ycsm-line); color: var(--ycsm-text-primary); }
+.ycsm-legend-form-save,
+.ycsm-legend-form-cancel {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ycsm-legend-form-save { background: var(--ycsm-action); color: var(--ycsm-on-action); }
+.ycsm-legend-form-save:hover { filter: brightness(0.92); }
+.ycsm-legend-form-cancel { background: var(--ycsm-chip); color: var(--ycsm-text-primary); }
+.ycsm-legend-form-cancel:hover { background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-legend-form-cancel { background: var(--ycsm-chip); color: var(--ycsm-text-primary); }
+
+/* ─── Grid de tarjetas ───────────────────────────────────────── */
+.ycsm-panel-channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
+  gap: 14px;
+  padding: 2px 0 8px;
+}
+
+/* ─── Tarjeta de canal ───────────────────────────────────────── */
+.ycsm-panel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: transparent;
+  cursor: default;
+  transition: background 0.22s ease, transform 0.22s ease;
+  position: relative;
+  min-width: 0;
+}
+
+.ycsm-panel-card:hover {
+  background: var(--ycsm-action-soft);
+  transform: translateY(-2px);
+}
+
+.ycsm-panel-card:hover .ycsm-card-name {
+  text-decoration: underline;
+}
+
+html[dark] .ycsm-panel-card {
+  background: transparent;
+}
+
+html[dark] .ycsm-panel-card:hover { background: var(--ycsm-action-soft); }
+
+/* ─── Contenedor del avatar ──────────────────────────────────── */
+.ycsm-card-thumb-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.ycsm-card-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  transition: border-color 0.25s;
+  display: block;
+}
+
+/* Placeholder cuando no hay avatar */
+.ycsm-card-avatar-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ycsm-action);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  user-select: none;
+}
+
+/* ─── Nombre del canal ───────────────────────────────────────── */
+.ycsm-card-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.35;
+  color: var(--ycsm-text-primary);
+  width: 100%;
+  padding: 0;
+}
+
+html[dark] .ycsm-card-name {
+  color: var(--ycsm-text-primary);
+}
+
+/* ─── Fecha del último vídeo ─────────────────────────────────── */
+.ycsm-card-date {
+  font-size: 10.5px;
+  color: var(--ycsm-text-muted);
+  text-align: center;
+  width: 100%;
+  min-height: 14px;
+  margin-top: -5px;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  word-spacing: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.ycsm-date-icon {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-card-date {
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-date-icon {
+  color: var(--ycsm-text-muted);
+}
+
+/* ─── Pills de categorías en la tarjeta ──────────────────────── */
+.ycsm-card-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 4px;
+  position: relative;
+}
+
+/* Pills de asignación (compartidos con panel standalone) */
+.ycsm-assign-pill {
+  padding: 3px 9px;
+  border-radius: 14px;
+  border: 1.5px solid var(--ycsm-pill-color, #999);
+  background: transparent;
+  color: var(--ycsm-pill-color, #999);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+  white-space: nowrap;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.ycsm-assign-pill:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.ycsm-assign-pill.ycsm-pill-on {
+  background: var(--ycsm-pill-color, #999);
+  color: #fff;
+}
+
+.ycsm-assign-pill:focus-visible {
+  outline: 2px solid var(--ycsm-pill-color, #999);
+  outline-offset: 2px;
+}
+
+/* ─── Botón Seleccionar (cabecera del panel) ─────────────────── */
+/* ─── Barra de acciones masivas ──────────────────────────────── */
+.ycsm-panel-bulk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 20px;
+  background: var(--ycsm-surface);
+  border-top: 1.5px solid var(--ycsm-action);
+  flex-shrink: 0;
+}
+.ycsm-panel-bulk:not([hidden]) {
+  animation: ycsm-bulk-slidein 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes ycsm-bulk-slidein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ycsm-bulk-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  user-select: none;
+  flex-shrink: 0;
+  padding: 4px 6px 4px 2px;
+  border-radius: 6px;
+}
+.ycsm-bulk-select-all:hover { background: var(--ycsm-chip-hover); }
+.ycsm-bulk-select-all input[type="checkbox"] {
+  accent-color: var(--ycsm-action);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  margin: 0;
+  flex-shrink: 0;
+}
+.ycsm-bulk-select-all-label { white-space: nowrap; }
+.ycsm-bulk-count {
+  font-size: 13px;
+  color: var(--ycsm-text-muted);
+  white-space: nowrap;
+}
+.ycsm-bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.ycsm-bulk-clear-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ycsm-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.ycsm-bulk-clear-btn:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+.ycsm-bulk-cat-wrap { position: relative; }
+.ycsm-bulk-cat-btn,
+.ycsm-bulk-unsub-btn {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.ycsm-bulk-cat-btn {
+  background: var(--ycsm-action);
+  color: var(--ycsm-on-action);
+}
+.ycsm-bulk-cat-btn:hover:not(:disabled) { opacity: 0.88; transform: scale(1.03); }
+.ycsm-bulk-cat-btn:disabled,
+.ycsm-bulk-unsub-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ─── Menú desplegable de categorías (asignación masiva) ─────── */
+.ycsm-bulk-cat-menu {
+  /* Reset UA popover styles (inset:0; margin:auto; border:solid; padding:0.25em) */
+  inset: unset;
+  margin: 0;
+  padding: 0;
+  border: none;
+  width: 260px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  z-index: 99999;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+html[dark] .ycsm-bulk-cat-menu {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.ycsm-bulk-cat-menu-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ycsm-text-primary);
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.01em;
+}
+html[dark] .ycsm-bulk-cat-menu-title { color: var(--ycsm-text-primary); }
+
+.ycsm-bulk-cat-menu-body {
+  overflow-y: auto;
+  max-height: 220px;
+  padding: 6px 0;
+}
+
+.ycsm-bulk-cat-item {
+  display: block;
+  width: 100%;
+  padding: 9px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  transition: background 0.12s;
+}
+.ycsm-bulk-cat-item:hover { background: var(--ycsm-chip-hover); }
+
+/* ─── Botón de categoría y dropdown por canal ─────────────────── */
+.ycsm-tag-wrap {
+  position: relative;
+}
+
+/* ── Tag button — YouTube chip style ── */
+.ycsm-tag-btn {
+  flex-shrink: 0;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: none;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.2s, opacity 0.2s;
+  max-width: 100%;
+}
+
+.ycsm-tag-btn:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+/* Modo secondary — sin categoría: oculto por defecto, visible en hover */
+.ycsm-tag-btn.ycsm-tag-btn-secondary {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: background 0.2s, opacity 0.15s;
+}
+
+.ycsm-panel-card:hover .ycsm-tag-btn.ycsm-tag-btn-secondary {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ycsm-tag-btn.ycsm-tag-btn-secondary:hover {
+  background: var(--ycsm-chip-hover);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-tag-btn {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-tag-btn:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-tag-btn.ycsm-tag-btn-secondary {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[dark] .ycsm-panel-card:hover .ycsm-tag-btn.ycsm-tag-btn-secondary {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+html[dark] .ycsm-tag-btn.ycsm-tag-btn-secondary:hover {
+  background: var(--ycsm-chip-hover);
+  color: var(--ycsm-text-primary);
+}
+
+/* En modo selección: suprimir cues interactivos de las tarjetas */
+.ycsm-selecting .ycsm-panel-card:hover .ycsm-card-name { text-decoration: none; }
+.ycsm-selecting .ycsm-panel-card:hover .ycsm-tag-btn.ycsm-tag-btn-secondary,
+html[dark] .ycsm-selecting .ycsm-panel-card:hover .ycsm-tag-btn.ycsm-tag-btn-secondary {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ycsm-tag-btn-icon {
+  flex-shrink: 0;
+}
+
+/* Labels de categorías activas dentro del botón */
+.ycsm-tag-btn-label {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* Sin categoría */
+.ycsm-tag-btn-empty {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* Contador "N categorías" */
+.ycsm-tag-btn-count {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* Chips de categorías (modo multi, max 2 visible) */
+.ycsm-tag-btn.ycsm-tag-btn--multi {
+  height: auto;
+  min-height: 26px;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  gap: 4px;
+}
+.ycsm-tag-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--cat-color, #999);
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 72px;
+}
+.ycsm-tag-cat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cat-color, #999);
+  flex-shrink: 0;
+}
+.ycsm-tag-cat-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ycsm-tag-extra-count {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Dropdown ── */
+@keyframes ycsm-dd-open {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ycsm-tag-dropdown {
+  /* posición calculada por JS (fixed) */
+  position: fixed;
+  width: 280px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 12px;
+  box-shadow: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2);
+  z-index: 2147483640;
+  overflow: hidden;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.ycsm-tag-dropdown:not([hidden]) {
+  animation: ycsm-dd-open 0.15s ease-out;
+}
+
+html[dark] .ycsm-tag-dropdown {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  box-shadow: 0 8px 10px 1px rgba(0,0,0,.4), 0 3px 14px 2px rgba(0,0,0,.35), 0 5px 5px -3px rgba(0,0,0,.3);
+}
+
+/* ── Dropdown Header ── */
+.ycsm-dd-header {
+  padding: 10px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ycsm-dd-title {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  margin: 0;
+}
+
+html[dark] .ycsm-dd-title { color: var(--ycsm-text-primary); }
+
+.ycsm-dd-title-belongs {
+  padding: 8px 14px 4px;
+}
+
+/* ── Chips de origen (snapshot al abrir, solo lectura) ── */
+.ycsm-dd-origin-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.ycsm-dd-origin-label {
+  font-size: 11px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-muted);
+  flex-shrink: 0;
+}
+
+html[dark] .ycsm-dd-origin-label { color: var(--ycsm-text-muted); }
+
+.ycsm-dd-origin-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--ycsm-action-soft);
+  color: var(--ycsm-action);
+  font-size: 11px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html[dark] .ycsm-dd-origin-chip {
+  background: var(--ycsm-action-soft);
+  color: var(--ycsm-action);
+}
+
+/* ── Belongs Summary (legacy) ── */
+.ycsm-dd-belongs-summary {
+  padding: 4px 14px 8px;
+  font-size: 12px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-muted);
+  line-height: 1.4;
+}
+
+html[dark] .ycsm-dd-belongs-summary { color: var(--ycsm-text-muted); }
+
+/* ── Área de creación inline ── */
+.ycsm-dd-search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ycsm-dd-search-row .ycsm-tag-search { flex: 1; min-width: 0; width: auto; }
+
+.ycsm-dd-create-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ycsm-dd-new-pill {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ycsm-dd-new-pill .ycsm-new-pill-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.ycsm-dd-create-btn {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ycsm-text-primary);
+  background: var(--ycsm-chip);
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.2s;
+}
+
+.ycsm-dd-create-btn:hover {
+  background: var(--ycsm-action-soft);
+  color: var(--ycsm-action);
+}
+
+html[dark] .ycsm-dd-create-btn {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-dd-create-btn:hover {
+  background: var(--ycsm-action-soft);
+  color: var(--ycsm-action);
+}
+
+/* ── Formulario inline de creación ── */
+.ycsm-dd-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ycsm-action-soft);
+  border: 1px solid var(--ycsm-action);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+html[dark] .ycsm-dd-inline-form {
+  background: var(--ycsm-action-soft);
+  border-color: var(--ycsm-action);
+}
+
+.ycsm-dd-inline-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  outline: none;
+}
+
+html[dark] .ycsm-dd-inline-input { color: var(--ycsm-text-primary); }
+
+.ycsm-dd-inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ycsm-dd-inline-confirm {
+  padding: 3px 10px;
+  border: none;
+  border-radius: 12px;
+  background: var(--ycsm-action);
+  color: var(--ycsm-on-action);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ycsm-dd-inline-confirm:hover { filter: brightness(0.92); }
+.ycsm-dd-inline-confirm:disabled { opacity: 0.6; cursor: default; }
+html[dark] .ycsm-dd-inline-confirm { background: var(--ycsm-action); color: var(--ycsm-on-action); }
+html[dark] .ycsm-dd-inline-confirm:hover { filter: brightness(1.08); }
+
+.ycsm-dd-inline-cancel {
+  padding: 3px 7px;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--ycsm-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ycsm-dd-inline-cancel:hover { background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-dd-inline-cancel { color: var(--ycsm-text-muted); }
+html[dark] .ycsm-dd-inline-cancel:hover { background: var(--ycsm-chip-hover); }
+
+.ycsm-dd-inline-error {
+  font-size: 11px;
+  color: var(--ycsm-danger);
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0 2px;
+}
+
+html[dark] .ycsm-dd-inline-error { color: var(--ycsm-danger); }
+
+@keyframes ycsm-dd-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+.ycsm-dd-inline-shake {
+  animation: ycsm-dd-shake 0.4s ease;
+}
+
+/* ── Dropdown Divider ── */
+.ycsm-dd-divider {
+  height: 1px;
+  background: var(--ycsm-line);
+  margin: 6px 14px;
+}
+
+html[dark] .ycsm-dd-divider {
+  background: var(--ycsm-line);
+}
+
+/* ── Dropdown List ── */
+.ycsm-dd-list {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 4px 0;
+}
+
+/* ── Dropdown Items ── */
+.ycsm-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  transition: background 0.12s;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+}
+
+.ycsm-dd-item:hover { background: var(--ycsm-chip); }
+html[dark] .ycsm-dd-item:hover { background: var(--ycsm-chip); }
+
+.ycsm-dd-item:focus {
+  outline: 2px solid var(--ycsm-action);
+  outline-offset: -2px;
+  background: var(--ycsm-chip);
+}
+html[dark] .ycsm-dd-item:focus {
+  background: var(--ycsm-chip);
+  outline-color: var(--ycsm-action);
+}
+
+.ycsm-dd-item-assigned {
+  background: var(--ycsm-chip);
+}
+.ycsm-dd-item-assigned .ycsm-dd-item-name { font-weight: 600; }
+.ycsm-dd-item-assigned:hover { background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-dd-item-assigned { background: var(--ycsm-chip); }
+html[dark] .ycsm-dd-item-assigned:hover { background: var(--ycsm-chip-hover); }
+
+.ycsm-dd-item-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+html[dark] .ycsm-dd-item-name { color: var(--ycsm-text-primary); }
+
+/* ── Dropdown Check button ── */
+.ycsm-dd-item-check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--ycsm-text-muted);
+  transition: color 0.12s, opacity 0.12s;
+}
+
+.ycsm-dd-item-check:hover {
+  color: var(--ycsm-text-primary);
+  opacity: 0.85;
+}
+
+html[dark] .ycsm-dd-item-check { color: var(--ycsm-text-muted); }
+html[dark] .ycsm-dd-item-check:hover {
+  color: var(--ycsm-text-primary);
+  opacity: 0.85;
+}
+
+.ycsm-dd-item-check-on {
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-dd-item-check-on:hover {
+  color: var(--ycsm-text-primary);
+  opacity: 0.85;
+}
+
+html[dark] .ycsm-dd-item-check-on { color: var(--ycsm-text-primary); }
+html[dark] .ycsm-dd-item-check-on:hover {
+  color: var(--ycsm-text-primary);
+  opacity: 0.85;
+}
+
+.ycsm-dd-item-check svg {
+  display: block;
+}
+
+/* ── Item tick (replaces checkbox) ── */
+.ycsm-dd-item-tick {
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3ea6ff;
+}
+html[dark] .ycsm-dd-item-tick { color: #3ea6ff; }
+
+/* ── Create row ("+ Crear 'nombre'") ── */
+.ycsm-dd-create-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  background: transparent;
+  color: var(--ycsm-text-muted);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 1px solid var(--ycsm-line);
+  transition: background 0.12s, color 0.12s;
+}
+.ycsm-dd-create-row:hover {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+.ycsm-dd-create-row strong {
+  color: var(--ycsm-text-primary);
+  font-weight: 600;
+}
+
+/* ── Dropdown Footer ── */
+.ycsm-dd-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--ycsm-line);
+}
+
+html[dark] .ycsm-dd-footer {
+  border-color: var(--ycsm-line);
+}
+
+.ycsm-dd-footer-btn {
+  padding: 7px 20px;
+  border: none;
+  border-radius: 22px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.2px;
+}
+
+.ycsm-dd-footer-btn:hover { opacity: 0.85; }
+
+html[dark] .ycsm-dd-footer-btn {
+  background: var(--yt-spec-text-primary, #f1f1f1);
+  color: var(--yt-spec-general-background-a, #0f0f0f);
+}
+
+.ycsm-dd-footer-done:disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+/* Cerrar: estilo secondary */
+.ycsm-dd-footer-cancel {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-muted);
+  border: none;
+}
+.ycsm-dd-footer-cancel:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); opacity: 1; }
+html[dark] .ycsm-dd-footer-cancel {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  border-color: var(--ycsm-line);
+}
+
+/* ── Dropdown search box (estilo modal principal) ── */
+.ycsm-dd-search-box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--ycsm-chip);
+  border: 1px solid transparent;
+  padding: 0 12px;
+  box-sizing: border-box;
+  transition: border-color 0.12s, background 0.12s;
+  color: var(--ycsm-text-muted);
+}
+.ycsm-dd-search-box.ycsm-dd-search-focused,
+.ycsm-dd-search-box:focus-within {
+  background: transparent;
+  border-color: var(--ycsm-line);
+}
+.ycsm-dd-search-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+.ycsm-dd-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ycsm-text-primary);
+}
+.ycsm-dd-search-input::placeholder { color: var(--ycsm-text-muted); }
+html[dark] .ycsm-dd-search-input { color: var(--ycsm-text-primary); }
+html[dark] .ycsm-dd-search-input::placeholder { color: var(--ycsm-text-muted); }
+.ycsm-dd-search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--ycsm-text-primary);
+  margin-right: 4px;
+  transition: background 0.15s;
+}
+.ycsm-dd-search-clear:hover { background: var(--ycsm-chip-hover); }
+.ycsm-dd-search-clear svg { width: 18px; height: 18px; }
+html[dark] .ycsm-dd-search-clear { color: var(--ycsm-text-primary); }
+html[dark] .ycsm-dd-search-clear:hover { background: var(--ycsm-chip-hover); }
+
+/* ── Search — pill con icono integrado ── */
+.ycsm-tag-search {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px 12px 7px 32px;
+  border: none;
+  border-radius: 20px;
+  background: var(--ycsm-chip) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='8.5' cy='8.5' r='5' stroke='%23999' stroke-width='1.5'/%3E%3Cpath d='M12.5 12.5L16 16' stroke='%23999' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 10px center;
+  background-size: 14px 14px;
+  font-size: 12px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  outline: none;
+  color: var(--ycsm-text-primary);
+  transition: background-color 0.15s;
+}
+
+.ycsm-tag-search:focus {
+  background-color: var(--ycsm-action-soft);
+  border: 1px solid var(--ycsm-action);
+}
+
+html[dark] .ycsm-tag-search {
+  background-color: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+
+html[dark] .ycsm-tag-search:focus {
+  background-color: var(--ycsm-action-soft);
+  border: 1px solid var(--ycsm-action);
+}
+
+/* ── Lista (legacy, no longer used by dropdown) ── */
+
+.ycsm-tag-empty {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--ycsm-text-muted);
+  text-align: center;
+}
+
+html[dark] .ycsm-tag-empty { color: var(--ycsm-text-muted); }
+
+
+/* ─── Filtrado de vídeos en suscripciones ─────────────────────── */
+ytd-rich-item-renderer.ycsm-hidden,
+ytd-rich-section-renderer.ycsm-hidden {
+  display: none !important;
+}
+
+/* ─── Navbar de categorías en /feed/subscriptions ────────────── */
+#ycsm-subs-nav {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 20px;
+  z-index: 2000;
+  background: var(--yt-spec-general-background-a, #fff);
+  box-shadow: 0 2px 0 var(--yt-spec-general-background-a, #fff);
+}
+html[dark] #ycsm-subs-nav {
+  background: var(--yt-spec-general-background-a, #0f0f0f);
+  box-shadow: 0 2px 0 var(--yt-spec-general-background-a, #0f0f0f);
+}
+
+/* Fades laterales — solo visibles cuando hay contenido fuera del viewport */
+#ycsm-subs-nav::before,
+#ycsm-subs-nav::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#ycsm-subs-nav.ycsm-subs-can-scroll-left::before  { opacity: 1; }
+#ycsm-subs-nav.ycsm-subs-can-scroll-right::after  { opacity: 1; }
+#ycsm-subs-nav::before {
+  left: 0;
+  background: linear-gradient(to right, var(--yt-spec-general-background-a, #fff), transparent);
+}
+#ycsm-subs-nav::after {
+  right: 0;
+  background: linear-gradient(to left, var(--yt-spec-general-background-a, #fff), transparent);
+}
+html[dark] #ycsm-subs-nav::before {
+  background: linear-gradient(to right, var(--yt-spec-general-background-a, #0f0f0f), transparent);
+}
+html[dark] #ycsm-subs-nav::after {
+  background: linear-gradient(to left, var(--yt-spec-general-background-a, #0f0f0f), transparent);
+}
+
+/* Contenedor scrollable horizontal de pills (sin wrapping, estilo legend-scroll) */
+.ycsm-subs-nav-scroll {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px 14px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ycsm-subs-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Evitar que los títulos de sección queden ocultos bajo el nav sticky */
+ytd-rich-section-renderer {
+  scroll-margin-top: 120px;
+}
+
+.ycsm-subs-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  line-height: 1;
+}
+.ycsm-subs-pill:hover {
+  background: var(--ycsm-chip-hover);
+}
+.ycsm-subs-pill-active {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+html[dark] .ycsm-subs-pill {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-subs-pill:hover {
+  background: var(--ycsm-chip-hover);
+}
+html[dark] .ycsm-subs-pill-active {
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+}
+
+/* ─── Punto azul de vídeos nuevos ────────────────────────────── */
+.ycsm-card-new-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #065fd4;
+  border: 2px solid var(--ycsm-surface);
+  pointer-events: none;
+  z-index: 1;
+}
+html[dark] .ycsm-card-new-dot {
+  background: #3ea6ff;
+  border-color: var(--ycsm-surface);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VISTA GESTIÓN DE CATEGORÍAS (dentro del panel existente)
+═══════════════════════════════════════════════════════════════ */
+
+/* Botón volver en la cabecera */
+.ycsm-manage-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px 6px 6px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--ycsm-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+
+.ycsm-manage-back-btn:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+html[dark] .ycsm-manage-back-btn { color: var(--ycsm-text-muted); }
+html[dark] .ycsm-manage-back-btn:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+
+/* Cabecera en modo gestión: grid 3 columnas para centrar el título */
+.ycsm-panel-head.ycsm-panel-head--manage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.ycsm-panel-head.ycsm-panel-head--manage .ycsm-panel-x {
+  justify-self: end;
+}
+
+/* Cuerpo en modo gestión */
+.ycsm-panel-body.ycsm-manage-view {
+  background: var(--ycsm-surface-alt);
+  display: flex;
+  flex-direction: column;
+}
+
+html[dark] .ycsm-panel-body.ycsm-manage-view { background: var(--ycsm-surface-alt); }
+
+.ycsm-manage-section-title {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ycsm-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ycsm-manage-empty {
+  font-size: 13px;
+  color: var(--ycsm-text-muted);
+  margin: auto;
+  text-align: center;
+}
+
+.ycsm-manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.ycsm-manage-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--ycsm-text-primary);
+  transition: background 0.12s;
+}
+
+.ycsm-manage-row:hover { background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-manage-row:hover { background: var(--ycsm-chip-hover); }
+
+.ycsm-manage-grip {
+  flex-shrink: 0;
+  color: var(--ycsm-text-muted);
+  cursor: grab;
+  line-height: 0;
+  padding: 2px;
+}
+.ycsm-manage-grip:active { cursor: grabbing; }
+html[dark] .ycsm-manage-grip { color: var(--ycsm-text-muted); }
+
+.ycsm-manage-dragging { opacity: 0.4; }
+.ycsm-manage-drag-over {
+  background: var(--ycsm-action-soft) !important;
+  outline: 2px dashed var(--ycsm-action);
+  outline-offset: -2px;
+}
+html[dark] .ycsm-manage-drag-over { background: var(--ycsm-action-soft) !important; outline-color: var(--ycsm-action); }
+
+.ycsm-manage-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ycsm-manage-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ycsm-text-primary) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ycsm-manage-count {
+  font-size: 11px;
+  color: var(--ycsm-text-muted);
+  white-space: nowrap;
+}
+
+.ycsm-manage-edit-pill {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 2px 0;
+}
+
+.ycsm-manage-edit-pill .ycsm-new-pill-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.ycsm-manage-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ycsm-manage-row:hover .ycsm-manage-actions,
+.ycsm-manage-row:focus-within .ycsm-manage-actions,
+.ycsm-manage-row-editing .ycsm-manage-actions {
+  opacity: 1;
+}
+
+.ycsm-manage-row-editing {
+  background: var(--ycsm-action-soft) !important;
+}
+html[dark] .ycsm-manage-row-editing { background: var(--ycsm-action-soft) !important; }
+
+.ycsm-manage-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  color: var(--ycsm-text-muted);
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.ycsm-manage-action-btn:hover { color: var(--ycsm-text-primary); background: var(--ycsm-chip-hover); }
+html[dark] .ycsm-manage-action-btn:hover { color: var(--ycsm-text-primary); background: var(--ycsm-chip-hover); }
+
+.ycsm-manage-del-btn:hover { color: var(--ycsm-danger) !important; background: color-mix(in srgb, var(--ycsm-danger) 12%, transparent) !important; }
+html[dark] .ycsm-manage-del-btn:hover { color: var(--ycsm-danger) !important; background: color-mix(in srgb, var(--ycsm-danger) 20%, transparent) !important; }
+
+/* Popover edición inline */
+.ycsm-manage-edit-popover {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  margin: 0 0 2px;
+  background: var(--ycsm-action-soft);
+  border-radius: 10px;
+  border: 1.5px solid var(--ycsm-action);
+}
+html[dark] .ycsm-manage-edit-popover { background: var(--ycsm-action-soft); border-color: var(--ycsm-action); }
+
+.ycsm-manage-popover-input {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  outline: none;
+  transition: border-color 0.12s;
+}
+.ycsm-manage-popover-input:focus { border-color: var(--ycsm-action); }
+html[dark] .ycsm-manage-popover-input { background: var(--ycsm-surface); color: var(--ycsm-text-primary); }
+
+.ycsm-manage-popover-cancel {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--ycsm-text-muted);
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+.ycsm-manage-popover-cancel:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+html[dark] .ycsm-manage-popover-cancel { color: var(--ycsm-text-muted); }
+
+/* Botón añadir */
+.ycsm-manage-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border-radius: 100px;
+  border: 1.5px dashed var(--ycsm-line);
+  background: none;
+  color: var(--ycsm-action);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ycsm-manage-add-btn:hover { background: var(--ycsm-action-soft); border-color: var(--ycsm-action); }
+html[dark] .ycsm-manage-add-btn { border-color: var(--ycsm-line); color: var(--ycsm-action); }
+html[dark] .ycsm-manage-add-btn:hover { background: var(--ycsm-action-soft); }
+
+/* Fila inline nueva categoría */
+.ycsm-manage-row-new {
+  background: var(--ycsm-action-soft);
+}
+html[dark] .ycsm-manage-row-new { background: var(--ycsm-action-soft); }
+html[dark] .ycsm-manage-row-new:hover { background: var(--ycsm-action-soft); }
+
+.ycsm-manage-new-name-input {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px;
+  border: 1.5px solid var(--ycsm-action);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  outline: none;
+}
+html[dark] .ycsm-manage-new-name-input {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-action);
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-manage-check-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--ycsm-action);
+  color: var(--ycsm-on-action);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.ycsm-manage-check-btn:hover { filter: brightness(0.92); }
+html[dark] .ycsm-manage-check-btn { background: var(--ycsm-action); color: var(--ycsm-on-action); }
+html[dark] .ycsm-manage-check-btn:hover { filter: brightness(1.08); }
+
+/* Formulario edición/creación */
+.ycsm-manage-edit-form {
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+  background: var(--ycsm-surface);
+  margin-top: 16px;
+}
+
+html[dark] .ycsm-manage-edit-form { background: var(--ycsm-surface); border-color: var(--ycsm-line); }
+
+.ycsm-manage-edit-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-manage-edit-title { color: var(--ycsm-text-muted); }
+
+.ycsm-manage-edit-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ycsm-manage-edit-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 12px;
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-primary);
+  outline: none;
+}
+
+.ycsm-manage-edit-input:focus { border-color: var(--ycsm-action); }
+html[dark] .ycsm-manage-edit-input { background: var(--ycsm-surface); border-color: var(--ycsm-line); color: var(--ycsm-text-primary); }
+
+.ycsm-manage-edit-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.ycsm-manage-edit-save {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ycsm-manage-edit-save:hover { opacity: 0.85; }
+
+.ycsm-manage-edit-cancel {
+  height: 36px;
+  padding: 0 16px;
+  border: 1.5px solid var(--ycsm-line);
+  border-radius: 8px;
+  background: var(--ycsm-surface);
+  color: var(--ycsm-text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.15s;
+}
+
+.ycsm-manage-edit-cancel:hover { background: var(--ycsm-chip-hover); color: var(--ycsm-text-primary); }
+html[dark] .ycsm-manage-edit-cancel { background: var(--ycsm-surface); border-color: var(--ycsm-line); color: var(--ycsm-text-muted); }
+
+.ycsm-card-check {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: transparent;
+  border: 2px solid var(--ycsm-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.12s, border-color 0.12s;
+  pointer-events: auto;
+  opacity: 1;
+}
+.ycsm-panel-card:hover .ycsm-card-check { border-color: var(--ycsm-text-primary); }
+.ycsm-card-selected .ycsm-card-check {
+  background: #3ea6ff;
+  border-color: #3ea6ff;
+}
+.ycsm-card-selected .ycsm-card-check::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+.ycsm-card-selected {
+  background: var(--ycsm-action-soft);
+  border-color: var(--ycsm-action);
+}
+html[dark] .ycsm-card-selected {
+  background: var(--ycsm-action-soft);
+  border-color: var(--ycsm-action);
+}
+
+/* ─── Footer del panel ───────────────────────────────────────── */
+.ycsm-panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 26px;
+  border-top: 1px solid var(--ycsm-line);
+  flex-shrink: 0;
+  background: var(--ycsm-surface);
+}
+
+html[dark] .ycsm-panel-foot {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+}
+
+.ycsm-panel-count {
+  font-size: 13px;
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-panel-count {
+  color: var(--ycsm-text-muted);
+}
+
+.ycsm-panel-close-btn {
+  padding: 9px 26px;
+  background: var(--ycsm-text-primary);
+  color: var(--ycsm-surface);
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 600;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.2px;
+}
+
+.ycsm-panel-close-btn:hover {
+  opacity: 0.85;
+}
+
+.ycsm-panel-close-btn:focus-visible {
+  outline: 2px solid var(--yt-spec-call-to-action, #065fd4);
+  outline-offset: 3px;
+}
+
+/* ─── Estado vacío del panel ─────────────────────────────────── */
+.ycsm-panel-empty {
+  grid-column: 1 / -1;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ycsm-text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+html[dark] .ycsm-panel-empty {
+  color: var(--ycsm-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTÓN "CATEGORIZAR" EN PÁGINA DE VÍDEO
+═══════════════════════════════════════════════════════════════ */
+
+/* Botón — estilo píldora igual que los botones nativos de YouTube */
+.ycsm-video-label-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 18px;
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  outline: none;
+  /* separación respecto al botón siguiente */
+  margin-right: 8px;
+}
+
+.ycsm-video-label-btn:hover {
+  background: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.10));
+}
+
+.ycsm-video-label-btn--channel {
+  margin-left: 8px;
+  margin-right: 0;
+  order: 999;
+}
+
+.ycsm-video-label-btn:focus-visible {
+  outline: 2px solid var(--yt-spec-focus-indicator, #065fd4);
+  outline-offset: 2px;
+}
+
+/* Estado activo: el canal ya tiene al menos una categoría */
+.ycsm-video-label-btn--active {
+  background: var(--yt-spec-badge-chip-background-active, rgba(6, 95, 212, 0.1));
+  color: var(--yt-spec-call-to-action, #065fd4);
+}
+
+.ycsm-video-label-btn--active:hover {
+  background: rgba(6, 95, 212, 0.16);
+}
+
+.ycsm-label-btn-icon {
+  flex-shrink: 0;
+}
+
+/* Modo oscuro */
+html[dark] .ycsm-video-label-btn {
+  background: var(--ycsm-chip);
+  color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-video-label-btn:hover {
+  background: var(--ycsm-chip-hover);
+}
+html[dark] .ycsm-video-label-btn--active {
+  background: rgba(62, 166, 255, 0.15);
+  color: var(--ycsm-action);
+}
+html[dark] .ycsm-video-label-btn--active:hover {
+  background: rgba(62, 166, 255, 0.22);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DROPDOWN DE CATEGORÍAS
+═══════════════════════════════════════════════════════════════ */
+
+#ycsm-video-dropdown {
+  position: absolute;
+  z-index: 9999;
+  width: 240px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html[dark] #ycsm-video-dropdown {
+  background: var(--ycsm-surface);
+  border-color: var(--ycsm-line);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Cabecera del dropdown */
+.ycsm-vd-header {
+  padding: 12px 14px 8px;
+  border-bottom: 1px solid var(--ycsm-line);
+}
+
+html[dark] .ycsm-vd-header {
+  border-bottom-color: var(--ycsm-line);
+}
+
+.ycsm-vd-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ycsm-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+html[dark] .ycsm-vd-title {
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-vd-subtitle {
+  display: block;
+  font-size: 12px;
+  color: var(--ycsm-text-muted);
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[dark] .ycsm-vd-subtitle {
+  color: var(--ycsm-text-muted);
+}
+
+/* Barra de búsqueda */
+.ycsm-vd-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ycsm-line);
+  color: var(--ycsm-text-muted);
+}
+
+html[dark] .ycsm-vd-search-wrap {
+  border-bottom-color: var(--ycsm-line);
+  color: var(--ycsm-text-muted);
+}
+
+.ycsm-vd-search-icon {
+  flex-shrink: 0;
+}
+
+.ycsm-vd-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: var(--ycsm-text-primary);
+  padding: 0;
+  /* Ocultar el botón nativo de "limpiar" de Safari/Chrome */
+}
+
+.ycsm-vd-search:focus ~ .ycsm-vd-search-wrap,
+.ycsm-vd-search-wrap:focus-within {
+  border-bottom-color: var(--ycsm-action);
+}
+
+.ycsm-vd-search::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+html[dark] .ycsm-vd-search {
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-vd-search::placeholder {
+  color: var(--ycsm-text-muted);
+}
+
+/* Lista de categorías */
+.ycsm-vd-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 220px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.ycsm-vd-list::-webkit-scrollbar {
+  width: 4px;
+}
+.ycsm-vd-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+html[dark] .ycsm-vd-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Ítem de categoría */
+.ycsm-vd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ycsm-text-primary);
+  transition: background 0.1s;
+  user-select: none;
+}
+
+html[dark] .ycsm-vd-item {
+  color: var(--ycsm-text-primary);
+}
+
+.ycsm-vd-item:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+html[dark] .ycsm-vd-item:hover {
+  background: var(--ycsm-chip-hover);
+}
+
+/* Ítem marcado (canal asignado a esta categoría) */
+.ycsm-vd-item--checked {
+  color: var(--yt-spec-call-to-action, #065fd4);
+}
+
+html[dark] .ycsm-vd-item--checked {
+  color: var(--ycsm-action);
+}
+
+.ycsm-vd-item--checked:hover {
+  background: var(--ycsm-action-soft);
+}
+
+html[dark] .ycsm-vd-item--checked:hover {
+  background: var(--ycsm-action-soft);
+}
+
+/* Icono de check */
+.ycsm-vd-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* Nombre de la categoría */
+.ycsm-vd-cat-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Estado vacío (sin categorías creadas) */
+.ycsm-vd-empty {
+  padding: 16px 14px;
+  font-size: 12px;
+  color: var(--ycsm-text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+html[dark] .ycsm-vd-empty {
+  color: var(--ycsm-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NUEVO DISEÑO — Sidebar + List view
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── Generic icon button (close) ─────────────────────────── */
+.ycsm-icon-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: transparent;
+  color: var(--ycsm-text-primary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.12s; flex-shrink: 0;
+}
+.ycsm-icon-btn:hover { background: var(--ycsm-chip); }
+
+/* ─── Header ─────────────────────────────────────────────── */
+.ycsm-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 16px 24px;
+  border-bottom: 1px solid var(--ycsm-border);
+  flex-shrink: 0; gap: 12px;
+}
+.ycsm-modal-head-info { flex: 1; min-width: 0; }
+.ycsm-modal-title {
+  font-size: 18px; font-weight: 500; margin: 0;
+  letter-spacing: -0.01em; color: var(--ycsm-text-primary);
+}
+.ycsm-modal-sub {
+  font-size: 13px; color: var(--ycsm-text-muted); margin: 3px 0 0;
+}
+
+/* ─── Body (sidebar + main pane) ─────────────────────────── */
+.ycsm-modal-body {
+  display: flex; flex: 1; min-height: 0;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────── */
+.ycsm-new-sidebar {
+  width: 260px; flex-shrink: 0;
+  border-right: 1px solid var(--ycsm-border);
+  padding: 10px 8px;
+  overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+}
+
+.ycsm-side-nav { display: flex; flex-direction: column; gap: 2px; }
+
+.ycsm-side-item {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 40px; padding: 0 12px;
+  border-radius: 10px; border: none; background: transparent;
+  color: var(--ycsm-text-primary);
+  cursor: pointer; font-size: 14px; text-align: left;
+  width: 100%; position: relative;
+  transition: background 0.12s; font-family: inherit;
+}
+.ycsm-side-item:hover { background: var(--ycsm-chip); }
+.ycsm-side-item.is-active {
+  background: var(--ycsm-chip-hover); font-weight: 500;
+}
+.ycsm-side-item.is-managing { cursor: default; }
+
+.ycsm-side-name {
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ycsm-side-count {
+  font-size: 12px; color: var(--ycsm-text-muted);
+  font-variant-numeric: tabular-nums; font-weight: 500;
+}
+.ycsm-side-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.ycsm-side-actions { display: flex; gap: 2px; margin-left: auto; }
+.ycsm-side-action-btn {
+  width: 26px; height: 26px;
+  border: none; background: transparent; color: var(--ycsm-text-muted);
+  border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: inherit;
+}
+.ycsm-side-action-btn:hover {
+  background: var(--ycsm-chip); color: var(--ycsm-text-primary);
+}
+.ycsm-side-rename-input {
+  flex: 1; min-width: 0;
+  background: var(--ycsm-surface-alt);
+  border: 1px solid var(--ycsm-line);
+  color: var(--ycsm-text-primary);
+  border-radius: 6px; padding: 4px 8px;
+  font-size: 14px; outline: none; font-family: inherit;
+  box-sizing: border-box;
+}
+.ycsm-side-rename-input:focus { border-color: #3ea6ff; }
+
+.ycsm-side-item-system .ycsm-side-name { font-weight: 500; }
+
+.ycsm-side-section { margin-top: 16px; }
+.ycsm-side-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 12px 4px;
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ycsm-text-muted);
+  font-weight: 500;
+}
+.ycsm-side-edit-toggle {
+  background: transparent; border: none;
+  color: var(--ycsm-text-muted);
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.08em; font-weight: 500;
+  cursor: pointer; padding: 4px 8px; border-radius: 6px;
+  font-family: inherit; transition: background 0.12s, color 0.12s;
+}
+.ycsm-side-edit-toggle:hover {
+  background: var(--ycsm-chip); color: var(--ycsm-text-primary);
+}
+.ycsm-side-edit-toggle.is-on { color: #3ea6ff; }
+
+.ycsm-side-add { color: var(--ycsm-text-muted); margin-top: 4px; }
+.ycsm-side-add:hover { color: var(--ycsm-text-primary); }
+.ycsm-side-empty {
+  padding: 10px 12px; font-size: 12px;
+  color: var(--ycsm-text-muted); text-align: center; margin: 0;
+}
+
+/* ─── Main pane ───────────────────────────────────────────── */
+.ycsm-main-pane {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+.ycsm-new-toolbar {
+  padding: 14px 20px 12px;
+  display: flex; flex-direction: column; gap: 10px;
+  border-bottom: 1px solid var(--ycsm-border);
+  flex-shrink: 0;
+}
+.ycsm-toolbar-title { display: flex; align-items: baseline; gap: 10px; }
+.ycsm-toolbar-view-name {
+  font-size: 17px; font-weight: 500; margin: 0;
+  letter-spacing: -0.01em; color: var(--ycsm-text-primary);
+}
+.ycsm-toolbar-count { font-size: 13px; color: var(--ycsm-text-muted); }
+.ycsm-toolbar-controls { display: flex; align-items: center; gap: 8px; }
+
+/* ─── Search ──────────────────────────────────────────────── */
+.ycsm-new-search {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  height: 36px; background: var(--ycsm-chip);
+  border-radius: 999px; padding: 0 14px;
+  border: 1px solid transparent;
+  transition: border-color 0.12s, background 0.12s;
+  color: var(--ycsm-text-muted);
+}
+.ycsm-new-search.ycsm-new-search-focused,
+.ycsm-new-search:focus-within {
+  background: transparent; border-color: var(--ycsm-line);
+}
+.ycsm-new-search-input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-size: 14px; color: var(--ycsm-text-primary); font-family: inherit;
+}
+.ycsm-new-search-input::placeholder { color: var(--ycsm-text-muted); }
+.ycsm-new-search-clear {
+  border: none; background: transparent; color: var(--ycsm-text-muted);
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 0; flex-shrink: 0;
+}
+.ycsm-new-search-clear:hover {
+  background: var(--ycsm-chip); color: var(--ycsm-text-primary);
+}
+
+/* ─── Sort select ─────────────────────────────────────────── */
+.ycsm-new-sort-wrap {
+  height: 36px; display: flex; align-items: center;
+  padding: 0 14px; background: var(--ycsm-chip);
+  border-radius: 999px; flex-shrink: 0;
+}
+.ycsm-new-sort-select {
+  border: none; background: transparent; outline: none;
+  font-size: 13px; appearance: none;
+  cursor: pointer; color: var(--ycsm-text-primary); font-family: inherit;
+}
+
+/* ─── View toggle ─────────────────────────────────────────── */
+.ycsm-view-toggle {
+  display: flex; gap: 2px; background: var(--ycsm-chip);
+  border-radius: 999px; padding: 3px; flex-shrink: 0;
+}
+.ycsm-view-btn {
+  width: 30px; height: 30px; border: none; background: transparent;
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--ycsm-text-muted);
+  transition: background 0.12s, color 0.12s;
+}
+.ycsm-view-btn:hover { color: var(--ycsm-text-primary); }
+.ycsm-view-btn.is-active {
+  background: var(--ycsm-surface); color: var(--ycsm-text-primary);
+}
+html[dark] .ycsm-view-btn.is-active { background: var(--ycsm-chip-hover); }
+
+/* ─── Channel area ────────────────────────────────────────── */
+.ycsm-channel-area {
+  flex: 1; min-height: 0; overflow-y: auto; position: relative;
+}
+.ycsm-channel-area::-webkit-scrollbar { width: 6px; }
+.ycsm-channel-area::-webkit-scrollbar-thumb {
+  background: var(--ycsm-chip-hover); border-radius: 3px;
+}
+.ycsm-channel-area::-webkit-scrollbar-track { background: transparent; }
+
+/* List mode — overrides base display:grid */
+.ycsm-panel-channels--list {
+  display: flex !important; flex-direction: column;
+  padding: 0;
+}
+.ycsm-panel-channels--grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px; padding: 16px;
+}
+
+/* ─── List header ─────────────────────────────────────────── */
+.ycsm-list-head {
+  display: grid;
+  grid-template-columns: 48px 1fr 280px;
+  align-items: center; padding: 8px 16px;
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ycsm-text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--ycsm-border);
+  position: sticky; top: 0;
+  background: var(--ycsm-surface); z-index: 5;
+}
+.ycsm-list-head-check {
+  display: flex; align-items: center; justify-content: center;
+}
+.ycsm-list-head-cats { text-align: right; }
+
+/* ─── Channel row ─────────────────────────────────────────── */
+.ycsm-channel-row {
+  display: grid;
+  grid-template-columns: 48px auto 1fr 280px;
+  gap: 12px; align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--ycsm-border);
+  transition: background 0.12s; position: relative;
+  cursor: default;
+}
+.ycsm-channel-row:hover { background: var(--ycsm-chip); }
+.ycsm-channel-row.ycsm-card-selected {
+  background: var(--ycsm-action-soft);
+}
+.ycsm-channel-row.ycsm-card-selected:hover {
+  background: var(--ycsm-action-soft); filter: brightness(1.06);
+}
+
+/* Checkbox */
+.ycsm-row-check {
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ycsm-row-check input { position: absolute; opacity: 0; pointer-events: none; }
+.ycsm-check-box {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--ycsm-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; background: transparent;
+  transition: background 0.12s, border-color 0.12s;
+  flex-shrink: 0; pointer-events: none;
+}
+.ycsm-channel-row:hover .ycsm-check-box { border-color: var(--ycsm-text-primary); }
+.ycsm-channel-row.ycsm-card-selected .ycsm-check-box,
+.ycsm-check-box.is-checked {
+  background: #3ea6ff; border-color: #3ea6ff;
+}
+.ycsm-channel-row.ycsm-card-selected .ycsm-check-box::after,
+.ycsm-check-box.is-checked::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+.ycsm-check-box-head { width: 18px; height: 18px; }
+.ycsm-check-box.is-indeterminate { background: #3ea6ff; border-color: #3ea6ff; }
+.ycsm-indet { width: 10px; height: 2px; background: #fff; border-radius: 2px; }
+
+/* Avatar */
+.ycsm-row-avatar { display: flex; align-items: center; }
+.ycsm-avatar-circle {
+  width: 36px; height: 36px; border-radius: 50%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--ycsm-chip-hover);
+  font-size: 14px; font-weight: 600; color: var(--ycsm-text-primary);
+  flex-shrink: 0;
+}
+.ycsm-avatar-circle img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+}
+
+/* Meta */
+.ycsm-row-meta { min-width: 0; }
+.ycsm-row-name {
+  font-size: 14px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--ycsm-text-primary);
+}
+
+/* Category chips */
+.ycsm-row-cats {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 6px; justify-content: flex-end;
+}
+.ycsm-chip-more {
+  font-size: 11px; color: var(--ycsm-text-muted);
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--ycsm-chip); flex-shrink: 0;
+}
+.ycsm-add-cat-wrap { position: relative; flex-shrink: 0; }
+.ycsm-add-cat-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 26px; padding: 0 8px;
+  border-radius: 999px;
+  border: 1px dashed var(--ycsm-line);
+  background: transparent; color: var(--ycsm-text-muted);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: all 0.12s; white-space: nowrap; font-family: inherit;
+  flex-shrink: 0;
+}
+.ycsm-add-cat-btn:hover {
+  border-color: var(--ycsm-text-muted);
+  color: var(--ycsm-text-primary); background: var(--ycsm-chip);
+}
+.ycsm-add-cat-btn-labeled { padding: 0 12px 0 9px; }
+.ycsm-chip-remove {
+  background: transparent; border: none; color: inherit;
+  opacity: 0.45; display: flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%; cursor: pointer;
+  padding: 0; flex-shrink: 0; transition: opacity 0.12s, background 0.12s;
+}
+.ycsm-cat-chip:hover .ycsm-chip-remove { opacity: 1; }
+.ycsm-chip-remove:hover { background: rgba(128,128,128,0.2); }
+
+/* ─── Floating selection bar ──────────────────────────────── */
+.ycsm-new-select-bar {
+  position: absolute; left: 50%; bottom: 20px;
+  transform: translate(-50%, 160%);
+  background: var(--ycsm-text-primary); color: var(--ycsm-surface);
+  border-radius: 999px; padding: 8px 10px 8px 10px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  transition: transform 0.22s cubic-bezier(0.2,0.8,0.2,1), opacity 0.22s;
+  z-index: 50; white-space: nowrap;
+  pointer-events: none; opacity: 0;
+}
+.ycsm-new-select-bar.is-visible {
+  transform: translate(-50%, 0); pointer-events: auto; opacity: 1;
+}
+.ycsm-select-bar-clear {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: none; background: transparent; color: inherit; opacity: 0.65;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ycsm-select-bar-clear:hover { opacity: 1; background: rgba(128,128,128,0.18); }
+.ycsm-select-bar-count { font-size: 13px; flex-shrink: 0; }
+.ycsm-select-bar-count strong { font-weight: 600; }
+.ycsm-bulk-cat-wrap { position: relative; flex-shrink: 0; }
+.ycsm-select-bar-assign-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 34px; padding: 0 16px;
+  border-radius: 999px; border: none;
+  background: #3ea6ff; color: #0f0f0f;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: filter 0.12s; font-family: inherit;
+}
+.ycsm-select-bar-assign-btn:hover { filter: brightness(1.08); }
+
+/* ─── Empty state ─────────────────────────────────────────── */
+.ycsm-new-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 48px 24px;
+  min-height: 200px;
+}
+.ycsm-new-empty-title {
+  font-size: 15px; font-weight: 500; color: var(--ycsm-text-muted);
+}
+
+/* ─── Category Picker ────────────────────────────────────── */
+.ycsm-cat-picker {
+  position: fixed; z-index: 2147483640;
+  min-width: 240px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  display: flex; flex-direction: column;
+  max-height: 320px;
+  overflow: hidden; padding: 8px; box-sizing: border-box;
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+html:not([dark]) .ycsm-cat-picker { box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+.ycsm-picker-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--ycsm-chip);
+  border-radius: 8px;
+  padding: 6px 10px;
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+.ycsm-picker-search-icon {
+  color: var(--ycsm-text-muted); flex-shrink: 0;
+  display: flex; align-items: center;
+}
+.ycsm-picker-search-input {
+  flex: 1; min-width: 0; border: none; background: transparent;
+  outline: none; font-size: 13px; color: var(--ycsm-text-primary);
+  font-family: inherit;
+}
+.ycsm-picker-search-input::placeholder { color: var(--ycsm-text-muted); }
+.ycsm-picker-list {
+  overflow-y: auto; display: flex; flex-direction: column; gap: 1px;
+}
+.ycsm-picker-list::-webkit-scrollbar { width: 10px; }
+.ycsm-picker-list::-webkit-scrollbar-thumb {
+  background: var(--ycsm-chip-hover);
+  border-radius: 999px;
+  border: 2px solid var(--ycsm-surface);
+}
+.ycsm-picker-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 6px; border: none;
+  background: transparent; width: 100%; cursor: pointer;
+  text-align: left; font-family: inherit; font-size: 13px;
+  color: var(--ycsm-text-primary); transition: background 0.12s;
+}
+.ycsm-picker-item:hover { background: var(--ycsm-chip); }
+.ycsm-picker-item.is-active { background: rgba(255,255,255,0.05); }
+html:not([dark]) .ycsm-picker-item.is-active { background: rgba(0,0,0,0.04); }
+.ycsm-picker-item.is-active .ycsm-picker-name { color: var(--ycsm-text-primary); font-weight: 500; }
+.ycsm-picker-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.ycsm-picker-dot-create {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #3ea6ff; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #0f0f0f;
+}
+html:not([dark]) .ycsm-picker-dot-create { background: #065fd4; }
+.ycsm-picker-name {
+  flex: 1; min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.ycsm-picker-tick {
+  flex-shrink: 0; width: 16px; display: flex;
+  align-items: center; justify-content: center; color: var(--ycsm-text-primary);
+}
+.ycsm-picker-create .ycsm-picker-name { color: #3ea6ff; font-weight: 500; }
+html:not([dark]) .ycsm-picker-create .ycsm-picker-name { color: #065fd4; }
+.ycsm-picker-empty {
+  padding: 16px 10px; text-align: center;
+  font-size: 12px; color: var(--ycsm-text-muted);
+}
+
+/* ─── Color picker del sidebar (manage mode) ──────────────── */
+.ycsm-side-dot-wrap {
+  position: relative;
+  display: flex; align-items: center; flex-shrink: 0;
+}
+.ycsm-side-dot-btn {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid transparent; padding: 0; cursor: pointer;
+  transition: transform 0.12s;
+  position: relative; flex-shrink: 0;
+}
+.ycsm-side-dot-btn::after {
+  content: '';
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px dashed transparent; transition: border-color 0.12s;
+}
+.ycsm-side-dot-btn:hover::after { border-color: var(--ycsm-line); }
+.ycsm-color-pop {
+  position: absolute;
+  top: calc(100% + 8px); left: -6px;
+  z-index: 70;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 6px; padding: 8px;
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-line);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+html:not([dark]) .ycsm-color-pop { box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+.ycsm-color-swatch {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid transparent; padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.12s, border-color 0.12s;
+}
+.ycsm-color-swatch:hover { transform: scale(1.15); }
+.ycsm-color-swatch.is-active { border-color: var(--ycsm-text-primary); }
+
+/* ─── Row sub (date below name in list view) ──────────────── */
+.ycsm-row-sub {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ycsm-text-muted);
+  margin-top: 2px;
+}
+.ycsm-dot-recent {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #3ea6ff; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(62,166,255,0.25);
+}
+
+/* ─── Grid card — rediseño completo ───────────────────────── */
+.ycsm-panel-channels--grid .ycsm-panel-card {
+  background: var(--ycsm-surface);
+  border: 1px solid var(--ycsm-border);
+  border-radius: 12px;
+  padding: 16px 12px 12px;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0;
+  cursor: pointer;
+  transition: border-color 0.12s;
+  transform: none;
+}
+.ycsm-panel-channels--grid .ycsm-panel-card:hover {
+  border-color: var(--ycsm-line);
+  background: var(--ycsm-surface);
+  transform: none;
+}
+.ycsm-panel-channels--grid .ycsm-panel-card:hover .ycsm-card-name {
+  text-decoration: none;
+}
+.ycsm-panel-channels--grid .ycsm-panel-card.ycsm-card-selected {
+  border-color: #3ea6ff;
+  background: var(--ycsm-action-soft);
+}
+
+/* Checkbox en card grid */
+.ycsm-card-check {
+  position: absolute; top: 10px; left: 10px;
+  background: transparent; border: none; padding: 0;
+  cursor: pointer; opacity: 0;
+  transition: opacity 0.12s;
+}
+.ycsm-panel-channels--grid .ycsm-panel-card:hover .ycsm-card-check,
+.ycsm-panel-channels--grid.is-selecting .ycsm-card-check,
+.ycsm-panel-channels--grid .ycsm-panel-card.ycsm-card-selected .ycsm-card-check {
+  opacity: 1;
+}
+.ycsm-card-check .ycsm-check-box {
+  background: var(--ycsm-surface);
+  box-shadow: 0 0 0 2px var(--ycsm-surface);
+}
+.ycsm-panel-card.ycsm-card-selected .ycsm-card-check .ycsm-check-box {
+  background: #3ea6ff;
+  border-color: #3ea6ff;
+}
+
+/* Avatar wrap (64px, centered, position relative para el new-dot) */
+.ycsm-card-avatar-wrap {
+  position: relative;
+  display: flex; justify-content: center;
+  margin-bottom: 10px;
+}
+.ycsm-card-avatar-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--ycsm-chip-hover);
+  font-size: 26px; font-weight: 700;
+  flex-shrink: 0;
+}
+.ycsm-card-avatar-circle img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+}
+.ycsm-avatar-new-dot {
+  position: absolute; top: 0; right: 0;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #3ea6ff;
+  border: 2px solid var(--ycsm-surface);
+}
+
+/* Card name */
+.ycsm-panel-channels--grid .ycsm-card-name {
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  width: 100%; margin-bottom: 2px;
+  -webkit-line-clamp: unset; -webkit-box-orient: unset; display: block;
+}
+
+/* Card sub (date) */
+.ycsm-card-sub {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--ycsm-text-muted);
+  margin-bottom: 10px; min-height: 16px;
+  justify-content: center;
+}
+
+/* Card cats */
+.ycsm-panel-channels--grid .ycsm-card-cats {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  justify-content: center; min-height: 28px;
+  align-items: center; margin-top: auto; padding-top: 0;
+}
+
+/* Add cat btn — card variant (just icon, no label) */
+.ycsm-add-cat-btn-card {
+  padding: 0;
+  width: 26px;
+  justify-content: center;
+}
+.ycsm-add-cat-btn-card span { display: none; }

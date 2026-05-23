@@ -1,0 +1,395 @@
+{
+  "appName": {
+    "message": "Sidefold"
+  },
+  "appDescription": {
+    "message": "Organize Subscriptions for YouTube™"
+  },
+  "myCategories": {
+    "message": "我的分类"
+  },
+  "organize": {
+    "message": "整理"
+  },
+  "organizeSubscriptions": {
+    "message": "整理订阅"
+  },
+  "organizeSubscriptionsYoutube": {
+    "message": "在 YouTube 上整理订阅"
+  },
+  "categories": {
+    "message": "分类"
+  },
+  "loading": {
+    "message": "正在加载..."
+  },
+  "categoryForm": {
+    "message": "分类表单"
+  },
+  "categoryName": {
+    "message": "分类名称"
+  },
+  "categoryNamePlaceholder": {
+    "message": "分类名称..."
+  },
+  "create": {
+    "message": "创建"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "newCategory": {
+    "message": "新分类"
+  },
+  "emptyCategoriesPopup": {
+    "message": "没有分类。<br>在下方创建第一个。"
+  },
+  "categoryActions": {
+    "message": "$CATEGORY$ 的操作",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "editCategoryName": {
+    "message": "编辑 $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryName": {
+    "message": "删除 $CATEGORY$",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "deleteCategoryConfirm": {
+    "message": "删除“$CATEGORY$”？\\n频道不会丢失，只会取消分配。",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountOne": {
+    "message": "$COUNT$ 个频道",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelCountMany": {
+    "message": "$COUNT$ 个频道",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save": {
+    "message": "保存"
+  },
+  "all": {
+    "message": "全部"
+  },
+  "reorderCategory": {
+    "message": "重新排序分类"
+  },
+  "inMultipleCategories": {
+    "message": "在多个分类中"
+  },
+  "manageCategories": {
+    "message": "管理分类"
+  },
+  "manageChannelCategories": {
+    "message": "管理频道分类"
+  },
+  "newCategoryName": {
+    "message": "新分类名称"
+  },
+  "deleteCategoryConfirmLong": {
+    "message": "删除分类“$CATEGORY$”？\\n频道不会丢失，只会取消分配。",
+    "placeholders": {
+      "category": {
+        "content": "$1"
+      }
+    }
+  },
+  "emptyCategoriesSidebar": {
+    "message": "没有分类。创建第一个。"
+  },
+  "myYoutubeCategories": {
+    "message": "我的 YouTube 分类"
+  },
+  "assignCategoryToChannel": {
+    "message": "为频道分配分类"
+  },
+  "categorizeChannel": {
+    "message": "为频道分类"
+  },
+  "searchCategoryPlaceholder": {
+    "message": "搜索分类..."
+  },
+  "searchCategory": {
+    "message": "搜索分类"
+  },
+  "availableCategories": {
+    "message": "可用分类"
+  },
+  "noCategoriesCreateSidebar": {
+    "message": "没有分类。请在侧边栏面板中创建一个。"
+  },
+  "categorize": {
+    "message": "分类"
+  },
+  "assignThisChannelToCategory": {
+    "message": "将此频道分配到分类"
+  },
+  "organizeSubscriptionsPageTitle": {
+    "message": "整理订阅 - Sidefold"
+  },
+  "organizeSubscriptionsTitle": {
+    "message": "整理订阅"
+  },
+  "searchChannelPlaceholder": {
+    "message": "搜索频道..."
+  },
+  "searchChannel": {
+    "message": "搜索频道"
+  },
+  "subscribedChannels": {
+    "message": "已订阅频道"
+  },
+  "organizeYoutubeSubscriptions": {
+    "message": "整理 YouTube 订阅"
+  },
+  "activateMultiSelect": {
+    "message": "启用多选"
+  },
+  "select": {
+    "message": "选择"
+  },
+  "closePanel": {
+    "message": "关闭面板"
+  },
+  "searchChannelByName": {
+    "message": "按名称搜索频道"
+  },
+  "clearSearch": {
+    "message": "清除搜索"
+  },
+  "search": {
+    "message": "搜索"
+  },
+  "recent": {
+    "message": "最近"
+  },
+  "subscribedChannelsList": {
+    "message": "已订阅频道列表"
+  },
+  "assignCategory": {
+    "message": "分配分类"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "selectedChannelCountOne": {
+    "message": "已选择 $COUNT$ 个频道",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "selectedChannelCountMany": {
+    "message": "已选择 $COUNT$ 个频道",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "channelsSelectedOne": {
+    "message": "个频道已选择"
+  },
+  "channelsSelectedMany": {
+    "message": "个频道已选择"
+  },
+  "today": {
+    "message": "今天"
+  },
+  "yesterday": {
+    "message": "昨天"
+  },
+  "daysAgoOne": {
+    "message": "$COUNT$ 天前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgoMany": {
+    "message": "$COUNT$ 天前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoOne": {
+    "message": "$COUNT$ 周前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "weeksAgoMany": {
+    "message": "$COUNT$ 周前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoOne": {
+    "message": "$COUNT$ 个月前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "monthsAgoMany": {
+    "message": "$COUNT$ 个月前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoOne": {
+    "message": "$COUNT$ 年前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "yearsAgoMany": {
+    "message": "$COUNT$ 年前",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "loadingChannels": {
+    "message": "正在加载频道..."
+  },
+  "loadingDates": {
+    "message": "正在加载日期以排序..."
+  },
+  "noResults": {
+    "message": "无结果"
+  },
+  "noCategoriesCreated": {
+    "message": "尚未创建分类"
+  },
+  "done": {
+    "message": "完成"
+  },
+  "back": {
+    "message": "返回"
+  },
+  "emptyCategoriesPlus": {
+    "message": "没有分类。按\"+\"创建一个。"
+  },
+  "addCategory": {
+    "message": "添加分类"
+  },
+  "editAction": {
+    "message": "编辑"
+  },
+  "deleteAction": {
+    "message": "删除"
+  },
+  "edit": {
+    "message": "编辑"
+  },
+  "viewAll": {
+    "message": "所有订阅"
+  },
+  "viewUncategorized": {
+    "message": "未分类"
+  },
+  "organizeSubscriptionsSubtitle": {
+    "message": "将频道分组到分类中以筛选您的订阅。"
+  },
+  "headChannel": {
+    "message": "频道"
+  },
+  "headCategories": {
+    "message": "分类"
+  },
+  "sortAlpha": {
+    "message": "A → Z"
+  },
+  "sortRecent": {
+    "message": "默认顺序"
+  },
+  "emptyUncategorizedTitle": {
+    "message": "全部已分类！"
+  },
+  "emptyUncategorizedSub": {
+    "message": "您列表中的每个频道至少有一个分类。"
+  },
+  "emptySearchSub": {
+    "message": "尝试其他名称或移除筛选条件。"
+  },
+  "emptyCategorySub": {
+    "message": "从「全部」列表中将频道添加到此分类。"
+  },
+  "pickerEmpty": {
+    "message": "无结果"
+  },
+  "dragToReorder": {
+    "message": "拖动以重新排序"
+  },
+  "changeColor": {
+    "message": "更改颜色"
+  },
+  "rename": {
+    "message": "重命名"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "searchOrCreateCategory": {
+    "message": "搜索或创建分类…"
+  },
+  "viewList": {
+    "message": "列表视图"
+  },
+  "viewGrid": {
+    "message": "网格视图"
+  },
+  "emptySearchTitle": {
+    "message": "\"$QUERY$\" 无结果",
+    "placeholders": { "query": { "content": "$1" } }
+  },
+  "emptyCategoryTitle": {
+    "message": "«$CATEGORY$» 为空",
+    "placeholders": { "category": { "content": "$1" } }
+  },
+  "clearSelection": {
+    "message": "清除选择"
+  }
+}
